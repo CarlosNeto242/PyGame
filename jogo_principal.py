@@ -11,7 +11,7 @@ try:
 except:
     pass
 
-tela = pygame.display.set_mode((p.WIDHT, p.HEIGHT), pygame.FULLSCREEN)
+tela = pygame.display.set_mode((p.WIDHT - 100, p.HEIGHT - 100),)
 clock = pygame.time.Clock()
 estados = {"Jogando" : True, "Inicial" : True, "Mapa" : False, "Boss" : False, "Final" : False}
 
