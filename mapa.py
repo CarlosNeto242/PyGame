@@ -4,6 +4,7 @@ import assets as a
 import player as pl
 
 pygame.init()
+pygame.font.init()
 
 def mapa(tela, clock, estado): 
     assets = a.carrega_assets()

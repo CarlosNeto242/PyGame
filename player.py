@@ -48,11 +48,19 @@ class Player(pygame.sprite.Sprite):
         self.image = self.i_animacao[self.frame]
         agora = pygame.time.get_ticks()
         elapsed_ticks = agora - self.ultimo_tiro
-        if elapsed_ticks > self.tiro_ticks: 
+        if elapsed_ticks > self.tiro_ticks and self.speedx > 0: 
             self.ultimo_tiro = agora
-            novo_tiro = Tiro(self.rect.bottom - 140, self.rect.centerx)
+            novo_tiro = Tiro(self.rect.bottom - 140, self.rect.centerx, 1)
             self.groups["tiros"].add(novo_tiro)
-
+        elif elapsed_ticks > self.tiro_ticks and self.speedx < 0: 
+            self.ultimo_tiro = agora
+            novo_tiro = Tiro(self.rect.bottom - 140, self.rect.centerx, -1)
+            self.groups["tiros"].add(novo_tiro)
+        elif elapsed_ticks > self.tiro_ticks and self.speedx == 0: 
+            self.ultimo_tiro = agora
+            novo_tiro = Tiro(self.rect.bottom - 140, self.rect.centerx, 1)
+            self.groups["tiros"].add(novo_tiro)
+        
         if elapsed_ticks > self.frames_ticks and self.speedx > 0: 
             self.ultimo_frame = agora
             self.frame += 1
@@ -66,14 +74,15 @@ class Player(pygame.sprite.Sprite):
         
 
 class Tiro(pygame.sprite.Sprite): 
-    def __init__(self, bottom, centerx):
+    def __init__(self, bottom, centerx, direcao):
         pygame.sprite.Sprite.__init__(self)
 
         self.image = assets["tiro player"]
         self.rect = self.image.get_rect()
         self.rect.centerx = centerx
         self.rect.bottom = bottom 
-        self.speedx = 10
+
+        self.speedx = 10 * direcao
 
     def update(self):
         self.rect.x += self.speedx
