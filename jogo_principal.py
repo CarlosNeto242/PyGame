@@ -6,10 +6,15 @@ import mapa
 import ganhar_ou_perder
 import ctypes
 
+
 try:
     ctypes.windll.user32.SetProcessDPIAware()
 except:
     pass
+
+pygame.init()
+pygame.font.init()
+
 
 tela = pygame.display.set_mode((p.WIDHT, p.HEIGHT),)
 clock = pygame.time.Clock()
