@@ -14,6 +14,8 @@ def mapa(tela, clock, estado):
     grupos = {}
     grupos["tiros"] = tiros
     player = pl.Player(grupos, assets["animacao player"])
+    chao_y = 800
+    player.rect.bottom = chao_y
     while estado["Mapa"]: 
         eventos = pygame.event.get()
 
@@ -28,16 +30,19 @@ def mapa(tela, clock, estado):
                     player.speedx += 8
                 if evento.key == pygame.K_v:
                     player.atirar()
+                if evento.key == pygame.K_UP:
+                    player.pular()
             if evento.type == pygame.KEYUP: 
                 if evento.key == pygame.K_LEFT: 
                     player.speedx += 8
                 if evento.key == pygame.K_RIGHT:
-                    player.speedx -= 8 
+                    player.speedx -= 8
                 player.i_animacao = assets["animacao player"]
         tela.blit(background, (0, 0))
-        tela.blit(player.image, (player.rect.x, 700))
         player.update_deslocar()
         player.update_animacao()
+        player.update_gravidade(chao_y)
+        tela.blit(player.image, player.rect)
         tiros.update()
         tiros.draw(tela)
         pygame.display.update()
