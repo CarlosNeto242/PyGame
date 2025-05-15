@@ -17,7 +17,7 @@ class Player(pygame.sprite.Sprite):
         self.groups = grupos
         self.direcao = 1
         self.pulando = False
-        self.gravity = 1
+        self.gravity = 0.8
 
         self.ultimo_frame = pygame.time.get_ticks()
         self.frames_ticks = 50
@@ -64,7 +64,8 @@ class Player(pygame.sprite.Sprite):
         elapsed_ticks = agora - self.ultimo_tiro
         if elapsed_ticks > self.tiro_ticks: 
             self.ultimo_tiro = agora
-            novo_tiro = Tiro(self.rect.bottom - 140, self.rect.centerx, self.direcao)
+            altura_do_tiro = self.rect.centery + 14
+            novo_tiro = Tiro(altura_do_tiro, self.rect.centerx, self.direcao)
             self.groups["tiros"].add(novo_tiro)
         
         if elapsed_ticks > self.frames_ticks and self.speedx > 0: 
@@ -88,7 +89,7 @@ class Player(pygame.sprite.Sprite):
 
     def pular(self):
         if not self.pulando:
-            self.speedy = -20  # impulso para cima
+            self.speedy = -21
             self.pulando = True
         
         
