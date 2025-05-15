@@ -6,8 +6,9 @@ class Player(pygame.sprite.Sprite):
     def __init__(self, grupos, assets):
         pygame.sprite.Sprite.__init__(self)
 
-        self.i_animacao = assets
+        self.i_animacao = assets["animacao player"]  
         self.frame = 0 
+        self.animacao_pulo = assets["animacao pulo"]
         self.image = self.i_animacao[self.frame]
         self.rect = self.image.get_rect()
         self.rect.centerx = 100
@@ -38,24 +39,30 @@ class Player(pygame.sprite.Sprite):
             self.direcao = -1
 
     def update_animacao(self): 
-        if not self.pulando:
-            agora = pygame.time.get_ticks()
-            ticks_passados = agora - self.ultimo_frame
-            if ticks_passados > self.frames_ticks and self.speedx > 0: 
+        agora = pygame.time.get_ticks()
+        ticks_passados = agora - self.ultimo_frame
+        if self.pulando:
+            if ticks_passados > self.frames_ticks:
                 self.ultimo_frame = agora
                 self.frame += 1
-                self.image = self.i_animacao[self.frame % len(self.i_animacao)]
-            elif ticks_passados > self.frames_ticks and self.speedx < 0:
-                self.ultimo_frame = agora
-                self.frame += 1
-                self.image = self.i_animacao[self.frame % len(self.i_animacao)]
+            frame_atual = self.animacao_pulo[self.frame % len(self.animacao_pulo)]
+            self.image = frame_atual if self.direcao == 1 else pygame.transform.flip(frame_atual, True, False)
+            return
+        if ticks_passados > self.frames_ticks and self.speedx > 0: 
+            self.ultimo_frame = agora
+            self.frame += 1
+            self.image = self.i_animacao[self.frame % len(self.i_animacao)]
+        elif ticks_passados > self.frames_ticks and self.speedx < 0:
+            self.ultimo_frame = agora
+            self.frame += 1
+            self.image = self.i_animacao[self.frame % len(self.i_animacao)]
+            self.image = pygame.transform.flip(self.image, True, False)
+        if self.speedx == 0:
+            if self.direcao == 1:
+                self.image = self.i_animacao[0]
+            else:
+                self.image = self.i_animacao[0]
                 self.image = pygame.transform.flip(self.image, True, False)
-            if self.speedx == 0:
-                if self.direcao == 1:
-                    self.image = self.i_animacao[0]
-                else:
-                    self.image = self.i_animacao[0]
-                    self.image = pygame.transform.flip(self.image, True, False)
     def atirar(self):
         self.i_animacao = assets["animacao player atirando"]
         self.frame = 0

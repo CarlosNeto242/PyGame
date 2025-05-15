@@ -13,7 +13,7 @@ def mapa(tela, clock, estado):
     tiros = pygame.sprite.Group()
     grupos = {}
     grupos["tiros"] = tiros
-    player = pl.Player(grupos, assets["animacao player"])
+    player = pl.Player(grupos, assets)
     chao_y = 800
     player.rect.bottom = chao_y
     while estado["Mapa"]: 

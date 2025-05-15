@@ -25,4 +25,13 @@ def carrega_assets():
         player_animacao_atirando.append(imagem1)
     assets["animacao player atirando"] = player_animacao_atirando
     assets["tiro player"] = pygame.image.load("Sprites/megamen/tiro megaman.png")
+
+    lista_pulo = []
+    for i in range(5):
+        sprite_pulo = pygame.image.load(f"Sprites/megamen/Pulo/pulo {i}.png")
+        frame = pygame.transform.scale(sprite_pulo, (100, 100))
+        lista_pulo.append(frame)
+
+    assets["animacao pulo"] = lista_pulo
+
     return assets
