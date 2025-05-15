@@ -24,18 +24,18 @@ def mapa(tela, clock, estado):
                 estado["Jogando"] = False
                 estado["Mapa"] = False
             if evento.type == pygame.KEYDOWN: 
-                if evento.key == pygame.K_LEFT: 
+                if evento.key == pygame.K_LEFT or evento.key == pygame.K_a: 
                     player.speedx -= 8
-                if evento.key == pygame.K_RIGHT:
+                if evento.key == pygame.K_RIGHT or evento.key == pygame.K_d:
                     player.speedx += 8
                 if evento.key == pygame.K_v:
                     player.atirar()
-                if evento.key == pygame.K_UP:
+                if evento.key == pygame.K_UP or evento.key == pygame.K_w:
                     player.pular()
             if evento.type == pygame.KEYUP: 
-                if evento.key == pygame.K_LEFT: 
+                if evento.key == pygame.K_LEFT or evento.key == pygame.K_a: 
                     player.speedx += 8
-                if evento.key == pygame.K_RIGHT:
+                if evento.key == pygame.K_RIGHT or evento.key == pygame.K_d:
                     player.speedx -= 8
                 player.i_animacao = assets["animacao player"]
         tela.blit(background, (0, 0))
