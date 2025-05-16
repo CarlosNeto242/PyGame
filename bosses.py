@@ -11,19 +11,21 @@ class Boss(pygame.sprite.Sprite):
         self.groups = grupos
         self.rect = self.image.get_rect()
         self.rect.centerx = 1400
-        self.rect.bottom = 750
+        self.rect.bottom = 800
 
         self.ultima_tacada = pygame.time.get_ticks() 
-        self.tacada_ticks = 200
-    def update_tiro(self, imagem): 
-        self.image = imagem
+        self.tacada_ticks = 2000
+    def update_tiro(self): 
         agora = pygame.time.get_ticks()
         ticks_passados = agora - self.ultima_tacada
-        if ticks_passados > self.tacada_ticks: 
+        if ticks_passados > self.tacada_ticks:
             self.ultima_tacada = agora
+            self.image = self.assets['boss jogando barril'] 
             altura_do_barril = self.rect.bottom
             novo_barril = Barril(altura_do_barril, self.rect.centerx, self.assets)
             self.groups["barris"].add(novo_barril)
+        if 1000 < ticks_passados < 2000: 
+            self.image = self.assets["chefe idle"]
 
 class Barril(pygame.sprite.Sprite): 
     def __init__(self, bottom, centerx, assets):

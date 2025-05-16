@@ -6,6 +6,7 @@ import bosses as b
 
 pygame.init()
 pygame.font.init()
+pygame.mixer.init()
 
 def mapa(tela, clock, estado): 
     assets = a.carrega_assets()
@@ -20,9 +21,11 @@ def mapa(tela, clock, estado):
     boss = b.Boss(assets, grupos)
     chao_y = 800
     player.rect.bottom = chao_y
+    checador = 0
     while estado["Mapa"]: 
         eventos = pygame.event.get()
-        boss.update_tiro(assets["boss jogando barril"])
+        boss.update_tiro()
+        checador += 1
         for evento in eventos: 
             if evento.type == pygame.QUIT:
                 estado["Jogando"] = False
@@ -42,6 +45,7 @@ def mapa(tela, clock, estado):
                 if evento.key == pygame.K_RIGHT or evento.key == pygame.K_d:
                     player.speedx -= 8
                 player.i_animacao = assets["animacao player"]
+
         tela.blit(background, (0, 0))
         player.update_deslocar()
         player.update_animacao()
