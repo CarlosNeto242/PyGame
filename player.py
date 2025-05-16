@@ -7,6 +7,8 @@ class Player(pygame.sprite.Sprite):
         pygame.sprite.Sprite.__init__(self)
 
         self.i_animacao = assets["animacao player"]  
+        self.som_tiro = assets["som_tiro"]
+        self.som_tiro.set_volume(0.5)
         self.frame = 0 
         self.animacao_pulo = assets["animacao pulo"]
         self.image = self.i_animacao[self.frame]
@@ -84,6 +86,8 @@ class Player(pygame.sprite.Sprite):
             self.frame += 1
             self.image = self.i_animacao[self.frame % len(self.i_animacao)]
             self.image = pygame.transform.flip(self.image, True, False)
+
+        self.som_tiro.play()
 
     def update_gravidade(self, chao_y):
         self.speedy += self.gravity
