@@ -33,5 +33,12 @@ def carrega_assets():
         lista_pulo.append(frame)
 
     assets["animacao pulo"] = lista_pulo
-
+    assets["chefe idle"] = pygame.image.load("Sprites/Chefes/boss 1 parado.png")
+    barril_rolando = []
+    for i in range(4): 
+        barril = pygame.image.load(f"Sprites/Chefes/frame barril {i}.png")
+        frame = pygame.transform.scale(barril, (60, 60))
+        barril_rolando.append(frame)
+    assets["barril rolando"] = barril_rolando
+    assets["boss jogando barril"] = pygame.image.load(f"Sprites/Chefes/boss 1 jogando barril.png")
     return assets

@@ -2,6 +2,7 @@ import pygame
 import parametros as p
 import assets as a
 import player as pl
+import bosses as b
 
 pygame.init()
 pygame.font.init()
@@ -11,20 +12,23 @@ def mapa(tela, clock, estado):
     background = assets["fundo mapa"]
     background = pygame.transform.scale(background, (1920, 1080))
     tiros = pygame.sprite.Group()
+    barris = pygame.sprite.Group()
     grupos = {}
     grupos["tiros"] = tiros
+    grupos["barris"] = barris
     player = pl.Player(grupos, assets)
+    boss = b.Boss(assets, grupos)
     chao_y = 800
     player.rect.bottom = chao_y
     while estado["Mapa"]: 
         eventos = pygame.event.get()
-
+        boss.update_tiro(assets["boss jogando barril"])
         for evento in eventos: 
             if evento.type == pygame.QUIT:
                 estado["Jogando"] = False
                 estado["Mapa"] = False
             if evento.type == pygame.KEYDOWN: 
-                if evento.key == pygame.K_LEFT or evento.key == pygame.K_a: 
+                if evento.key == pygame.K_LEFT or evento.key == pygame.K_a:
                     player.speedx -= 8
                 if evento.key == pygame.K_RIGHT or evento.key == pygame.K_d:
                     player.speedx += 8
@@ -43,7 +47,10 @@ def mapa(tela, clock, estado):
         player.update_animacao()
         player.update_gravidade(chao_y)
         tela.blit(player.image, player.rect)
+        tela.blit(boss.image, boss.rect)
         tiros.update()
         tiros.draw(tela)
+        barris.update()
+        barris.draw(tela)
         pygame.display.update()
         clock.tick(p.FPS)

@@ -110,7 +110,7 @@ class Tiro(pygame.sprite.Sprite):
         self.rect.centerx = centerx
         self.rect.bottom = bottom 
 
-        self.speedx = 10 * direcao
+        self.speedx = 15 * direcao
 
     def update(self):
         self.rect.x += self.speedx
