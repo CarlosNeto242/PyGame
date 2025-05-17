@@ -60,52 +60,81 @@ class Barril(pygame.sprite.Sprite):
         self.update_animacao()
         self.update_posicao()
 
-class Bowser(pygame.sprite.Sprite): 
-    def __init__(self, assets, grupos): 
+class Bowser(pygame.sprite.Sprite):
+    def __init__(self, assets, grupos):
         pygame.sprite.Sprite.__init__(self)
 
         self.image = pygame.transform.scale(pygame.image.load("Sprites/Chefes/bowser_idle.png"), (200, 200))
+        self.image = pygame.transform.flip(self.image, True, False)
         self.assets = assets
         self.groups = grupos
         self.rect = self.image.get_rect()
         self.rect.centerx = 1600
         self.rect.bottom = 800
 
-        self.ultimo_ataque = pygame.time.get_ticks() 
-        self.delay_ataque = 3000  # a cada 3 segundos
-        self.chuva_duracao = 2000  # dura 2 segundos
-        self.chovendo = False
-        self.inicio_chuva = 0
+        self.speedx = -2  
+        self.vida = 100
+        self.max_vida = 100
 
-    def update_ataque(self): 
+        self.ultimo_ataque = pygame.time.get_ticks()
+
+    def update_comportamento(self, player):
+        self.movimentar()
+        self.atacar(player)
+
+    def movimentar(self):
+        self.rect.x += self.speedx
+        if self.rect.left <= 1200 or self.rect.right >= 1800:
+            self.speedx *= -1
+
+    def atacar(self, player):
         agora = pygame.time.get_ticks()
+        if agora - self.ultimo_ataque < 2000:
+            return
+        self.ultimo_ataque = agora
 
-        if not self.chovendo and agora - self.ultimo_ataque > self.delay_ataque:
-            self.chovendo = True
-            self.inicio_chuva = agora
-            self.ultimo_ataque = agora
+        if self.vida > 60:
+            self.ataque_chuva()
+        elif self.vida > 30:
+            self.ataque_chuva()
+            self.ataque_investida(player)
+        else:
+            self.ataque_chuva()
+            self.ataque_investida(player)
+            self.ataque_lateral()
 
-        if self.chovendo:
-            if agora - self.inicio_chuva < self.chuva_duracao:
-                if agora % 300 < 20:  # solta várias bolas a cada 300ms
-                    for _ in range(3):  # 3 bolas por vez
-                        x = random.randint(100, 1700)
-                        nova_bola = BolaDeFogo(x, 0)
-                        self.groups["bolas_de_fogo"].add(nova_bola)
-            else:
-                self.chovendo = False
+    def ataque_chuva(self):
+        for _ in range(4):
+            x = random.randint(100, 1700)
+            nova_bola = BolaDeFogo(x, 0)
+            self.groups["bolas_de_fogo"].add(nova_bola)
 
+    def ataque_investida(self, player):
+        if abs(player.rect.centery - self.rect.centery) < 200:
+            self.rect.x -= 80  
 
-class BolaDeFogo(pygame.sprite.Sprite): 
-    def __init__(self, x, y): 
+    def ataque_lateral(self):
+        nova_bola = BolaDeFogo(self.rect.centerx, self.rect.centery, vertical=False)
+        self.groups["bolas_de_fogo"].add(nova_bola)
+
+    def levar_dano(self, dano):
+        self.vida -= dano
+        if self.vida <= 0:
+            self.kill()
+
+class BolaDeFogo(pygame.sprite.Sprite):
+    def __init__(self, x, y, vertical=True):
         pygame.sprite.Sprite.__init__(self)
         self.image = pygame.transform.scale(pygame.image.load("Sprites/Chefes/bola_fogo.png"), (40, 40))
         self.rect = self.image.get_rect()
         self.rect.x = x
         self.rect.y = y
-        self.speedy = 10
-
-    def update(self): 
-        self.rect.y += self.speedy
-        if self.rect.y > 1080:
+        self.vertical = vertical
+        self.speed = 10
+    def update(self):
+        if self.vertical:
+            self.rect.y += self.speed
+        else:
+            self.rect.x -= self.speed
+        if self.rect.top > 1080 or self.rect.right < 0:
             self.kill()

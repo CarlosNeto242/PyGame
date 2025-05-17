@@ -21,6 +21,8 @@ class Player(pygame.sprite.Sprite):
         self.direcao = 1
         self.pulando = False
         self.gravity = 0.8
+        self.vida = 100
+        self.max_vida = 100
 
         self.ultimo_frame = pygame.time.get_ticks()
         self.frames_ticks = 50

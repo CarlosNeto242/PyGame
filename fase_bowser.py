@@ -8,9 +8,19 @@ pygame.init()
 pygame.font.init()
 pygame.mixer.init()
 
+def desenhar_barra_vida(tela, boss):
+    largura = 400
+    altura = 30
+    x = (p.WIDHT - largura) // 2
+    y = 20
+    vida_percent = boss.vida / boss.max_vida
+    pygame.draw.rect(tela, (255, 0, 0), (x, y, largura, altura)) 
+    pygame.draw.rect(tela, (0, 255, 0), (x, y, largura * vida_percent, altura)) 
+    pygame.draw.rect(tela, (0, 0, 0), (x, y, largura, altura), 4) 
+
 def fase_bowser(tela, clock, estado):
     assets = a.carrega_assets()
-    background = assets["fundo mapa"]
+    background = assets["fundo mario"]
     background = pygame.transform.scale(background, (1920, 1080))
 
     tiros = pygame.sprite.Group()
@@ -28,7 +38,7 @@ def fase_bowser(tela, clock, estado):
 
     while estado["Bowser"]: 
         eventos = pygame.event.get()
-        bowser.update_ataque()
+        bowser.update_comportamento(player)
 
         for evento in eventos:
             if evento.type == pygame.QUIT:
@@ -50,14 +60,19 @@ def fase_bowser(tela, clock, estado):
                     player.speedx -= 8
                 player.i_animacao = assets["animacao player"]
 
-        # Atualizações
+
         player.update_deslocar()
         player.update_animacao()
         player.update_gravidade(chao_y)
         bolas_de_fogo.update()
         tiros.update()
+        for bola in bolas_de_fogo:
+            if player.rect.colliderect(bola.rect):
+                player.vida -= 10
+                print(f"Vida do jogador: {player.vida}")
+                bola.kill()
 
-        # Desenho
+
         tela.blit(background, (0, 0))
         tela.blit(player.image, player.rect)
         tela.blit(bowser.image, bowser.rect)
