@@ -8,6 +8,10 @@ class Player(pygame.sprite.Sprite):
 
         self.i_animacao = assets["animacao player"]  
         self.som_tiro = assets["som_tiro"]
+        self.tiro_especial_img = pygame.transform.scale(assets["tiro player"], (60, 30))  # pode mudar depois
+        self.tiro_especial_dano = 30
+        self.tiro_especial_cooldown = 3000
+        self.ultimo_tiro_especial = pygame.time.get_ticks()
         self.som_tiro.set_volume(0.5)
         self.frame = 0 
         self.animacao_pulo = assets["animacao pulo"]
@@ -91,6 +95,14 @@ class Player(pygame.sprite.Sprite):
 
         self.som_tiro.play()
 
+    def atirar_especial(self):
+        agora = pygame.time.get_ticks()
+        if agora - self.ultimo_tiro_especial >= self.tiro_especial_cooldown:
+            self.ultimo_tiro_especial = agora
+            altura_do_tiro = self.rect.centery + 14
+            novo_tiro = TiroEspecial(altura_do_tiro, self.rect.centerx, self.direcao, self.tiro_especial_img)
+            self.groups["tiros"].add(novo_tiro)
+
     def update_gravidade(self, chao_y):
         self.speedy += self.gravity
         self.rect.y += self.speedy
@@ -124,6 +136,19 @@ class Tiro(pygame.sprite.Sprite):
         if self.rect.x > p.WIDHT:
             self.kill()
     
+class TiroEspecial(pygame.sprite.Sprite):
+    def __init__(self, bottom, centerx, direcao, imagem):
+        pygame.sprite.Sprite.__init__(self)
+        self.image = imagem
+        self.rect = self.image.get_rect()
+        self.rect.centerx = centerx
+        self.rect.bottom = bottom
+        self.speedx = 20 * direcao
+        self.dano = 30
 
+    def update(self):
+        self.rect.x += self.speedx
+        if self.rect.right < 0 or self.rect.left > p.WIDHT:
+            self.kill()
         
         

@@ -18,6 +18,7 @@ def desenhar_barra_vida(tela, boss):
     pygame.draw.rect(tela, (0, 255, 0), (x, y, largura * vida_percent, altura)) 
     pygame.draw.rect(tela, (0, 0, 0), (x, y, largura, altura), 4) 
 
+
 def fase_bowser(tela, clock, estado):
     assets = a.carrega_assets()
     background = assets["fundo mario"]
@@ -53,6 +54,8 @@ def fase_bowser(tela, clock, estado):
                     player.atirar()
                 if evento.key in [pygame.K_UP, pygame.K_w]:
                     player.pular()
+                if evento.key == pygame.K_c:
+                    player.atirar_especial()
             if evento.type == pygame.KEYUP:
                 if evento.key in [pygame.K_LEFT, pygame.K_a]:
                     player.speedx += 8
@@ -71,7 +74,12 @@ def fase_bowser(tela, clock, estado):
                 player.vida -= 10
                 print(f"Vida do jogador: {player.vida}")
                 bola.kill()
-
+        for tiro in tiros:
+            if bowser.rect.colliderect(tiro.rect):
+                dano = getattr(tiro, "dano", 10) 
+                bowser.levar_dano(dano)
+                print(f"Vida do Bowser: {bowser.vida}")
+                tiro.kill()
 
         tela.blit(background, (0, 0))
         tela.blit(player.image, player.rect)
