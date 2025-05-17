@@ -40,8 +40,14 @@ def carrega_assets():
     barril_rolando = []
     for i in range(4): 
         barril = pygame.image.load(f"Sprites/Chefes/frame barril {i}.png")
-        frame = pygame.transform.scale(barril, (60, 60))
+        frame = pygame.transform.scale(barril, (100, 100))
         barril_rolando.append(frame)
     assets["barril rolando"] = barril_rolando
     assets["boss jogando barril"] = pygame.image.load(f"Sprites/Chefes/boss 1 jogando barril.png")
+    animacao_foguinho = []
+    animacao_foguinho.append(pygame.image.load("Sprites/Chefes/foguinho 1.png"))
+    animacao_foguinho[0] = pygame.transform.scale(animacao_foguinho[0], (60, 60))
+    animacao_foguinho.append(pygame.image.load("Sprites/Chefes/foguinho 2.png"))
+    animacao_foguinho[1] = pygame.transform.scale(animacao_foguinho[1], (60, 60))
+    assets["foguinho dk"] = animacao_foguinho
     return assets

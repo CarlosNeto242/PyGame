@@ -29,7 +29,7 @@ def inicio(tela, clock, estado):
             if evento.type == pygame.KEYDOWN:
                 if evento.key == pygame.K_SPACE:
                     estado["Inicial"] = False
-                    estado["Mapa"] = True
+                    estado["DK"] = True
 
         pygame.display.update()
         clock.tick(p.FPS)

@@ -13,9 +13,14 @@ class Boss(pygame.sprite.Sprite):
         self.rect = self.image.get_rect()
         self.rect.centerx = 1400
         self.rect.bottom = 800
+        self.vida = 80
+        self.max_vida = 80
 
         self.ultima_tacada = pygame.time.get_ticks() 
         self.tacada_ticks = 2000
+        self.ultimo_ataque_chuva = pygame.time.get_ticks()
+        self.intervalo_chuva = random.randint(300, 3000)
+    
     def update_tiro(self): 
         agora = pygame.time.get_ticks()
         ticks_passados = agora - self.ultima_tacada
@@ -27,6 +32,30 @@ class Boss(pygame.sprite.Sprite):
             self.groups["barris"].add(novo_barril)
         if 1000 < ticks_passados < 2000: 
             self.image = self.assets["chefe idle"]
+    
+    def levar_dano(self, dano):
+        self.vida -= dano
+        if self.vida <= 0:
+            self.kill()
+    
+    def fase_atual(self):
+        if self.vida > 60:
+            return 1
+        elif self.vida > 30:
+            return 2
+        else:
+            return 3
+
+    def ataque_chuva(self): 
+        agora = pygame.time.get_ticks()
+        passados = agora - self.ultimo_ataque_chuva
+        if passados >= self.intervalo_chuva: 
+            self.ultimo_ataque_chuva = agora
+            for _ in range(3):
+                x = random.randint(100, 1700)
+                novo_fogo = Fogo(self.assets, self.groups, x, 0)
+                self.groups["foguinhos"].add(novo_fogo)
+
 
 class Barril(pygame.sprite.Sprite): 
     def __init__(self, bottom, centerx, assets):
@@ -59,6 +88,33 @@ class Barril(pygame.sprite.Sprite):
     def update(self):
         self.update_animacao()
         self.update_posicao()
+
+class Fogo(pygame.sprite.Sprite):
+    def __init__(self, assets, grupos, x, y):
+        pygame.sprite.Sprite.__init__(self)
+
+        self.animacao = assets["foguinho dk"]
+        self.frame = 0
+        self.image = self.animacao[self.frame]
+        self.rect = self.image.get_rect()
+        self.rect.x = x
+        self.rect.y = y
+        self.speed = 10
+
+        self.ultimo_ticks = pygame.time.get_ticks()
+        self.ticks_animacao = 50
+    
+    def update(self):
+        self.rect.y += self.speed
+        self.update_animacao()
+    
+    def update_animacao(self): 
+        agora = pygame.time.get_ticks()
+        ticks_passados = agora - self.ultimo_ticks
+        if ticks_passados > self.ticks_animacao:
+            self.ultimo_frame = agora
+            self.frame += 1
+            self.image = self.animacao[self.frame % len(self.animacao)]
 
 class Bowser(pygame.sprite.Sprite):
     def __init__(self, assets, grupos):
@@ -157,6 +213,7 @@ class BolaDeFogo(pygame.sprite.Sprite):
         self.rect.y = y
         self.vertical = vertical
         self.speed = 10
+    
     def update(self):
         if self.vertical:
             self.rect.y += self.speed
