@@ -17,7 +17,15 @@ def desenhar_barra_vida(tela, boss):
     pygame.draw.rect(tela, (255, 0, 0), (x, y, largura, altura)) 
     pygame.draw.rect(tela, (0, 255, 0), (x, y, largura * vida_percent, altura)) 
     pygame.draw.rect(tela, (0, 0, 0), (x, y, largura, altura), 4) 
-
+def desenhar_barra_vida_player(tela, player):
+    largura = 200
+    altura = 20
+    x = 50
+    y = 20
+    vida_percent = player.vida / player.max_vida
+    pygame.draw.rect(tela, (255, 0, 0), (x, y, largura, altura))  
+    pygame.draw.rect(tela, (0, 255, 0), (x, y, largura * vida_percent, altura))  
+    pygame.draw.rect(tela, (0, 0, 0), (x, y, largura, altura), 3)  
 
 def fase_bowser(tela, clock, estado):
     assets = a.carrega_assets()
@@ -84,6 +92,8 @@ def fase_bowser(tela, clock, estado):
         tela.blit(background, (0, 0))
         tela.blit(player.image, player.rect)
         tela.blit(bowser.image, bowser.rect)
+        desenhar_barra_vida(tela, bowser)
+        desenhar_barra_vida_player(tela, player)
         tiros.draw(tela)
         bolas_de_fogo.draw(tela)
         pygame.display.update()
