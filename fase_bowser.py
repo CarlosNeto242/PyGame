@@ -28,7 +28,7 @@ def fase_bowser(tela, clock, estado):
 
     while estado["Bowser"]: 
         eventos = pygame.event.get()
-
+        bowser.update_ataque()
 
         for evento in eventos:
             if evento.type == pygame.QUIT:

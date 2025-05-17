@@ -77,6 +77,35 @@ class Bowser(pygame.sprite.Sprite):
         self.chovendo = False
         self.inicio_chuva = 0
 
+    def update_ataque(self): 
+        agora = pygame.time.get_ticks()
+
+        if not self.chovendo and agora - self.ultimo_ataque > self.delay_ataque:
+            self.chovendo = True
+            self.inicio_chuva = agora
+            self.ultimo_ataque = agora
+
+        if self.chovendo:
+            if agora - self.inicio_chuva < self.chuva_duracao:
+                if agora % 300 < 20:  # solta várias bolas a cada 300ms
+                    for _ in range(3):  # 3 bolas por vez
+                        x = random.randint(100, 1700)
+                        nova_bola = BolaDeFogo(x, 0)
+                        self.groups["bolas_de_fogo"].add(nova_bola)
+            else:
+                self.chovendo = False
 
 
+class BolaDeFogo(pygame.sprite.Sprite): 
+    def __init__(self, x, y): 
+        pygame.sprite.Sprite.__init__(self)
+        self.image = pygame.transform.scale(pygame.image.load("Sprites/Chefes/bola_fogo.png"), (40, 40))
+        self.rect = self.image.get_rect()
+        self.rect.x = x
+        self.rect.y = y
+        self.speedy = 10
 
+    def update(self): 
+        self.rect.y += self.speedy
+        if self.rect.y > 1080:
+            self.kill()
