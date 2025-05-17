@@ -89,19 +89,29 @@ class Bowser(pygame.sprite.Sprite):
 
     def atacar(self, player):
         agora = pygame.time.get_ticks()
-        if agora - self.ultimo_ataque < 2000:
+        fase = self.fase_atual()
+
+        if fase == 1:
+            intervalo = 3000
+            self.speedx = -2
+        elif fase == 2:
+            intervalo = 2000
+            self.speedx = -3
+        else:
+            intervalo = 1500
+            self.speedx = -4
+
+        if agora - self.ultimo_ataque < intervalo:
             return
         self.ultimo_ataque = agora
 
-        if self.vida > 60:
+        if fase >= 1:
             self.ataque_chuva()
-        elif self.vida > 30:
-            self.ataque_chuva()
+        if fase >= 2:
             self.ataque_investida(player)
-        else:
-            self.ataque_chuva()
-            self.ataque_investida(player)
+        if fase == 3:
             self.ataque_lateral()
+
 
     def ataque_chuva(self):
         for _ in range(4):
