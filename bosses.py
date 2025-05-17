@@ -84,8 +84,16 @@ class Bowser(pygame.sprite.Sprite):
 
     def movimentar(self):
         self.rect.x += self.speedx
-        if self.rect.left <= 1200 or self.rect.right >= 1800:
-            self.speedx *= -1
+
+        LIMITE_ESQUERDO = 1000
+        LIMITE_DIREITO = 1720
+
+        if self.rect.left < LIMITE_ESQUERDO:
+            self.rect.left = LIMITE_ESQUERDO
+            self.speedx = abs(self.speedx)  
+        elif self.rect.right > LIMITE_DIREITO:
+            self.rect.right = LIMITE_DIREITO
+            self.speedx = -abs(self.speedx)  
 
     def atacar(self, player):
         agora = pygame.time.get_ticks()
