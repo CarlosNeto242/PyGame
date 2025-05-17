@@ -1,6 +1,7 @@
 import pygame
 import parametros as p
 import player as pl 
+import random
 
 class Boss(pygame.sprite.Sprite): 
     def __init__(self, assets, grupos): 
@@ -58,3 +59,24 @@ class Barril(pygame.sprite.Sprite):
     def update(self):
         self.update_animacao()
         self.update_posicao()
+
+class Bowser(pygame.sprite.Sprite): 
+    def __init__(self, assets, grupos): 
+        pygame.sprite.Sprite.__init__(self)
+
+        self.image = pygame.transform.scale(pygame.image.load("Sprites/Chefes/bowser_idle.png"), (200, 200))
+        self.assets = assets
+        self.groups = grupos
+        self.rect = self.image.get_rect()
+        self.rect.centerx = 1600
+        self.rect.bottom = 800
+
+        self.ultimo_ataque = pygame.time.get_ticks() 
+        self.delay_ataque = 3000  # a cada 3 segundos
+        self.chuva_duracao = 2000  # dura 2 segundos
+        self.chovendo = False
+        self.inicio_chuva = 0
+
+
+
+

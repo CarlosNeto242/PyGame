@@ -39,6 +39,9 @@ def mapa(tela, clock, estado):
                     player.atirar()
                 if evento.key == pygame.K_UP or evento.key == pygame.K_w:
                     player.pular()
+                if evento.key == pygame.K_b: 
+                    estado["Mapa"] = False
+                    estado["Bowser"] = True
             if evento.type == pygame.KEYUP: 
                 if evento.key == pygame.K_LEFT or evento.key == pygame.K_a: 
                     player.speedx += 8
