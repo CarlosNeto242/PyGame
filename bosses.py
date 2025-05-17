@@ -121,6 +121,14 @@ class Bowser(pygame.sprite.Sprite):
         self.vida -= dano
         if self.vida <= 0:
             self.kill()
+    def fase_atual(self):
+        if self.vida > 60:
+            return 1
+        elif self.vida > 30:
+            return 2
+        else:
+            return 3
+
 
 class BolaDeFogo(pygame.sprite.Sprite):
     def __init__(self, x, y, vertical=True):
