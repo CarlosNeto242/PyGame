@@ -8,7 +8,8 @@ class Player(pygame.sprite.Sprite):
 
         self.i_animacao = assets["animacao player"]  
         self.som_tiro = assets["som_tiro"]
-        self.tiro_especial_img = pygame.transform.scale(assets["tiro player"], (60, 30))  # pode mudar depois
+        self.som_tiroespecial = assets["som_tiroespecial"]
+        self.tiro_especial_img = pygame.image.load("Sprites/megamen/TiroEspecial.png")
         self.tiro_especial_dano = 30
         self.tiro_especial_cooldown = 3000
         self.ultimo_tiro_especial = pygame.time.get_ticks()
@@ -102,6 +103,7 @@ class Player(pygame.sprite.Sprite):
             altura_do_tiro = self.rect.centery + 14
             novo_tiro = TiroEspecial(altura_do_tiro, self.rect.centerx, self.direcao, self.tiro_especial_img)
             self.groups["tiros"].add(novo_tiro)
+            self.som_tiroespecial.play()
 
     def update_gravidade(self, chao_y):
         self.speedy += self.gravity

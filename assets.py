@@ -12,6 +12,7 @@ def carrega_assets():
     assets["fundo mapa"] = pygame.image.load("Sprites/Backgrounds/floresta.png")
     assets["fundo mario"] = pygame.image.load("Sprites/Backgrounds/mario.png")
     assets["som_tiro"] = pygame.mixer.Sound("Sprites/megamen/som_tiro.wav")
+    assets["som_tiroespecial"] = pygame.mixer.Sound("Sprites/megamen/especial.mp3")
     player_animacao = []
     for i in range(11):
         arquivo = f"Sprites/megamen/frame {i}.png"
