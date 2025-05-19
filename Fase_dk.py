@@ -73,6 +73,8 @@ def mapa(tela, clock, estado):
                 if evento.key == pygame.K_b: 
                     estado["DK"] = False
                     estado["Bowser"] = True
+                if evento.key == pygame.K_c:
+                    player.atirar_especial()
             if evento.type == pygame.KEYUP: 
                 if evento.key == pygame.K_LEFT or evento.key == pygame.K_a: 
                     player.speedx += 8
