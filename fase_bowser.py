@@ -44,7 +44,7 @@ def fase_bowser(tela, clock, estado):
     player = pl.Player(grupos, assets) 
     bowser = b.Bowser(assets, grupos)
     # criando um chão
-    chao_y = 800
+    chao_y = 853
     player.rect.bottom = chao_y
     # enquanto a fase acontecer
     while estado["Bowser"]: 
@@ -80,6 +80,7 @@ def fase_bowser(tela, clock, estado):
         player.update_gravidade(chao_y)
         bolas_de_fogo.update()
         tiros.update()
+        background = pygame.transform.scale(background, (p.WIDHT, p.HEIGHT))
         tela.blit(background, (0, 0))
         tela.blit(player.image, player.rect)
         tela.blit(bowser.image, bowser.rect)

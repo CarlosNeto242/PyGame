@@ -47,7 +47,7 @@ def mapa(tela, clock, estado):
     player = pl.Player(grupos, assets)
     boss = b.Boss(assets, grupos)
     # criando um chão
-    chao_y = 800
+    chao_y = 1000
     player.rect.bottom = chao_y
     # enquanto a fase acontecer
     while estado["DK"]: 
