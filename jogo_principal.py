@@ -3,7 +3,7 @@ import parametros as p
 import tela_inicial 
 import bosses
 import Fase_dk
-import ganhar_ou_perder
+import perder
 import ctypes
 import fase_bowser
 
@@ -27,6 +27,8 @@ while estados["Jogando"]:
         Fase_dk.mapa(tela, clock, estados)
     elif estados["Bowser"]:
         fase_bowser.fase_bowser(tela, clock, estados)
+    elif estados["Perder"]: 
+        perder.gameover(tela, clock, estados)
     elif estados["Final"]: 
         pass
 

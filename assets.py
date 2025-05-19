@@ -11,6 +11,7 @@ def carrega_assets():
     assets["fonte apertar inicial"] = pygame.font.Font("Fontes/PressStart2P.ttf", 50)
     assets["fundo mapa"] = pygame.image.load("Sprites/Backgrounds/floresta.png")
     assets["fundo mario"] = pygame.image.load("Sprites/Backgrounds/mario.png")
+    assets["tela de gameover"] = pygame.image.load("Sprites/Telas/game over.jpg")
     assets["som_tiro"] = pygame.mixer.Sound("Sprites/megamen/som_tiro.wav")
     assets["som_tiroespecial"] = pygame.mixer.Sound("Sprites/megamen/especial.mp3")
     player_animacao = []

@@ -100,6 +100,9 @@ def mapa(tela, clock, estado):
                 player.vida -= 5
                 print(f"Vida do jogador: {player.vida}")
                 fogo.kill()
+        if player.vida <= 0: 
+            estado["DK"] = False
+            estado["Perder"] = True
         desenhar_barra_vida(tela, boss)
         desenhar_barra_vida_player(tela, player)
         pygame.display.update()
