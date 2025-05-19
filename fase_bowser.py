@@ -41,7 +41,7 @@ def fase_bowser(tela, clock, estado):
     grupos["tiros"] = tiros
     grupos["bolas_de_fogo"] = bolas_de_fogo
     # declarando as entidades principais do jogo com base nas classes criadas
-    player = pl.Player(grupos, assets)
+    player = pl.Player(grupos, assets) 
     bowser = b.Bowser(assets, grupos)
     # criando um chão
     chao_y = 853
@@ -70,9 +70,9 @@ def fase_bowser(tela, clock, estado):
                     player.atirar_especial()
             if evento.type == pygame.KEYUP:
                 if evento.key in [pygame.K_LEFT, pygame.K_a]:
-                    player.speedx += 8
+                    player.speedx = 0
                 if evento.key in [pygame.K_RIGHT, pygame.K_d]:
-                    player.speedx -= 8
+                    player.speedx = 0
                 player.i_animacao = assets["animacao player"]
         # atualizamos na tela o background, as animacoes do player, do boss de dos projéteis
         player.update_deslocar()
