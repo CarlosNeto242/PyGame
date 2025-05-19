@@ -101,7 +101,9 @@ class Player(pygame.sprite.Sprite):
 
         self.som_tiro.play()
 
-    def atirar_especial(self):
+    def atirar_especial(self,pegou_flor):
+        if not pegou_flor:
+            return
         agora = pygame.time.get_ticks()
         if agora - self.ultimo_tiro_especial >= self.tiro_especial_cooldown:
             self.ultimo_tiro_especial = agora

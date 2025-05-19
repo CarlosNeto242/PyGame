@@ -37,7 +37,7 @@ def inicio(tela, clock, estado):
             if evento.type == pygame.KEYDOWN:
                 if evento.key == pygame.K_SPACE:
                     estado["Inicial"] = False
-                    estado["DK"] = True
+                    estado["Bowser"] = True
         # por fim, atualizamos a cada momento o jogo e determinamos sua taxa de atualizacao
         pygame.display.update()
         clock.tick(p.FPS)
