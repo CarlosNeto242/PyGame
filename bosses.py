@@ -221,3 +221,11 @@ class BolaDeFogo(pygame.sprite.Sprite):
             self.rect.x -= self.speed
         if self.rect.top > 1080 or self.rect.right < 0:
             self.kill()
+
+class FlorDeFogo(pygame.sprite.Sprite):
+    def __init__(self, x, y):
+        pygame.sprite.Sprite.__init__(self)
+        self.image = pygame.transform.scale(pygame.image.load("Sprites/Chefes/flor_de_fogo.png"), (50, 50))
+        self.rect = self.image.get_rect()
+        self.rect.centerx = x
+        self.rect.bottom = y

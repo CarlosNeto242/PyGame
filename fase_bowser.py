@@ -30,6 +30,11 @@ def desenhar_barra_vida_player(tela, player):
     pygame.draw.rect(tela, (0, 0, 0), (x, y, largura, altura), 3)  
 # definimos uma função que rodará o principal da fase 
 def fase_bowser(tela, clock, estado):
+    # Valores booleandos para controlar o estado da flor de fogo
+    pegou_flor = False
+    mostrando_texto = False
+    tempo_texto = 0
+    pode_usar_fogo = False
       # colocamos o background na fase
     assets = a.carrega_assets()
     background = assets["fundo mario"]
@@ -43,6 +48,11 @@ def fase_bowser(tela, clock, estado):
     # declarando as entidades principais do jogo com base nas classes criadas
     player = pl.Player(grupos, assets) 
     bowser = b.Bowser(assets, grupos)
+    # criando a flor de fogo
+    flor = b.FlorDeFogo(400, 800) 
+    grupo_floresta = pygame.sprite.Group()
+    grupo_floresta.add(flor)
+
     # criando um chão
     chao_y = 853
     player.rect.bottom = chao_y
@@ -50,8 +60,16 @@ def fase_bowser(tela, clock, estado):
     while estado["Bowser"]: 
         # analisamos os eventos
         eventos = pygame.event.get()
+        if not pegou_flor and player.rect.colliderect(flor.rect):
+            pegou_flor = True
+            mostrando_texto = True
+            tempo_texto = pygame.time.get_ticks()
+            grupo_floresta.remove(flor)
+
         # fazemos o boss continuamente atacar
-        bowser.update_comportamento(player)
+        if not mostrando_texto:
+            bowser.update_comportamento(player)
+
         # analisamos as teclas que o player pode ativar
         for evento in eventos:
             if evento.type == pygame.QUIT:
@@ -67,7 +85,7 @@ def fase_bowser(tela, clock, estado):
                 if evento.key in [pygame.K_UP, pygame.K_w]:
                     player.pular()
                 if evento.key == pygame.K_c:
-                    player.atirar_especial()
+                    player.atirar_especial(pegou_flor)
             if evento.type == pygame.KEYUP:
                 if evento.key in [pygame.K_LEFT, pygame.K_a]:
                     player.speedx = 0
@@ -82,6 +100,7 @@ def fase_bowser(tela, clock, estado):
         tiros.update()
         background = pygame.transform.scale(background, (p.WIDHT, p.HEIGHT))
         tela.blit(background, (0, 0))
+        grupo_floresta.draw(tela)
         tela.blit(player.image, player.rect)
         tela.blit(bowser.image, bowser.rect)
         tiros.draw(tela)
@@ -110,4 +129,16 @@ def fase_bowser(tela, clock, estado):
         desenhar_barra_vida_player(tela, player)
         # por fim, atualizamos a cada momento o jogo e determinamos sua taxa de atualizacao
         pygame.display.update()
+        if mostrando_texto:
+            fonte = pygame.font.SysFont("Arial", 40)
+            texto1 = fonte.render("Você adquiriu um novo poder: Tiro de Fogo!", True, (255, 255, 0))
+            texto2 = fonte.render("Use o botão C para disparar. Requer tempo de recarga.", True, (255, 255, 0))
+            tela.blit(texto1, ((p.WIDHT - texto1.get_width()) // 2, 300))
+            tela.blit(texto2, ((p.WIDHT - texto2.get_width()) // 2, 360))
+
+            # Pausar por 4 segundos
+            if pygame.time.get_ticks() - tempo_texto > 4000:
+                mostrando_texto = False
+                pode_usar_fogo = True
+
         clock.tick(p.FPS)
