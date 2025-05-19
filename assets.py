@@ -54,4 +54,5 @@ def carrega_assets():
     animacao_foguinho.append(pygame.image.load("Sprites/Chefes/foguinho 2.png"))
     animacao_foguinho[1] = pygame.transform.scale(animacao_foguinho[1], (60, 60))
     assets["foguinho dk"] = animacao_foguinho
+    
     return assets
