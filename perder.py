@@ -21,7 +21,7 @@ def gameover(tela, clock, estado):
 
         for evento in eventos: 
             if evento.type == pygame.QUIT:
-                estado["Inicial"] = False
+                estado["Perder"] = False
                 estado["Jogando"] = False 
             if evento.type == pygame.KEYDOWN:
                 if evento.key == pygame.K_SPACE:

@@ -88,6 +88,12 @@ def fase_bowser(tela, clock, estado):
                 bowser.levar_dano(dano)
                 print(f"Vida do Bowser: {bowser.vida}")
                 tiro.kill()
+        if player.vida <= 0: 
+            estado["DK"] = False
+            estado["Perder"] = True
+        if bowser.vida <= 0: 
+            estado["DK"] = False
+            estado["Ganhar"] = True
 
         tela.blit(background, (0, 0))
         tela.blit(player.image, player.rect)

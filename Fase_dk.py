@@ -43,12 +43,11 @@ def mapa(tela, clock, estado):
     boss = b.Boss(assets, grupos)
     chao_y = 800
     player.rect.bottom = chao_y
-    checador = 0
+    passada = 0
     while estado["DK"]: 
         eventos = pygame.event.get()
         boss.update_tiro()
         boss.ataque_chuva()
-        checador += 1
         for evento in eventos: 
             if evento.type == pygame.QUIT:
                 estado["Jogando"] = False
@@ -103,6 +102,10 @@ def mapa(tela, clock, estado):
         if player.vida <= 0: 
             estado["DK"] = False
             estado["Perder"] = True
+        if boss.vida <= 0: 
+            passada += 1
+            estado["DK"] = False
+            estado["Ganhar"] = True
         desenhar_barra_vida(tela, boss)
         desenhar_barra_vida_player(tela, player)
         pygame.display.update()
