@@ -4,7 +4,6 @@ import parametros as p
 import assets as a
 import player as pl
 import bosses as b
-from Fase_dk import passada
 
 pygame.init()
 # definindo uma função responsável por montar a tela de vitória (será posteriormente chamada no loop principal)

@@ -26,12 +26,13 @@ while estados["Jogando"]:
         tela_inicial.inicio(tela, clock, estados)
     elif estados["DK"]:
         Fase_dk.mapa(tela, clock, estados)
+        fase = "Bowser"
     elif estados["Bowser"]:
         fase_bowser.fase_bowser(tela, clock, estados)
     elif estados["Perder"]: 
         perder.gameover(tela, clock, estados)
     elif estados["Ganhar"]: 
-        ganhar.win(tela, clock, estados)
+        ganhar.win(tela, clock, estados, fase)
     elif estados["Final"]: 
         pass
 
