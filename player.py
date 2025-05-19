@@ -1,8 +1,13 @@
+# importamos as bibliotecas e arquivos necessários para montar a tela inicial
 import pygame
 import parametros as p
 import assets as a
+# carregamos os assetas para usar nas classes
 assets = a.carrega_assets()
+# a primeira classe criada se refere ao player 
 class Player(pygame.sprite.Sprite):
+    # inicialmente, definimos diversos parâmetros: dimensões, animações, velocidade...
+    # Não só isso, mas o intervalo de tempo entre os frames das animações e de seus projéteis
     def __init__(self, grupos, assets):
         pygame.sprite.Sprite.__init__(self)
 

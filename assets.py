@@ -1,9 +1,11 @@
+# carregando as bibliotecas necessárias para rodar o programa
 import pygame 
 import os
 
 pygame.font.init()
 
-
+# definindo uma função que guardará todos os assets do jogo por meio de um dicionário. 
+# sempre que precisamos chamar um assets, chamamos essa função e o dicionário contido nela.
 def carrega_assets():
     assets = {}
     assets["imagem tela inicial"] = pygame.image.load("Sprites/megaman_inicial.jpg")
