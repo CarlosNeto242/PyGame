@@ -7,6 +7,7 @@ import perder
 import ganhar
 import ctypes
 import fase_bowser
+import selecao_fase
 
 try:
     ctypes.windll.user32.SetProcessDPIAware()
@@ -18,11 +19,13 @@ pygame.font.init()
 
 tela = pygame.display.set_mode((p.WIDHT, p.HEIGHT),)
 clock = pygame.time.Clock()
-estados = {"Jogando" : True, "Inicial" : True, "Mapa" : False, "Ganhar" : False, "Perder" : False, "DK" : False, "Bowser" : False, "Final" : False}
+estados = {"Jogando" : True, "Inicial" : True, "Mapa" : False, "Ganhar" : False, "Perder" : False, "DK" : False, "Bowser" : False, "PacMan" : False, "Final" : False}
 
 while estados["Jogando"]: 
     if estados["Inicial"]: 
         tela_inicial.inicio(tela, clock, estados)
+    elif estados["Mapa"]:
+        selecao_fase.selecionar(tela, clock, estados)
     elif estados["DK"]:
         Fase_dk.mapa(tela, clock, estados)
         fase = "Bowser"
