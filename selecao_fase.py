@@ -5,7 +5,9 @@ import botao as b
 
 def selecionar(tela, clock, estado):
     assets = a.carrega_assets()
-    espacamento = 300 
+    fonte = assets["fonte apertar inicial"]
+
+    espacamento = 400
     x = espacamento
     y = 500
     botoes = pygame.sprite.Group()
@@ -26,11 +28,21 @@ def selecionar(tela, clock, estado):
         tela.fill((0, 0, 0))
         for botao in botoes:
             tela.blit(botao.image, botao.rect)
+        fonte1 = fonte.render("Selecione a fase desejada", True, (255, 255, 255))
+        fonte_rect1 = fonte1.get_rect()
+        fonte_rect1.midtop = (p.WIDHT/2, 800)
+        tela.blit(fonte1, fonte_rect1)
         
         for event in pygame.event.get(): 
             if event.type == pygame.QUIT:
                 estado["Mapa"] = False
                 estado["Jogando"] = False
+            if event.type == pygame.MOUSEMOTION: 
+                for botao in botoes: 
+                    if botao.rect.collidepoint(event.pos):
+                        botao.image = pygame.transform.scale(botao.image, (300, 300))
+                    else:
+                        botao.image = pygame.transform.scale(botao.image, (200, 200))
             elif event.type == pygame.MOUSEBUTTONDOWN:
                 for botao in botoes: 
                     if botao.rect.collidepoint(event.pos):

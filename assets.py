@@ -55,10 +55,10 @@ def carrega_assets():
     animacao_foguinho[1] = pygame.transform.scale(animacao_foguinho[1], (60, 60))
     assets["foguinho dk"] = animacao_foguinho
     icon_dk = pygame.image.load("Sprites/Botoes/Fase 1.jpg")
-    assets["Icon DK"] = pygame.transform.scale(icon_dk, (100, 100))
+    assets["Icon DK"] = pygame.transform.scale(icon_dk, (250, 250))
     icon_bowser = pygame.image.load("Sprites/Botoes/Fase 2.png")
-    assets["Icon Bowser"] = pygame.transform.scale(icon_bowser, (100, 100))
+    assets["Icon Bowser"] = pygame.transform.scale(icon_bowser, (250, 250))
     icon_pacman = pygame.image.load("Sprites/Botoes/Fase 3.jpg")
-    assets["Icon PacMan"] = pygame.transform.scale(icon_pacman, (100, 100))
+    assets["Icon PacMan"] = pygame.transform.scale(icon_pacman, (250, 250))
     
     return assets
