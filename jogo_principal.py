@@ -18,7 +18,7 @@ pygame.init()
 pygame.font.init()
 tela = pygame.display.set_mode((p.WIDHT, p.HEIGHT),)
 clock = pygame.time.Clock()
-estados = {"Jogando" : True, "Inicial" : True, "Mapa" : False, "Ganhar" : False, "Perder" : False, "DK" : False, "Bowser" : False, "PacMan" : False, "Final" : False}
+estados = {"Jogando" : True, "Inicial" : True, "Mapa" : False, "Ganhar" : False, "Perder" : False, "DK" : False, "Bowser" : False, "EggMan" : False, "Final" : False}
 
 while estados["Jogando"]: 
     if estados["Inicial"]: 

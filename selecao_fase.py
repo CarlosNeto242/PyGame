@@ -20,7 +20,7 @@ def selecionar(tela, clock, estado):
     botao1.rect.x = 2*x
     botao1.rect.centery = y
 
-    botao2 = b.Botao(assets, botoes, "Icon PacMan")
+    botao2 = b.Botao(assets, botoes, "Icon EggMan")
     botao2.rect.x = 3*x
     botao2.rect.centery = y
 
@@ -53,7 +53,7 @@ def selecionar(tela, clock, estado):
                             estado["Bowser"] = True
                             estado["Mapa"] = False
                         elif botao.nome_da_fase == "Icon PacMan": 
-                            estado["PacMan"] = True
+                            estado["EggMan"] = True
                             estado["Mapa"] = False
         pygame.display.update()
         clock.tick(p.FPS)
