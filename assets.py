@@ -10,6 +10,7 @@ def carrega_assets():
     assets = {}
     assets["imagem tela inicial"] = pygame.image.load("Sprites/megaman_inicial.jpg")
     assets["fonte titulo inicial"] = pygame.font.Font("Fontes/Thaleahfat.ttf", 200)
+    assets["background fliperama"] = pygame.image.load("Sprites/Backgrounds/Fliperama.png")
     assets["fonte apertar inicial"] = pygame.font.Font("Fontes/PressStart2P.ttf", 50)
     assets["fundo mapa"] = pygame.image.load("Sprites/Backgrounds/floresta.png")
     assets["fundo mario"] = pygame.image.load("Sprites/Backgrounds/mario.png")

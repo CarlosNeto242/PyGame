@@ -58,6 +58,13 @@ class Player(pygame.sprite.Sprite):
         elif self.speedx < 0:
             self.direcao = -1
 
+    def update_deslocar_fixo(self):
+        self.rect.x += self.speedx
+
+        if self.knockback_frames > 0:
+            self.rect.x += self.knockback_x
+            self.knockback_frames -= 1
+
     def update_animacao(self): 
         agora = pygame.time.get_ticks()
         ticks_passados = agora - self.ultimo_frame

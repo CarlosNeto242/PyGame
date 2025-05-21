@@ -6,6 +6,8 @@ import botao as b
 def selecionar(tela, clock, estado):
     assets = a.carrega_assets()
     fonte = assets["fonte apertar inicial"]
+    background = assets["background fliperama"]
+    background = pygame.transform.scale(background, (p.WIDHT, p.HEIGHT))
 
     espacamento = 400
     x = espacamento
@@ -25,7 +27,7 @@ def selecionar(tela, clock, estado):
     botao2.rect.centery = y
 
     while estado["Mapa"]: 
-        tela.fill((0, 0, 0))
+        tela.blit((background), (0, 0))
         for botao in botoes:
             tela.blit(botao.image, botao.rect)
         fonte1 = fonte.render("Selecione a fase desejada", True, (255, 255, 255))
