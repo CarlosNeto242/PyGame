@@ -49,7 +49,7 @@ def fase_bowser(tela, clock, estado):
     grupo_floresta = pygame.sprite.Group()
     grupo_floresta.add(flor)
 
-    chao_y = 853
+    chao_y = 801.5
     player.rect.bottom = chao_y
 
     camera_x = 0
