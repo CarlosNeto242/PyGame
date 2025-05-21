@@ -12,13 +12,13 @@ class Player(pygame.sprite.Sprite):
         pygame.sprite.Sprite.__init__(self)
 
         self.i_animacao = assets["animacao player"]  
-        self.som_tiro = assets["som_tiro"]
+        # self.som_tiro = assets["som_tiro"]
         self.som_tiroespecial = assets["som_tiroespecial"]
         self.tiro_especial_img = pygame.image.load("Sprites/megamen/TiroEspecial.png")
         self.tiro_especial_dano = 30
         self.tiro_especial_cooldown = 3000
         self.ultimo_tiro_especial = pygame.time.get_ticks()
-        self.som_tiro.set_volume(0.5)
+        # self.som_tiro.set_volume(0.5)
         self.frame = 0 
         self.animacao_pulo = assets["animacao pulo"]
         self.image = self.i_animacao[self.frame]
@@ -99,7 +99,7 @@ class Player(pygame.sprite.Sprite):
             self.image = self.i_animacao[self.frame % len(self.i_animacao)]
             self.image = pygame.transform.flip(self.image, True, False)
 
-        self.som_tiro.play()
+        # self.som_tiro.play()
 
     def atirar_especial(self,pegou_flor):
         if not pegou_flor:
@@ -142,7 +142,7 @@ class Tiro(pygame.sprite.Sprite):
     def update(self):
         self.rect.x += self.speedx
 
-        if self.rect.x > p.WIDHT:
+        if self.rect.x > self.rect.x + p.WIDHT or self.rect.x < self.rect.x - p.WIDHT:
             self.kill()
     
 class TiroEspecial(pygame.sprite.Sprite):
@@ -157,7 +157,7 @@ class TiroEspecial(pygame.sprite.Sprite):
 
     def update(self):
         self.rect.x += self.speedx
-        if self.rect.right < 0 or self.rect.left > p.WIDHT:
+        if self.rect.x > self.rect.x + p.WIDHT or self.rect.x < self.rect.x - p.WIDHT:
             self.kill()
         
         
