@@ -246,3 +246,32 @@ class EggMan(pygame.sprite.Sprite):
         self.max_vida = 100
 
         self.ultimo_ataque = pygame.time.get_ticks()
+
+class Inimigo(pygame.sprite.Sprite):
+    def __init__(self, x, y, tipo):
+        super().__init__()
+        self.tipo = tipo
+        
+        # Configurações visuais diferentes para cada inimigo
+        if tipo == "planta":
+            self.image = pygame.Surface((40, 60))
+            self.image.fill((0, 255, 0))  # Verde
+            self.dano = 5
+            self.speed = 0  # Planta não se move
+        elif tipo == "goomba":
+            self.image = pygame.Surface((40, 40))
+            self.image.fill((165, 42, 42))  # Marrom
+            self.dano = 10
+            self.speed = -1  # Goomba anda para esquerda
+            
+        self.rect = self.image.get_rect()
+        self.rect.x = x
+        self.rect.bottom = y  # Alinha pela base
+
+    def update(self):
+        """Atualiza o movimento dos inimigos"""
+        if self.tipo == "goomba":
+            self.rect.x += self.speed
+            # Inverte direção ao bater nas bordas
+            if self.rect.left < 0 or self.rect.right > p.WIDHT:
+                self.speed *= -1

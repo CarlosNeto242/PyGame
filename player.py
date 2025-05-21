@@ -14,7 +14,6 @@ class Player(pygame.sprite.Sprite):
         self.i_animacao = assets["animacao player"]  
         # self.som_tiro = assets["som_tiro"]
         self.som_tiroespecial = assets["som_tiroespecial"]
-        self.tiro_especial_img = pygame.image.load("Sprites/megamen/TiroEspecial.png")
         self.tiro_especial_dano = 30
         self.tiro_especial_cooldown = 3000
         self.ultimo_tiro_especial = pygame.time.get_ticks()
@@ -86,7 +85,7 @@ class Player(pygame.sprite.Sprite):
         if elapsed_ticks > self.tiro_ticks: 
             self.ultimo_tiro = agora
             altura_do_tiro = self.rect.centery + 14
-            novo_tiro = Tiro(altura_do_tiro, self.rect.centerx, self.direcao)
+            novo_tiro = Tiro(altura_do_tiro, self.rect.centerx, self.direcao, self.rect.x)
             self.groups["tiros"].add(novo_tiro)
         
         if elapsed_ticks > self.frames_ticks and self.speedx > 0: 
@@ -107,8 +106,7 @@ class Player(pygame.sprite.Sprite):
         agora = pygame.time.get_ticks()
         if agora - self.ultimo_tiro_especial >= self.tiro_especial_cooldown:
             self.ultimo_tiro_especial = agora
-            altura_do_tiro = self.rect.centery + 14
-            novo_tiro = TiroEspecial(altura_do_tiro, self.rect.centerx, self.direcao, self.tiro_especial_img)
+            novo_tiro = TiroEspecial(self.rect.bottom, self.rect.centerx, self.direcao)
             self.groups["tiros"].add(novo_tiro)
             self.som_tiroespecial.play()
 
@@ -129,35 +127,66 @@ class Player(pygame.sprite.Sprite):
         
 
 class Tiro(pygame.sprite.Sprite): 
-    def __init__(self, bottom, centerx, direcao):
+    def __init__(self, bottom, centerx, direcao, player_x):
         pygame.sprite.Sprite.__init__(self)
-
         self.image = assets["tiro player"]
         self.rect = self.image.get_rect()
         self.rect.centerx = centerx
         self.rect.bottom = bottom 
-
         self.speedx = 15 * direcao
+        self.player_x = player_x  # salva posição do player no momento do tiro
 
     def update(self):
         self.rect.x += self.speedx
 
-        if self.rect.x > self.rect.x + p.WIDHT or self.rect.x < self.rect.x - p.WIDHT:
+        if self.rect.x > self.player_x + p.WIDHT or self.rect.x < self.player_x - p.WIDHT:
             self.kill()
+
+            print("Tiro saiu da tela")
     
 class TiroEspecial(pygame.sprite.Sprite):
-    def __init__(self, bottom, centerx, direcao, imagem):
+    def __init__(self, bottom, centerx, direcao):
         pygame.sprite.Sprite.__init__(self)
-        self.image = imagem
+        self.animacao = assets["animacao fogo"]
+        self.frame = 0
+        self.image = self.animacao[self.frame]
         self.rect = self.image.get_rect()
         self.rect.centerx = centerx
         self.rect.bottom = bottom
-        self.speedx = 20 * direcao
+
+        self.speedx = 10 * direcao
+        self.speedy = -10
+        self.gravity = 0.5
+        self.bounces = 0
+        self.max_bounces = 3
+        self.chao_y = 801.5
         self.dano = 30
 
+        self.ultimo_frame = pygame.time.get_ticks()
+        self.frame_intervalo = 100  # milissegundos por frame
+
     def update(self):
+        # Animação
+        agora = pygame.time.get_ticks()
+        if agora - self.ultimo_frame > self.frame_intervalo:
+            self.ultimo_frame = agora
+            self.frame = (self.frame + 1) % len(self.animacao)
+            self.image = self.animacao[self.frame]
+
+        # Movimento
         self.rect.x += self.speedx
-        if self.rect.x > self.rect.x + p.WIDHT or self.rect.x < self.rect.x - p.WIDHT:
+        self.speedy += self.gravity
+        self.rect.y += self.speedy
+
+        # Quicar no chão
+        if self.rect.bottom >= self.chao_y:
+            self.rect.bottom = self.chao_y
+            self.speedy = -10
+            self.bounces += 1
+
+        if self.bounces > self.max_bounces:
             self.kill()
+
+
         
         

@@ -71,9 +71,9 @@ def fase_bowser(tela, clock, estado):
                 estado["Bowser"] = False
             if evento.type == pygame.KEYDOWN:
                 if evento.key in [pygame.K_LEFT, pygame.K_a]:
-                    player.speedx -= 8
+                    player.speedx -= 5
                 if evento.key in [pygame.K_RIGHT, pygame.K_d]:
-                    player.speedx += 8
+                    player.speedx += 5
                 if evento.key == pygame.K_v:
                     player.atirar()
                 if evento.key in [pygame.K_UP, pygame.K_w]:
