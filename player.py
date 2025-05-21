@@ -40,13 +40,13 @@ class Player(pygame.sprite.Sprite):
         self.ultimo_tiro = pygame.time.get_ticks() 
         self.tiro_ticks = 200
 
-    def update_deslocar(self):
+    def update_deslocar(self, limite_esquerdo, limite_direito):
         self.rect.x += self.speedx
         
-        if self.rect.right > p.WIDHT: 
-            self.rect.right = p.WIDHT
-        if self.rect.left < 0:
-            self.rect.left = 0
+        if self.rect.right > limite_direito: 
+            self.rect.right = limite_direito
+        if self.rect.left < limite_esquerdo:
+            self.rect.left = limite_esquerdo   
         if self.speedx > 0:
             self.direcao = 1
         elif self.speedx < 0:
