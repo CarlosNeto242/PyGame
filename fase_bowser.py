@@ -33,7 +33,6 @@ def fase_bowser(tela, clock, estado):
     pegou_flor = False
     mostrando_texto = False
     tempo_texto = 0
-    pode_usar_fogo = False
     bowser = False
 
     assets = a.carrega_assets()
@@ -41,6 +40,7 @@ def fase_bowser(tela, clock, estado):
 
     tiros = pygame.sprite.Group()
     bolas_de_fogo = pygame.sprite.Group()
+    inimigos = pygame.sprite.Group()
     grupos = {"tiros": tiros, "bolas_de_fogo": bolas_de_fogo}
 
     player = pl.Player(grupos, assets) 
@@ -53,6 +53,17 @@ def fase_bowser(tela, clock, estado):
     player.rect.bottom = chao_y
 
     camera_x = 0
+
+    inimigos_list = [
+        ("planta", 400, chao_y),
+        ("goomba", 500, chao_y),
+        ("planta", 800, chao_y)
+    ]
+    
+    for tipo, x, y in inimigos_list:
+        enemy = b.Inimigo(x, y, tipo)
+        inimigos.add(enemy)
+        # all_sprites.add(enemy)
 
     while estado["Bowser"]: 
         eventos = pygame.event.get()
@@ -95,6 +106,8 @@ def fase_bowser(tela, clock, estado):
         player.update_gravidade(chao_y)
         bolas_de_fogo.update()
         tiros.update()
+        inimigos.update()
+
 
         target_camera_x = player.rect.centerx - p.WIDHT // 2
         camera_x += (target_camera_x - camera_x) * 0.1
@@ -112,6 +125,9 @@ def fase_bowser(tela, clock, estado):
 
         tela.blit(player.image, (player.rect.x - camera_x, player.rect.y))
         # tela.blit(bowser.image, (bowser.rect.x - camera_x, bowser.rect.y))
+        for inimigo in inimigos:
+            tela.blit(inimigo.image, (inimigo.rect.x - camera_x, inimigo.rect.y))
+
         for tiro in tiros:
             tela.blit(tiro.image, (tiro.rect.x - camera_x, tiro.rect.y))
         for bola in bolas_de_fogo:
@@ -121,11 +137,21 @@ def fase_bowser(tela, clock, estado):
             if player.rect.colliderect(bola.rect):
                 player.vida -= 10
                 bola.kill()
+
         # for tiro in tiros:
         #     if bowser.rect.colliderect(tiro.rect):
         #         dano = getattr(tiro, "dano", 10)
         #         bowser.levar_dano(dano)
         #         tiro.kill()
+
+        enemy_hits = pygame.sprite.spritecollide(player, inimigos, False)
+        for enemy in enemy_hits:
+            # Se pisou no goomba
+            if enemy.tipo == "goomba" and player.speedy > 0:
+                enemy.kill()
+                player.speedy = -5  # Pequeno repique
+            else:
+                player.vida -= enemy.dano * 0.1  # Dano gradual
 
         if player.vida <= 0: 
             estado["Bowser"] = False
