@@ -32,6 +32,9 @@ class Player(pygame.sprite.Sprite):
         self.gravity = 0.8
         self.vida = 100
         self.max_vida = 100
+        self.knockback_x = 0
+        self.knockback_frames = 0
+
 
         self.ultimo_frame = pygame.time.get_ticks()
         self.frames_ticks = 50
@@ -41,7 +44,11 @@ class Player(pygame.sprite.Sprite):
 
     def update_deslocar(self, limite_esquerdo, limite_direito):
         self.rect.x += self.speedx
-        
+
+        if self.knockback_frames > 0:
+            self.rect.x += self.knockback_x
+            self.knockback_frames -= 1
+
         if self.rect.right > limite_direito: 
             self.rect.right = limite_direito
         if self.rect.left < limite_esquerdo:

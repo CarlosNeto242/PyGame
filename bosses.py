@@ -248,9 +248,14 @@ class EggMan(pygame.sprite.Sprite):
         self.ultimo_ataque = pygame.time.get_ticks()
 
 class Inimigo(pygame.sprite.Sprite):
-    def __init__(self, x, y, tipo):
+    def __init__(self, x, y, tipo, assets):
         super().__init__()
         self.tipo = tipo
+        self.animacao_planta = assets["animacao planta"]
+        self.animacao_goomba = assets["animacao goomba"]
+        self.animacao = self.animacao_planta if tipo == "planta" else self.animacao_goomba
+        self.ultimo_frame = pygame.time.get_ticks() 
+        self.frame_ticks = 50
         
         # Configurações visuais diferentes para cada inimigo
         if tipo == "planta":
@@ -260,18 +265,29 @@ class Inimigo(pygame.sprite.Sprite):
             self.speed = 0  # Planta não se move
         elif tipo == "goomba":
             self.image = pygame.Surface((40, 40))
-            self.image.fill((165, 42, 42))  # Marrom
             self.dano = 10
             self.speed = -1  # Goomba anda para esquerda
-            
+        self.frame = 0
         self.rect = self.image.get_rect()
         self.rect.x = x
         self.rect.bottom = y  # Alinha pela base
 
-    def update(self):
+    def update_animacao(self): 
+        agora = pygame.time.get_ticks()
+        ticks_passados = agora - self.ultimo_frame
+        if ticks_passados > self.frame_ticks:
+            self.ultimo_frame = agora
+            self.frame += 1
+            self.image = self.animacao[self.frame % len(self.animacao)]
+
+    def update_posição(self):
         """Atualiza o movimento dos inimigos"""
         if self.tipo == "goomba":
             self.rect.x += self.speed
             # Inverte direção ao bater nas bordas
             if self.rect.left < 0 or self.rect.right > p.WIDHT:
                 self.speed *= -1
+    def update(self):
+        self.update_posição()
+        self.update_animacao()
+

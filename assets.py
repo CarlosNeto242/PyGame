@@ -75,4 +75,20 @@ def carrega_assets():
     animacao_foguinho.append(imagem)
     assets["animacao fogo"] = animacao_foguinho
 
+    animacao_goomba = []
+    for i in [1,2,3,4]:
+        goomba = pygame.image.load(f"Sprites/megamen/goomba {i}.png")
+        frame = pygame.transform.scale(goomba, (100, 100))
+        animacao_goomba.append(frame)
+    assets["animacao goomba"] = animacao_goomba
+
+    animacao_planta = []
+    imagem = pygame.image.load("Sprites/megamen/Planta 1.png")
+    imagem = pygame.transform.scale(imagem, (100,100))
+    animacao_planta.append(imagem)
+    imagem = pygame.image.load("Sprites/megamen/Planta 2.png")
+    imagem = pygame.transform.scale(imagem, (100,100))
+    animacao_planta.append(imagem)
+    assets["animacao planta"] = animacao_planta
+
     return assets

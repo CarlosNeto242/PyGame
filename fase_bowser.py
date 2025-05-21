@@ -61,7 +61,7 @@ def fase_bowser(tela, clock, estado):
     ]
     
     for tipo, x, y in inimigos_list:
-        enemy = b.Inimigo(x, y, tipo)
+        enemy = b.Inimigo(x, y, tipo, assets)
         inimigos.add(enemy)
         # all_sprites.add(enemy)
 
@@ -151,7 +151,10 @@ def fase_bowser(tela, clock, estado):
                 enemy.kill()
                 player.speedy = -5  # Pequeno repique
             else:
-                player.vida -= enemy.dano * 0.1  # Dano gradual
+                direcao = 1 if player.rect.centerx < enemy.rect.centerx else -1
+                player.knockback_x = -direcao * 10  # recua 10px por frame
+                player.knockback_frames = 5         # por 5 frames
+                player.vida -= enemy.dano * 0.1
 
         if player.vida <= 0: 
             estado["Bowser"] = False
