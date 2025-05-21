@@ -3,7 +3,7 @@ import parametros as p
 import tela_inicial 
 import bosses
 import Fase_dk
-import perder
+import perder 
 import ganhar
 import ctypes
 import fase_bowser
