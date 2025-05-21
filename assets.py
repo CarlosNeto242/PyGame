@@ -80,15 +80,29 @@ def carrega_assets():
         goomba = pygame.image.load(f"Sprites/megamen/goomba {i}.png")
         frame = pygame.transform.scale(goomba, (100, 100))
         animacao_goomba.append(frame)
-    assets["animacao goomba"] = animacao_goomba
+    assets["goomba"] = animacao_goomba
 
     animacao_planta = []
     imagem = pygame.image.load("Sprites/megamen/Planta 1.png")
-    imagem = pygame.transform.scale(imagem, (100,100))
+    imagem = pygame.transform.scale(imagem, (100,150))
+    imagem = pygame.transform.rotate(imagem, 180)
     animacao_planta.append(imagem)
     imagem = pygame.image.load("Sprites/megamen/Planta 2.png")
-    imagem = pygame.transform.scale(imagem, (100,100))
+    imagem = pygame.transform.scale(imagem, (100,150))
+    imagem = pygame.transform.rotate(imagem, 180)
     animacao_planta.append(imagem)
-    assets["animacao planta"] = animacao_planta
+    assets["planta"] = animacao_planta
 
+    # Koopa
+    assets["koopa"] = [
+        pygame.image.load("Sprites/Chefes/koopa.png")
+    ]
+
+
+    # Bullet Bill
+    assets["bullet"] = [
+        pygame.image.load("Sprites/Chefes/bullet.png")
+    ]
+
+    assets["bloco"] = pygame.image.load("Sprites/Chefes/bloco.png")
     return assets

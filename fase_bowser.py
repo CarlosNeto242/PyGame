@@ -4,6 +4,7 @@ import parametros as p
 import assets as a
 import player as pl
 import bosses as b
+from plataformas import Bloco
 
 pygame.init()
 pygame.font.init()
@@ -40,7 +41,6 @@ def fase_bowser(tela, clock, estado):
 
     tiros = pygame.sprite.Group()
     bolas_de_fogo = pygame.sprite.Group()
-    inimigos = pygame.sprite.Group()
     grupos = {"tiros": tiros, "bolas_de_fogo": bolas_de_fogo}
 
     player = pl.Player(grupos, assets) 
@@ -49,6 +49,15 @@ def fase_bowser(tela, clock, estado):
     grupo_floresta = pygame.sprite.Group()
     grupo_floresta.add(flor)
 
+    inimigos = pygame.sprite.Group()  # <-- NOVO
+    inimigos.add(b.Goomba(assets, 500, 853))  # <-- EXEMPLO DE INIMIGO
+    inimigos.add(b.Koopa(assets, 800, 853))
+    inimigos.add(b.PlantaCarnivora(assets, 600, 853))
+
+    plataformas = pygame.sprite.Group()  # <-- NOVO
+    plataformas.add(Bloco(400, 700, assets["bloco"]))  # <-- EXEMPLO DE BLOCO
+
+    chao_y = 853
     chao_y = 801.5
     player.rect.bottom = chao_y
 
@@ -61,9 +70,9 @@ def fase_bowser(tela, clock, estado):
     ]
     
     for tipo, x, y in inimigos_list:
-        enemy = b.Inimigo(x, y, tipo, assets)
-        inimigos.add(enemy)
-        # all_sprites.add(enemy)
+        inimigos.add(b.Goomba(assets, x, y))
+        inimigos.add(b.Koopa(assets, x, y))
+        inimigos.add(b.PlantaCarnivora(assets, x, y))
 
     while estado["Bowser"]: 
         eventos = pygame.event.get()
@@ -122,6 +131,12 @@ def fase_bowser(tela, clock, estado):
 
         for flor in grupo_floresta:
             tela.blit(flor.image, (flor.rect.x - camera_x, flor.rect.y))
+        
+        for plataforma in plataformas:  # <-- NOVO
+            tela.blit(plataforma.image, (plataforma.rect.x - camera_x, plataforma.rect.y))
+
+        for inimigo in inimigos:  # <-- NOVO
+            tela.blit(inimigo.image, (inimigo.rect.x - camera_x, inimigo.rect.y))
 
         tela.blit(player.image, (player.rect.x - camera_x, player.rect.y))
         # tela.blit(bowser.image, (bowser.rect.x - camera_x, bowser.rect.y))
@@ -147,7 +162,7 @@ def fase_bowser(tela, clock, estado):
         enemy_hits = pygame.sprite.spritecollide(player, inimigos, False)
         for enemy in enemy_hits:
             # Se pisou no goomba
-            if enemy.tipo == "goomba" and player.speedy > 0:
+            if isinstance(enemy, b.Goomba) and player.speedy > 0:
                 enemy.kill()
                 player.speedy = -5  # Pequeno repique
             else:

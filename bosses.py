@@ -248,46 +248,41 @@ class EggMan(pygame.sprite.Sprite):
         self.ultimo_ataque = pygame.time.get_ticks()
 
 class Inimigo(pygame.sprite.Sprite):
-    def __init__(self, x, y, tipo, assets):
+    def __init__(self, animacao, x, y, speedx=0):
         super().__init__()
-        self.tipo = tipo
-        self.animacao_planta = assets["animacao planta"]
-        self.animacao_goomba = assets["animacao goomba"]
-        self.animacao = self.animacao_planta if tipo == "planta" else self.animacao_goomba
-        self.ultimo_frame = pygame.time.get_ticks() 
-        self.frame_ticks = 50
-        
-        # Configurações visuais diferentes para cada inimigo
-        if tipo == "planta":
-            self.image = pygame.Surface((40, 60))
-            self.image.fill((0, 255, 0))  # Verde
-            self.dano = 5
-            self.speed = 0  # Planta não se move
-        elif tipo == "goomba":
-            self.image = pygame.Surface((40, 40))
-            self.dano = 10
-            self.speed = -1  # Goomba anda para esquerda
-        self.frame = 0
+        self.animacao = animacao
+        self.image = self.animacao[0]
         self.rect = self.image.get_rect()
         self.rect.x = x
-        self.rect.bottom = y  # Alinha pela base
+        self.rect.bottom = y
+        self.speedx = speedx
+        self.frame = 0
+        self.ultimo_frame = pygame.time.get_ticks()
+        self.frame_interval = 200
 
-    def update_animacao(self): 
-        agora = pygame.time.get_ticks()
-        ticks_passados = agora - self.ultimo_frame
-        if ticks_passados > self.frame_ticks:
-            self.ultimo_frame = agora
-            self.frame += 1
-            self.image = self.animacao[self.frame % len(self.animacao)]
-
-    def update_posição(self):
-        """Atualiza o movimento dos inimigos"""
-        if self.tipo == "goomba":
-            self.rect.x += self.speed
-            # Inverte direção ao bater nas bordas
-            if self.rect.left < 0 or self.rect.right > p.WIDHT:
-                self.speed *= -1
     def update(self):
-        self.update_posição()
-        self.update_animacao()
+        self.rect.x += self.speedx
+        agora = pygame.time.get_ticks()
+        if agora - self.ultimo_frame > self.frame_interval:
+            self.ultimo_frame = agora
+            self.frame = (self.frame + 1) % len(self.animacao)
+            self.image = self.animacao[self.frame]
 
+# --------------------------
+# Subclasses específicas
+# --------------------------
+
+class Goomba(Inimigo):
+    def __init__(self, assets, x, y):
+        super().__init__(assets["goomba"], x, y, speedx=-2)
+        self.dano = 10
+
+class Koopa(Inimigo):
+    def __init__(self, assets, x, y):
+        super().__init__(assets["koopa"], x, y, speedx=-1.5)
+        self.dano = 15
+
+class PlantaCarnivora(Inimigo):
+    def __init__(self, assets, x, y):
+        super().__init__(assets["planta"], x, y, speedx=0)
+        self.dano = 25
