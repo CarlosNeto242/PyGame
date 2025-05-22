@@ -19,7 +19,7 @@ class Boss(pygame.sprite.Sprite):
         self.ultima_tacada = pygame.time.get_ticks() 
         self.tacada_ticks = 2000
         self.ultimo_ataque_chuva = pygame.time.get_ticks()
-        self.intervalo_chuva = random.randint(300, 3000)
+        self.intervalo_chuva = random.randint(300, 1000)
     
     def update_tiro(self): 
         agora = pygame.time.get_ticks()
@@ -46,15 +46,16 @@ class Boss(pygame.sprite.Sprite):
         else:
             return 3
 
-    def ataque_chuva(self): 
+    def ataque_chuva(self, intervalo1, intervalo2): 
         agora = pygame.time.get_ticks()
         passados = agora - self.ultimo_ataque_chuva
         if passados >= self.intervalo_chuva: 
             self.ultimo_ataque_chuva = agora
             for _ in range(3):
-                x = random.randint(100, 1700)
+                x = random.randint(intervalo1, intervalo2)
                 novo_fogo = Fogo(self.assets, self.groups, x, 0)
                 self.groups["foguinhos"].add(novo_fogo)
+            self.intervalo_chuva = random.randint(300, 1000)
 
 
 class Barril(pygame.sprite.Sprite): 
@@ -68,7 +69,7 @@ class Barril(pygame.sprite.Sprite):
         self.rect.centerx = centerx
         self.rect.bottom = bottom 
 
-        self.speedx = -9
+        self.speedx = -6
         self.ultimo_frame = pygame.time.get_ticks() 
         self.frame_ticks = 50
         
@@ -99,7 +100,7 @@ class Fogo(pygame.sprite.Sprite):
         self.rect = self.image.get_rect()
         self.rect.x = x
         self.rect.y = y
-        self.speed = 10
+        self.speed = 7
 
         self.ultimo_ticks = pygame.time.get_ticks()
         self.ticks_animacao = 50

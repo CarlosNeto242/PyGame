@@ -64,6 +64,10 @@ class Player(pygame.sprite.Sprite):
         if self.knockback_frames > 0:
             self.rect.x += self.knockback_x
             self.knockback_frames -= 1
+        if self.speedx > 0:
+            self.direcao = 1
+        elif self.speedx < 0:
+            self.direcao = -1
 
     def update_animacao(self): 
         agora = pygame.time.get_ticks()

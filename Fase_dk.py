@@ -4,11 +4,11 @@ import parametros as p
 import assets as a
 import player as pl
 import bosses as b
+import random 
 
 pygame.init()
 pygame.font.init()
 pygame.mixer.init()
-
 # definimos uma função que desenha a barra de vida do boss na tela
 def desenhar_barra_vida(tela, boss):
     largura = 400
@@ -55,7 +55,7 @@ def mapa(tela, clock, estado):
         eventos = pygame.event.get()
         # fazemos o boss continuamente atacar 
         boss.update_tiro()
-        boss.ataque_chuva()
+        boss.ataque_chuva(100, 1700)
         # analisamos as teclas que o player pode ativar
         for evento in eventos: 
             if evento.type == pygame.QUIT:
@@ -101,9 +101,10 @@ def mapa(tela, clock, estado):
                 player.vida -= 20
                 print(f"Vida do jogador: {player.vida}")
                 barril.kill()
+                assets["som de dano"].play()
         for tiro in tiros:
             if boss.rect.colliderect(tiro.rect):
-                dano = getattr(tiro, "dano", 2) 
+                dano = getattr(tiro, "dano", 1) 
                 boss.levar_dano(dano)
                 print(f"Vida do Donkey Kong: {boss.vida}")
                 tiro.kill()

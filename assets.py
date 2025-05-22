@@ -99,11 +99,14 @@ def carrega_assets():
         pygame.image.load("Sprites/Chefes/koopa.png")
     ]
 
-
     # Bullet Bill
     assets["bullet"] = [
         pygame.image.load("Sprites/Chefes/bullet.png")
     ]
 
     assets["bloco"] = pygame.image.load("Sprites/Chefes/bloco.png")
+
+    assets["som de dano"] = pygame.mixer.Sound("Sprites/Sound Effects/expl3.wav")
+
     return assets
+

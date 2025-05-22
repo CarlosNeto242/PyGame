@@ -4,15 +4,18 @@ import parametros as p
 import assets as a
 
 pygame.init()
+
+pygame.mixer.music.load('Sprites/Sound Effects/bgm_action_1.mp3')
 # definindo uma função responsável por montar a tela inicial (será posteriormente chamada no loop principal)
 def inicio(tela, clock, estado):
+    pygame.mixer.music.play(loops=-1)
     # começamos chamando o tela de fundo inicial do assets e configurando seus parâmetros
     assets = a.carrega_assets()
     background = assets["imagem tela inicial"]
     background = pygame.transform.scale(background, (p.WIDHT, p.HEIGHT))
     # em seguida, chamamos a fontes usadas no texto da tela inicial
     fonte1 = assets["fonte apertar inicial"] 
-    fonte2 =   assets["fonte titulo inicial"]
+    fonte2 = assets["fonte titulo inicial"]
     # enquanto a tela inicial estiver rodando
     while estado["Inicial"]: 
         # colocamos na tela o seu fundo e os textos com as respectivas fontes 
