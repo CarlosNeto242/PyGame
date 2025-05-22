@@ -5,6 +5,8 @@ import botao as b
 
 
 def selecionar(tela, clock, estado):
+    pygame.mixer.music.load('Sprites/Sound Effects/bgm_action_2.mp3')
+    pygame.mixer.music.play(loops=-1)
     assets = a.carrega_assets()
     fonte = assets["fonte apertar inicial"]
     background = assets["background fliperama"]
@@ -58,5 +60,6 @@ def selecionar(tela, clock, estado):
                         elif botao.nome_da_fase == "Icon PacMan": 
                             estado["EggMan"] = True
                             estado["Mapa"] = False
+                        pygame.mixer.music.stop()
         pygame.display.update()
         clock.tick(p.FPS)

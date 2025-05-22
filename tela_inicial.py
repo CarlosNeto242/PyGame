@@ -5,9 +5,9 @@ import assets as a
 
 pygame.init()
 
-pygame.mixer.music.load('Sprites/Sound Effects/bgm_action_1.mp3')
 # definindo uma função responsável por montar a tela inicial (será posteriormente chamada no loop principal)
 def inicio(tela, clock, estado):
+    pygame.mixer.music.load('Sprites/Sound Effects/bgm_action_1.mp3')
     pygame.mixer.music.play(loops=-1)
     # começamos chamando o tela de fundo inicial do assets e configurando seus parâmetros
     assets = a.carrega_assets()
@@ -41,6 +41,7 @@ def inicio(tela, clock, estado):
                 if evento.key == pygame.K_SPACE:
                     estado["Inicial"] = False
                     estado["Mapa"] = True
+                    pygame.mixer.music.stop()
         # por fim, atualizamos a cada momento o jogo e determinamos sua taxa de atualizacao
         pygame.display.update()
         clock.tick(p.FPS)
