@@ -1,4 +1,3 @@
-# plataformas.py atualizado
 import pygame
 import random
 

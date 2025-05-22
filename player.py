@@ -15,7 +15,7 @@ class Player(pygame.sprite.Sprite):
         # self.som_tiro = assets["som_tiro"]
         self.som_tiroespecial = assets["som_tiroespecial"]
         self.tiro_especial_dano = 30
-        self.tiro_especial_cooldown = 3000
+        self.tiro_especial_cooldown = 1000
         self.ultimo_tiro_especial = pygame.time.get_ticks()
         # self.som_tiro.set_volume(0.5)
         self.frame = 0 

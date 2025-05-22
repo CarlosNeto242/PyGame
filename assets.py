@@ -63,7 +63,7 @@ def carrega_assets():
     assets["Icon EggMan"] = pygame.transform.scale(icon_eggman, (250, 250))
     assets["EggMan idle"] = pygame.image.load("Sprites/Chefes/boss 3 parado.png")
     assets["fundo eggman"] = pygame.image.load("Sprites/Backgrounds/cenario_eggman.png")
-    
+    assets["bowser_junior_idle"] = pygame.image.load("Sprites/Chefes/bowser_junior_idle.png")
     animacao_foguinho = []
     imagem = pygame.image.load("Sprites/megamen/foguinho.png")
     imagem = pygame.transform.scale(imagem, (40,40))
