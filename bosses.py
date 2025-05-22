@@ -12,7 +12,7 @@ class Boss(pygame.sprite.Sprite):
         self.groups = grupos
         self.rect = self.image.get_rect()
         self.rect.centerx = 1400
-        self.rect.bottom = 800
+        self.rect.bottom = 830
         self.vida = 80
         self.max_vida = 80
 
@@ -27,7 +27,7 @@ class Boss(pygame.sprite.Sprite):
         if ticks_passados > self.tacada_ticks:
             self.ultima_tacada = agora
             self.image = self.assets['boss jogando barril'] 
-            altura_do_barril = self.rect.bottom
+            altura_do_barril = self.rect.bottom + 15
             novo_barril = Barril(altura_do_barril, self.rect.centerx, self.assets)
             self.groups["barris"].add(novo_barril)
         if 1000 < ticks_passados < 2000: 

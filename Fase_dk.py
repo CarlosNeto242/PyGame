@@ -47,7 +47,7 @@ def mapa(tela, clock, estado):
     player = pl.Player(grupos, assets)
     boss = b.Boss(assets, grupos)
     # criando um chão
-    chao_y = 801.5
+    chao_y = 830
     player.rect.bottom = chao_y
     # enquanto a fase acontecer
     while estado["DK"]: 
@@ -82,6 +82,7 @@ def mapa(tela, clock, estado):
                     player.speedx -= 8
                 player.i_animacao = assets["animacao player"]
         # atualizamos na tela o background, as animacoes do player, do boss de dos projéteis
+        tela.fill((0, 0, 0))
         tela.blit(background, (0, 0))
         player.update_deslocar_fixo()
         player.update_animacao()
