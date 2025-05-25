@@ -31,6 +31,8 @@ def desenhar_barra_vida_player(tela, player):
     pygame.draw.rect(tela, (0, 0, 0), (x, y, largura, altura), 3)  
 
 def fase_bowser(tela, clock, estado):
+    pygame.mixer.music.load('Sprites/Sound Effects/JRPG OST (Rev 2)/15 - Dungeon.ogg')
+    pygame.mixer.music.play(loops=-1)
     pegou_flor = False
     mostrando_texto = False
     tempo_texto = 0

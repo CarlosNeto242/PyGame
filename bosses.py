@@ -28,7 +28,7 @@ class Boss(pygame.sprite.Sprite):
             self.ultima_tacada = agora
             self.image = self.assets['boss jogando barril'] 
             altura_do_barril = self.rect.bottom + 15
-            novo_barril = Barril(altura_do_barril, self.rect.centerx, self.assets)
+            novo_barril = Barril(altura_do_barril, self.rect.centerx, self.assets, "normal")
             self.groups["barris"].add(novo_barril)
         if 1000 < ticks_passados < 2000: 
             self.image = self.assets["chefe idle"]
@@ -59,27 +59,49 @@ class Boss(pygame.sprite.Sprite):
 
 
 class Barril(pygame.sprite.Sprite): 
-    def __init__(self, bottom, centerx, assets):
+    def __init__(self, bottom, centerx, assets, tipo_do_barril):
         pygame.sprite.Sprite.__init__(self)
 
         self.animacao = assets["barril rolando"]
         self.frame = 0
         self.image = self.animacao[self.frame]
+        self.image2 = assets["barril especial"]
         self.rect = self.image.get_rect()
         self.rect.centerx = centerx
         self.rect.bottom = bottom 
-
-        self.speedx = -6
+        self.tipo_do_barril = tipo_do_barril
+        self.gravity = 0.8
+        self.speedy = 0
+        self.speedx = -8
         self.ultimo_frame = pygame.time.get_ticks() 
         self.frame_ticks = 50
         
     def update_posicao(self):
-        self.rect.x += self.speedx
+        if self.tipo_do_barril == "normal":
+            self.rect.x += self.speedx
 
-        if self.rect.x > p.WIDHT:
-            self.kill()
+            if self.rect.x > p.WIDHT:
+                self.kill()
+        elif self.tipo_do_barril == "especial":
+            self.rect.x += self.speedx
+            self.rect.y += self.speedy
+            if self.rect.bottom >= 800:
+                self.rect.bottom = 800
+                self.speedy = 0
+            else:
+                self.speedy += self.gravity
+
+            if self.rect.x > p.WIDHT or self.rect.y > p.HEIGHT:
+                self.kill()
             
     def update_animacao(self): 
+        if self.tipo_do_barril == "normal":
+            agora = pygame.time.get_ticks()
+            ticks_passados = agora - self.ultimo_frame
+            if ticks_passados > self.frame_ticks:
+                self.ultimo_frame = agora
+                self.frame += 1
+                self.image = self.animacao[self.frame % len(self.animacao)]
         agora = pygame.time.get_ticks()
         ticks_passados = agora - self.ultimo_frame
         if ticks_passados > self.frame_ticks:

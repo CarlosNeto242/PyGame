@@ -7,7 +7,7 @@ import bosses as b
 
 pygame.init()
 # definindo uma função responsável por montar a tela de vitória (será posteriormente chamada no loop principal)
-def win(tela, clock, estado, fase): 
+def win(tela, clock, estado): 
     # começamos chamando o tela de fundo de vitória do assets e configurando seus parâmetros
     assets = a.carrega_assets()
     background = assets["tela de vitória"]
@@ -35,7 +35,7 @@ def win(tela, clock, estado, fase):
             # se o usuário clicar espaço, ele será direcionado para a primeira fase (o jogo reinicia)
                 if evento.key == pygame.K_SPACE:
                     estado["Ganhar"] = False
-                    estado[fase] = True
+                    estado["Mapa"] = True
         # por fim, atualizamos a cada momento o jogo e determinamos sua taxa de atualizacao
         pygame.display.update()
         clock.tick(p.FPS)

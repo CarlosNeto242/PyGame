@@ -16,7 +16,7 @@ def carrega_assets():
     assets["fundo mario"] = pygame.image.load("Sprites/Backgrounds/mario.png")
     assets["tela de gameover"] = pygame.image.load("Sprites/Telas/game over.jpg")
     assets["tela de vitória"] = pygame.image.load("Sprites/Telas/victory.png")
-    # assets["som_tiro"] = pygame.mixer.Sound("Sprites/megamen/som_tiro.wav")
+    assets["som_tiro"] = pygame.mixer.Sound("Sprites/megamen/som_tiro.wav")
     assets["som_tiroespecial"] = pygame.mixer.Sound("Sprites/megamen/especial.mp3")
     player_animacao = []
     for i in range(11):
@@ -107,6 +107,6 @@ def carrega_assets():
     assets["bloco"] = pygame.image.load("Sprites/Chefes/bloco.png")
 
     assets["som de dano"] = pygame.mixer.Sound("Sprites/Sound Effects/expl3.wav")
-
+    assets["barril especial"] = pygame.image.load("Sprites/Chefes/barril especial 1.png")
     return assets
 
