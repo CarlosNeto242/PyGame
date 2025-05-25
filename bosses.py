@@ -2,6 +2,7 @@ import pygame
 import parametros as p
 import player as pl 
 import random
+import math
 
 class Boss(pygame.sprite.Sprite): 
     def __init__(self, assets, grupos): 
