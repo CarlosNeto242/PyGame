@@ -29,7 +29,6 @@ def desenhar_barra_vida_player(tela, player):
 # 3. FUNÇÃO PRINCIPAL DA FASE
 # =============================
 def fase_bowser(tela, clock, estado):
-    # --- 3.1 Variáveis de controle da fase ---
     pegou_flor = False
     mostrando_texto = False
     semtiro_texto = False

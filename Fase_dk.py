@@ -31,6 +31,8 @@ def desenhar_barra_vida_player(tela, player):
     pygame.draw.rect(tela, (0, 0, 0), (x, y, largura, altura), 3)  
 # definimos uma função que rodará o principal da fase 
 def mapa(tela, clock, estado): 
+    pygame.mixer.music.load('Sprites/Sound Effects/bgm_action_3.mp3')
+    pygame.mixer.music.play(loops=-1)
     # colocamos o background na fase
     assets = a.carrega_assets()
     background = assets["fundo mapa"]
@@ -74,7 +76,7 @@ def mapa(tela, clock, estado):
                     estado["DK"] = False
                     estado["Bowser"] = True
                 if evento.key == pygame.K_c:
-                    player.atirar_especial()
+                    player.atirar_especial(True)
             if evento.type == pygame.KEYUP: 
                 if evento.key == pygame.K_LEFT or evento.key == pygame.K_a: 
                     player.speedx += 8
@@ -98,28 +100,28 @@ def mapa(tela, clock, estado):
         # checamos as diferentes hitboxes possíveis 
         for barril in barris:
             if player.rect.colliderect(barril.rect):
-                player.vida -= 20
-                print(f"Vida do jogador: {player.vida}")
+                player.vida -= 10
                 barril.kill()
                 assets["som de dano"].play()
         for tiro in tiros:
             if boss.rect.colliderect(tiro.rect):
                 dano = getattr(tiro, "dano", 1) 
                 boss.levar_dano(dano)
-                print(f"Vida do Donkey Kong: {boss.vida}")
                 tiro.kill()
         for fogo in foguinho:
             if player.rect.colliderect(fogo.rect):
                 player.vida -= 5
-                print(f"Vida do jogador: {player.vida}")
                 fogo.kill()
+                assets["som de dano"].play()
         # checando se o player ou o boss morreram (isso muda se a tela será de vitória ou de derrota)
         if player.vida <= 0: 
             estado["DK"] = False
             estado["Perder"] = True
+            pygame.mixer.music.stop()
         if boss.vida <= 0: 
             estado["DK"] = False
             estado["Ganhar"] = True
+            pygame.mixer.music.stop()
         # atualizando a vida do boss e do player
         desenhar_barra_vida(tela, boss)
         desenhar_barra_vida_player(tela, player)

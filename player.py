@@ -21,6 +21,7 @@ class Player(pygame.sprite.Sprite):
         self.frame = 0 
         self.animacao_pulo = assets["animacao pulo"]
         self.image = self.i_animacao[self.frame]
+        self.som_tiro = assets["som_tiro"]
         self.rect = self.image.get_rect()
         self.rect.centerx = 100
         self.rect.bottom = 900
@@ -116,7 +117,7 @@ class Player(pygame.sprite.Sprite):
             self.image = self.i_animacao[self.frame % len(self.i_animacao)]
             self.image = pygame.transform.flip(self.image, True, False)
 
-        # self.som_tiro.play()
+        self.som_tiro.play()
 
     def atirar_especial(self,pegou_flor):
         if not pegou_flor:

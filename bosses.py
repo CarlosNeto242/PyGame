@@ -17,20 +17,21 @@ class Boss(pygame.sprite.Sprite):
         self.max_vida = 80
 
         self.ultima_tacada = pygame.time.get_ticks() 
-        self.tacada_ticks = 2000
+        self.tacada_ticks = 1000
         self.ultimo_ataque_chuva = pygame.time.get_ticks()
         self.intervalo_chuva = random.randint(300, 1000)
     
     def update_tiro(self): 
         agora = pygame.time.get_ticks()
+        tipo_barril = random.choice(["normal", "especial"])
         ticks_passados = agora - self.ultima_tacada
         if ticks_passados > self.tacada_ticks:
             self.ultima_tacada = agora
             self.image = self.assets['boss jogando barril'] 
             altura_do_barril = self.rect.bottom + 15
-            novo_barril = Barril(altura_do_barril, self.rect.centerx, self.assets)
+            novo_barril = Barril(altura_do_barril, self.rect.centerx, self.assets, tipo_barril)
             self.groups["barris"].add(novo_barril)
-        if 1000 < ticks_passados < 2000: 
+        if 500 < ticks_passados < 1000: 
             self.image = self.assets["chefe idle"]
     
     def levar_dano(self, dano):
@@ -59,27 +60,55 @@ class Boss(pygame.sprite.Sprite):
 
 
 class Barril(pygame.sprite.Sprite): 
-    def __init__(self, bottom, centerx, assets):
+    def __init__(self, bottom, centerx, assets, tipo_do_barril):
         pygame.sprite.Sprite.__init__(self)
-
-        self.animacao = assets["barril rolando"]
+        if tipo_do_barril == "normal":
+            self.animacao = assets["barril rolando"]
+        else: 
+            self.animacao = assets["barril especial"]
         self.frame = 0
         self.image = self.animacao[self.frame]
         self.rect = self.image.get_rect()
         self.rect.centerx = centerx
         self.rect.bottom = bottom 
-
-        self.speedx = -6
+        self.tipo_do_barril = tipo_do_barril
+        if tipo_do_barril == "especial":
+            self.speedx = random.uniform(-17, -12)           # lateral
+            self.speedy = random.uniform(-25, -18)          # vertical
+            self.gravity = random.uniform(0.4, 0.7)         # leve variação na gravidade
+        else:
+            self.speedx = -8
+            self.speedy = 0
+            self.gravity = 0.6
         self.ultimo_frame = pygame.time.get_ticks() 
         self.frame_ticks = 50
         
     def update_posicao(self):
-        self.rect.x += self.speedx
+        if self.tipo_do_barril == "normal":
+            self.rect.x += self.speedx
 
-        if self.rect.x > p.WIDHT:
-            self.kill()
+            if self.rect.x > p.WIDHT:
+                self.kill()
+        elif self.tipo_do_barril == "especial":
+            self.rect.x += self.speedx
+            self.rect.y += self.speedy
+            if self.rect.bottom == 0:
+                self.rect.bottom = 0
+                self.speedy = 0
+            else:
+                self.speedy += self.gravity
+
+            if self.rect.x > p.WIDHT or self.rect.y > p.HEIGHT:
+                self.kill()
             
     def update_animacao(self): 
+        if self.tipo_do_barril == "normal":
+            agora = pygame.time.get_ticks()
+            ticks_passados = agora - self.ultimo_frame
+            if ticks_passados > self.frame_ticks:
+                self.ultimo_frame = agora
+                self.frame += 1
+                self.image = self.animacao[self.frame % len(self.animacao)]
         agora = pygame.time.get_ticks()
         ticks_passados = agora - self.ultimo_frame
         if ticks_passados > self.frame_ticks:
@@ -230,23 +259,6 @@ class FlorDeFogo(pygame.sprite.Sprite):
         self.rect = self.image.get_rect()
         self.rect.centerx = x
         self.rect.bottom = y
-
-class EggMan(pygame.sprite.Sprite): 
-    def __init__(self, assets, grupos):
-        pygame.sprite.Sprite.__init__(self)
-
-        self.image = assets["EggMan Idle"]
-        self.assets = assets
-        self.groups = grupos
-        self.rect = self.image.get_rect()
-        self.rect.centerx = 1600
-        self.rect.bottom = 800
-
-        self.speedx = -2  
-        self.vida = 100
-        self.max_vida = 100
-
-        self.ultimo_ataque = pygame.time.get_ticks()
 
 class Inimigo(pygame.sprite.Sprite):
     def __init__(self, animacao, x, y, speedx=0):
