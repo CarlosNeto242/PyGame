@@ -2,7 +2,6 @@ import pygame
 import parametros as p
 import tela_inicial 
 import bosses
-import Fase_dk
 import perder 
 import ganhar
 import ctypes
@@ -27,7 +26,7 @@ while estados["Jogando"]:
     elif estados["Mapa"]:
         selecao_fase.selecionar(tela, clock, estados)
     elif estados["DK"]:
-        Fase_dk.mapa(tela, clock, estados)
+        fase_mario.mapa(tela, clock, estados)
         fase = "Bowser"
     elif estados["Bowser"]:
         fase_mario.fase_bowser(tela, clock, estados) 

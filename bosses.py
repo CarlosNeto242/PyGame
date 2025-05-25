@@ -299,3 +299,249 @@ class PlantaCarnivora(Inimigo):
     def __init__(self, assets, x, y):
         super().__init__(assets["planta"], x, y, speedx=0)
         self.dano = 25
+
+class KingBoo(pygame.sprite.Sprite):
+    def __init__(self, assets, grupos):
+        pygame.sprite.Sprite.__init__(self)
+        self.animacao = assets["king boo"]
+        self.frame = 0
+        self.image = self.animacao[self.frame]
+        self.rect = self.image.get_rect()
+        self.rect.centerx = 1500
+        self.rect.centery = 400
+        self.assets = assets
+        self.groups = grupos
+        
+        self.vida = 120
+        self.max_vida = 120
+        self.velocidade = 3
+        self.estado = "voando"
+        self.tempo_estado = pygame.time.get_ticks()
+        self.intervalo_estado = 3000
+        self.ultimo_ataque = pygame.time.get_ticks()
+        self.intervalo_ataque = 1500
+        self.ultimo_frame = pygame.time.get_ticks()
+    
+    def update(self, player):
+        agora = pygame.time.get_ticks()
+        
+        # Máquina de estados
+        if agora - self.tempo_estado > self.intervalo_estado:
+            self.tempo_estado = agora
+            if self.estado == "voando":
+                self.estado = random.choice(["atacando", "invisivel"])
+            else:
+                self.estado = "voando"
+                self.image = self.animacao[self.frame]
+                self.rect = self.image.get_rect(center=self.rect.center)
+        
+        # Comportamentos
+        if self.estado == "voando":
+            self.voar(player)
+            self.atacar(player)
+        elif self.estado == "atacando":
+            self.ataque_raio()
+        
+        # Animação
+        if self.estado != "invisivel":
+            self.atualizar_animacao()
+    
+    def voar(self, player):
+        tempo = pygame.time.get_ticks() / 1000
+        self.rect.centerx = 1500 + 200 * math.sin(tempo * 0.5)
+        self.rect.centery = 400 + 100 * math.sin(tempo)
+    
+    def atacar(self, player):
+        agora = pygame.time.get_ticks()
+        if agora - self.ultimo_ataque > self.intervalo_ataque:
+            self.ultimo_ataque = agora
+            self.lancar_bolas_fantasmas()
+    
+    def lancar_bolas_fantasmas(self):
+        for _ in range(3):
+            angulo = random.uniform(0, 2 * math.pi)
+            velocidade = random.uniform(3, 6)
+            bola = BolaFantasma(self.rect.centerx, self.rect.centery, 
+                               math.cos(angulo) * velocidade, 
+                               math.sin(angulo) * velocidade)
+            self.groups["projeteis_inimigos"].add(bola)
+    
+    def ataque_raio(self):
+        if pygame.time.get_ticks() - self.ultimo_ataque > 500:
+            self.ultimo_ataque = pygame.time.get_ticks()
+            raio = RaioEletrico(self.rect.centerx, self.rect.bottom)
+            self.groups["projeteis_inimigos"].add(raio)
+    
+    def atualizar_animacao(self):
+        agora = pygame.time.get_ticks()
+        if agora - self.ultimo_frame > 100:
+            self.ultimo_frame = agora
+            self.frame = (self.frame + 1) % len(self.animacao)
+            self.image = self.animacao[self.frame]
+    
+    def levar_dano(self, dano):
+        if self.estado != "invisivel":
+            self.vida -= dano
+            if self.vida <= 0:
+                self.kill()
+                estrela = ItemEstrela(self.rect.centerx, self.rect.centery)
+                self.groups["itens"].add(estrela)
+
+class BolaFantasma(pygame.sprite.Sprite):
+    def __init__(self, x, y, speedx, speedy):
+        super().__init__()
+        self.image = pygame.Surface((30, 30), pygame.SRCALPHA)
+        pygame.draw.circle(self.image, (200, 200, 255, 200), (15, 15), 15)
+        self.rect = self.image.get_rect(center=(x, y))
+        self.speedx = speedx
+        self.speedy = speedy
+        self.tempo_vida = 120
+    
+    def update(self):
+        self.rect.x += self.speedx
+        self.rect.y += self.speedy
+        self.tempo_vida -= 1
+        if self.tempo_vida <= 0:
+            self.kill()
+
+class RaioEletrico(pygame.sprite.Sprite):
+    def __init__(self, x, y):
+        super().__init__()
+        self.image = pygame.Surface((20, 800), pygame.SRCALPHA)
+        pygame.draw.rect(self.image, (100, 255, 255, 150), (0, 0, 20, 800))
+        self.rect = self.image.get_rect(midtop=(x, y))
+        self.tempo_vida = 30
+    
+    def update(self):
+        self.tempo_vida -= 1
+        if self.tempo_vida <= 0:
+            self.kill()
+
+class BowserJr(pygame.sprite.Sprite):
+    def __init__(self, assets, grupos):
+        pygame.sprite.Sprite.__init__(self)
+        self.animacoes = {
+            "andando": assets["bowser jr andando"],
+            "atacando": assets["bowser jr atacando"],
+            "shell": assets["bowser jr shell"]
+        }
+        self.estado = "andando"
+        self.image = self.animacoes[self.estado][0]
+        self.rect = self.image.get_rect()
+        self.rect.centerx = 1400
+        self.rect.bottom = 800
+        
+        self.vida = 150
+        self.max_vida = 150
+        self.speedx = -3
+        self.direcao = -1
+        self.contador_ataques = 0
+        self.ultimo_ataque = pygame.time.get_ticks()
+        self.intervalo_ataque = 2000
+        self.groups = grupos
+        self.frame = 0
+        self.ultimo_frame = pygame.time.get_ticks()
+        self.frame_interval = 100
+    
+    def update(self, player):
+        self.movimentar()
+        self.atacar(player)
+        self.atualizar_animacao()
+        
+        hits = pygame.sprite.collide_rect(self, player)
+        if hits and self.estado != "shell":
+            player.vida -= 10
+            player.knockback(15 if self.rect.centerx < player.rect.centerx else -15)
+    
+    def movimentar(self):
+        if self.estado == "shell":
+            self.speedx = 8 * self.direcao
+            self.rect.x += self.speedx
+            
+            if self.rect.right < 0 or self.rect.left > p.WIDHT:
+                self.estado = "andando"
+                self.speedx = -3
+        else:
+            self.rect.x += self.speedx
+            if self.rect.left < 1000:
+                self.rect.left = 1000
+                self.speedx = 3
+                self.direcao = 1
+            elif self.rect.right > 1700:
+                self.rect.right = 1700
+                self.speedx = -3
+                self.direcao = -1
+    
+    def atacar(self, player):
+        agora = pygame.time.get_ticks()
+        if agora - self.ultimo_ataque > self.intervalo_ataque:
+            self.ultimo_ataque = agora
+            self.contador_ataques += 1
+            
+            if self.contador_ataques % 3 == 0:
+                self.estado = "shell"
+                self.direcao = -1 if player.rect.centerx < self.rect.centerx else 1
+            else:
+                self.estado = "atacando"
+                self.lancar_martelo()
+    
+    def lancar_martelo(self):
+        martelo = Martelo(self.rect.centerx, self.rect.top, self.direcao)
+        self.groups["projeteis_inimigos"].add(martelo)
+    
+    def atualizar_animacao(self):
+        agora = pygame.time.get_ticks()
+        if agora - self.ultimo_frame > self.frame_interval:
+            self.ultimo_frame = agora
+            animacao = self.animacoes[self.estado]
+            self.frame = (self.frame + 1) % len(animacao)
+            self.image = animacao[self.frame]
+    
+    def levar_dano(self, dano):
+        if self.estado != "shell":
+            self.vida -= dano
+            if self.vida <= 0:
+                self.kill()
+            elif self.vida < self.max_vida / 3:
+                self.intervalo_ataque = 1000
+
+class Martelo(pygame.sprite.Sprite):
+    def __init__(self, x, y, direcao):
+        super().__init__()
+        self.image = pygame.Surface((40, 40), pygame.SRCALPHA)
+        pygame.draw.circle(self.image, (150, 75, 0), (20, 20), 20)
+        self.rect = self.image.get_rect(center=(x, y))
+        self.direcao = direcao
+        self.speedx = 5 * direcao
+        self.speedy = -5
+        self.gravity = 0.3
+        self.rotation = 0
+        self.rotation_speed = 10 * direcao
+    
+    def update(self):
+        self.rect.x += self.speedx
+        self.rect.y += self.speedy
+        self.speedy += self.gravity
+        self.rotation += self.rotation_speed
+        self.image = pygame.transform.rotate(self.image, self.rotation)
+        
+        if self.rect.top > p.HEIGHT:
+            self.kill()
+
+class ItemEstrela(pygame.sprite.Sprite):
+    def __init__(self, x, y):
+        super().__init__()
+        self.image = pygame.Surface((30, 30), pygame.SRCALPHA)
+        pygame.draw.polygon(self.image, (255, 255, 0), [
+            (15, 0), (20, 15), (30, 15),
+            (22, 22), (27, 32), (15, 25),
+            (3, 32), (8, 22), (0, 15),
+            (10, 15)
+        ])
+        self.rect = self.image.get_rect(center=(x, y))
+        self.tempo_vida = 300
+    
+    def update(self):
+        self.tempo_vida -= 1
+        if self.tempo_vida <= 0:
+            self.kill()

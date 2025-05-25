@@ -27,7 +27,15 @@ class PlataformaQuebravel(Bloco):
     def __init__(self, x, y, imagem):
         super().__init__(x, y, imagem)
         self.resistencia = 3
-    
+        self.pisando = False
+        self.tempo_pisado = 0 
+
+    def update(self):
+        if self.pisando:
+            if pygame.time.get_ticks() - self.tempo_pisado > 1000:  # 1 segundo pisando
+                self.atingida()
+            self.pisando = False  # reseta a flag a cada frame
+
     def atingida(self):
         self.resistencia -= 1
         if self.resistencia <= 0:
