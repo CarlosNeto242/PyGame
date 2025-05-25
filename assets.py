@@ -107,6 +107,11 @@ def carrega_assets():
     assets["bloco"] = pygame.image.load("Sprites/Chefes/bloco.png")
 
     assets["som de dano"] = pygame.mixer.Sound("Sprites/Sound Effects/expl3.wav")
-    assets["barril especial"] = pygame.image.load("Sprites/Chefes/barril especial 1.png")
+    animacao_barril_especial = []
+    animacao_barril_especial.append(pygame.image.load("Sprites/Chefes/barril especial 1.png"))
+    animacao_barril_especial[0] = pygame.transform.scale(animacao_barril_especial[0], (100, 100))
+    imagem = pygame.transform.rotate(animacao_barril_especial[0], 90)
+    animacao_barril_especial.append(imagem)
+    assets["barril especial"] = animacao_barril_especial
     return assets
 

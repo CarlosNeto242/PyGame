@@ -23,12 +23,13 @@ class Boss(pygame.sprite.Sprite):
     
     def update_tiro(self): 
         agora = pygame.time.get_ticks()
+        tipo_barril = random.choice(["normal", "especial"])
         ticks_passados = agora - self.ultima_tacada
         if ticks_passados > self.tacada_ticks:
             self.ultima_tacada = agora
             self.image = self.assets['boss jogando barril'] 
             altura_do_barril = self.rect.bottom + 15
-            novo_barril = Barril(altura_do_barril, self.rect.centerx, self.assets, "normal")
+            novo_barril = Barril(altura_do_barril, self.rect.centerx, self.assets, tipo_barril)
             self.groups["barris"].add(novo_barril)
         if 1000 < ticks_passados < 2000: 
             self.image = self.assets["chefe idle"]
@@ -61,18 +62,24 @@ class Boss(pygame.sprite.Sprite):
 class Barril(pygame.sprite.Sprite): 
     def __init__(self, bottom, centerx, assets, tipo_do_barril):
         pygame.sprite.Sprite.__init__(self)
-
-        self.animacao = assets["barril rolando"]
+        if tipo_do_barril == "normal":
+            self.animacao = assets["barril rolando"]
+        else: 
+            self.animacao = assets["barril especial"]
         self.frame = 0
         self.image = self.animacao[self.frame]
-        self.image2 = assets["barril especial"]
         self.rect = self.image.get_rect()
         self.rect.centerx = centerx
         self.rect.bottom = bottom 
         self.tipo_do_barril = tipo_do_barril
-        self.gravity = 0.8
-        self.speedy = 0
-        self.speedx = -8
+        if tipo_do_barril == "especial":
+            self.speedx = random.uniform(-17, -12)           # lateral
+            self.speedy = random.uniform(-25, -18)          # vertical
+            self.gravity = random.uniform(0.4, 0.7)         # leve variação na gravidade
+        else:
+            self.speedx = -8
+            self.speedy = 0
+            self.gravity = 0.6
         self.ultimo_frame = pygame.time.get_ticks() 
         self.frame_ticks = 50
         
@@ -85,8 +92,8 @@ class Barril(pygame.sprite.Sprite):
         elif self.tipo_do_barril == "especial":
             self.rect.x += self.speedx
             self.rect.y += self.speedy
-            if self.rect.bottom >= 800:
-                self.rect.bottom = 800
+            if self.rect.bottom == 0:
+                self.rect.bottom = 0
                 self.speedy = 0
             else:
                 self.speedy += self.gravity
