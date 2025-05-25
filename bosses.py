@@ -17,7 +17,7 @@ class Boss(pygame.sprite.Sprite):
         self.max_vida = 80
 
         self.ultima_tacada = pygame.time.get_ticks() 
-        self.tacada_ticks = 2000
+        self.tacada_ticks = 1000
         self.ultimo_ataque_chuva = pygame.time.get_ticks()
         self.intervalo_chuva = random.randint(300, 1000)
     
@@ -31,7 +31,7 @@ class Boss(pygame.sprite.Sprite):
             altura_do_barril = self.rect.bottom + 15
             novo_barril = Barril(altura_do_barril, self.rect.centerx, self.assets, tipo_barril)
             self.groups["barris"].add(novo_barril)
-        if 1000 < ticks_passados < 2000: 
+        if 500 < ticks_passados < 1000: 
             self.image = self.assets["chefe idle"]
     
     def levar_dano(self, dano):
