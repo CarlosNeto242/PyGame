@@ -22,12 +22,8 @@ def selecionar(tela, clock, estado):
     botao0.rect.centery = y
     
     botao1 = b.Botao(assets, botoes, "Icon Bowser")
-    botao1.rect.x = 2*x
+    botao1.rect.x = x + 800
     botao1.rect.centery = y
-
-    botao2 = b.Botao(assets, botoes, "Icon EggMan")
-    botao2.rect.x = 3*x
-    botao2.rect.centery = y
 
     while estado["Mapa"]: 
         tela.blit((background), (0, 0))
@@ -56,9 +52,6 @@ def selecionar(tela, clock, estado):
                             estado["Mapa"] = False
                         elif botao.nome_da_fase == "Icon Bowser":
                             estado["Bowser"] = True
-                            estado["Mapa"] = False
-                        elif botao.nome_da_fase == "Icon PacMan": 
-                            estado["EggMan"] = True
                             estado["Mapa"] = False
                         pygame.mixer.music.stop()
         pygame.display.update()

@@ -19,7 +19,7 @@ def win(tela, clock, estado):
     while estado["Ganhar"]: 
          # colocamos na tela o seu fundo e os textos com as respectivas fontes 
         tela.blit(background, (0, 0))
-        fonte_tecla = fonte1.render("Clique espaço para avançar para próxima fase", True, (0, 195, 255))
+        fonte_tecla = fonte1.render("Clique espaço para selecionar outra fase", True, (0, 195, 255))
         fonte_rect1 = fonte_tecla.get_rect()
         fonte_rect1.midtop = (p.WIDHT/2, 800)
         tela.blit(fonte_tecla, fonte_rect1)

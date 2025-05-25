@@ -260,23 +260,6 @@ class FlorDeFogo(pygame.sprite.Sprite):
         self.rect.centerx = x
         self.rect.bottom = y
 
-class EggMan(pygame.sprite.Sprite): 
-    def __init__(self, assets, grupos):
-        pygame.sprite.Sprite.__init__(self)
-
-        self.image = assets["EggMan Idle"]
-        self.assets = assets
-        self.groups = grupos
-        self.rect = self.image.get_rect()
-        self.rect.centerx = 1600
-        self.rect.bottom = 800
-
-        self.speedx = -2  
-        self.vida = 100
-        self.max_vida = 100
-
-        self.ultimo_ataque = pygame.time.get_ticks()
-
 class Inimigo(pygame.sprite.Sprite):
     def __init__(self, animacao, x, y, speedx=0):
         super().__init__()

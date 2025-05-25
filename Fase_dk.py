@@ -76,7 +76,7 @@ def mapa(tela, clock, estado):
                     estado["DK"] = False
                     estado["Bowser"] = True
                 if evento.key == pygame.K_c:
-                    player.atirar_especial()
+                    player.atirar_especial(True)
             if evento.type == pygame.KEYUP: 
                 if evento.key == pygame.K_LEFT or evento.key == pygame.K_a: 
                     player.speedx += 8
@@ -100,7 +100,7 @@ def mapa(tela, clock, estado):
         # checamos as diferentes hitboxes possíveis 
         for barril in barris:
             if player.rect.colliderect(barril.rect):
-                player.vida -= 20
+                player.vida -= 10
                 barril.kill()
                 assets["som de dano"].play()
         for tiro in tiros:
