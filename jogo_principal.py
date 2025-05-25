@@ -16,7 +16,8 @@ except:
 
 pygame.init()
 pygame.font.init()
-tela = pygame.display.set_mode((p.WIDHT, p.HEIGHT),)
+pygame.mixer.init()
+tela = pygame.display.set_mode((p.WIDHT, p.HEIGHT))
 clock = pygame.time.Clock()
 estados = {"Jogando" : True, "Inicial" : True, "Mapa" : False, "Ganhar" : False, "Perder" : False, "DK" : False, "Bowser" : False, "EggMan" : False, "Final" : False}
 
@@ -29,7 +30,7 @@ while estados["Jogando"]:
         Fase_dk.mapa(tela, clock, estados)
         fase = "Bowser"
     elif estados["Bowser"]:
-        fase_mario.fase_bowser(tela, clock, estados)
+        fase_mario.fase_bowser(tela, clock, estados) 
     elif estados["Perder"]: 
         perder.gameover(tela, clock, estados)
     elif estados["Ganhar"]: 

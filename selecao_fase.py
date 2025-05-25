@@ -3,6 +3,7 @@ import parametros as p
 import assets as a
 import botao as b
 
+
 def selecionar(tela, clock, estado):
     assets = a.carrega_assets()
     fonte = assets["fonte apertar inicial"]
