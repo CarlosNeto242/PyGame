@@ -28,8 +28,14 @@ while estados["Jogando"]:
     elif estados["DK"]:
         fase_mario.mapa(tela, clock, estados)
         fase = "Bowser"
+    elif estados["Mario"]:
+        fase_mario.fase_mario(tela, clock, estados) 
+    elif estados["Bowser_Junior"]:
+        fase_mario.fase_bowser_jr(tela, clock, estados) 
+    elif estados["KingBoo"]:
+        fase_mario.fase_king_boo(tela, clock, estados) 
     elif estados["Bowser"]:
-        fase_mario.fase_bowser(tela, clock, estados) 
+        fase_mario.fase_bowser_final(tela, clock, estados) 
     elif estados["Perder"]: 
         perder.gameover(tela, clock, estados)
     elif estados["Ganhar"]: 

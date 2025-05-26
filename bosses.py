@@ -523,8 +523,8 @@ class Martelo(pygame.sprite.Sprite):
         self.rect.x += self.speedx
         self.rect.y += self.speedy
         self.speedy += self.gravity
-        self.rotation += self.rotation_speed
-        self.image = pygame.transform.rotate(self.image, self.rotation)
+        # self.rotation += self.rotation_speed
+        # self.image = pygame.transform.rotate(self.image, self.rotation)
         
         if self.rect.top > p.HEIGHT:
             self.kill()
