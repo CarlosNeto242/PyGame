@@ -1,4 +1,4 @@
-# carregando as bibliotecas necessárias para rodar o programa
+# carregando as bibliotecas necessárias para rodar os assets do jogo
 import pygame 
 import os
 
@@ -18,6 +18,7 @@ def carrega_assets():
     assets["tela de vitória"] = pygame.image.load("Sprites/Telas/victory.png")
     assets["som_tiro"] = pygame.mixer.Sound("Sprites/megamen/som_tiro.wav")
     assets["som_tiroespecial"] = pygame.mixer.Sound("Sprites/megamen/especial.mp3")
+    
     player_animacao = []
     for i in range(11):
         arquivo = f"Sprites/megamen/frame {i}.png"
@@ -25,6 +26,7 @@ def carrega_assets():
         imagem = pygame.transform.scale(imagem, (100,100))
         player_animacao.append(imagem)
     assets["animacao player"] = player_animacao
+
     player_animacao_atirando = []
     for i in range(11): 
         arquivo1 = f"Sprites/megamen/frame atirando {i}.png"
@@ -43,10 +45,12 @@ def carrega_assets():
     assets["animacao pulo"] = lista_pulo
     assets["chefe idle"] = pygame.image.load("Sprites/Chefes/boss 1 parado.png")
     barril_rolando = []
+
     for i in range(4): 
         barril = pygame.image.load(f"Sprites/Chefes/frame barril {i}.png")
         frame = pygame.transform.scale(barril, (100, 100))
         barril_rolando.append(frame)
+    
     assets["barril rolando"] = barril_rolando
     assets["boss jogando barril"] = pygame.image.load(f"Sprites/Chefes/boss 1 jogando barril.png")
     animacao_foguinho = []
@@ -94,12 +98,10 @@ def carrega_assets():
     animacao_planta.append(imagem)
     assets["planta"] = animacao_planta
 
-    # Koopa
     assets["koopa"] = [
         pygame.image.load("Sprites/Chefes/koopa.png")
     ]
 
-    # Bullet Bill
     assets["bullet"] = [
         pygame.image.load("Sprites/Chefes/bullet.png")
     ]
