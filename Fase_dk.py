@@ -1,4 +1,4 @@
-# importamos as bibliotecas e arquivos necessários para montar a tela inicial
+# importamos as bibliotecas e arquivos necessários para montar a fase do Donkey Kong
 import pygame
 import parametros as p
 import assets as a
@@ -58,7 +58,7 @@ def mapa(tela, clock, estado):
         # fazemos o boss continuamente atacar 
         boss.update_tiro()
         boss.ataque_chuva(100, 1700)
-        # analisamos as teclas que o player pode ativar
+        # analisamos as teclas que o player pode ativar e relacionamos aos seus respectivos eventos
         for evento in eventos: 
             if evento.type == pygame.QUIT:
                 estado["Jogando"] = False

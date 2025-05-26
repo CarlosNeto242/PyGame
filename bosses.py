@@ -1,8 +1,10 @@
+# importamos as bibliotecas e arquivos necessários para criar os bosses do jogo
 import pygame
 import parametros as p
 import player as pl 
 import random
 
+# Criando uma classe para o boss Donkey Kong
 class Boss(pygame.sprite.Sprite): 
     def __init__(self, assets, grupos): 
         pygame.sprite.Sprite.__init__(self)
@@ -21,7 +23,7 @@ class Boss(pygame.sprite.Sprite):
         self.ultimo_ataque_chuva = pygame.time.get_ticks()
         self.intervalo_chuva = random.randint(300, 1000)
     
-    def update_tiro(self): 
+    def update_tiro(self): # atualiza a animação do barril jogado pelo Donkey Kong
         agora = pygame.time.get_ticks()
         tipo_barril = random.choice(["normal", "especial"])
         ticks_passados = agora - self.ultima_tacada
@@ -34,18 +36,10 @@ class Boss(pygame.sprite.Sprite):
         if 500 < ticks_passados < 1000: 
             self.image = self.assets["chefe idle"]
     
-    def levar_dano(self, dano):
+    def levar_dano(self, dano): # atualiza a vida do Donkey Kong
         self.vida -= dano
         if self.vida <= 0:
             self.kill()
-    
-    def fase_atual(self):
-        if self.vida > 60:
-            return 1
-        elif self.vida > 30:
-            return 2
-        else:
-            return 3
 
     def ataque_chuva(self, intervalo1, intervalo2): 
         agora = pygame.time.get_ticks()
@@ -58,7 +52,7 @@ class Boss(pygame.sprite.Sprite):
                 self.groups["foguinhos"].add(novo_fogo)
             self.intervalo_chuva = random.randint(300, 1000)
 
-
+# Criando uma classe para os barris atirados pelo Donkey Kong
 class Barril(pygame.sprite.Sprite): 
     def __init__(self, bottom, centerx, assets, tipo_do_barril):
         pygame.sprite.Sprite.__init__(self)
@@ -73,9 +67,9 @@ class Barril(pygame.sprite.Sprite):
         self.rect.bottom = bottom 
         self.tipo_do_barril = tipo_do_barril
         if tipo_do_barril == "especial":
-            self.speedx = random.uniform(-17, -12)           # lateral
-            self.speedy = random.uniform(-25, -18)          # vertical
-            self.gravity = random.uniform(0.4, 0.7)         # leve variação na gravidade
+            self.speedx = random.uniform(-17, -12)           
+            self.speedy = random.uniform(-25, -18)          
+            self.gravity = random.uniform(0.4, 0.7)         
         else:
             self.speedx = -8
             self.speedy = 0
@@ -119,6 +113,7 @@ class Barril(pygame.sprite.Sprite):
         self.update_animacao()
         self.update_posicao()
 
+# criamos uma classe para o fogo que cai do céu na fase do Donkey Kong
 class Fogo(pygame.sprite.Sprite):
     def __init__(self, assets, grupos, x, y):
         pygame.sprite.Sprite.__init__(self)
@@ -146,6 +141,7 @@ class Fogo(pygame.sprite.Sprite):
             self.frame += 1
             self.image = self.animacao[self.frame % len(self.animacao)]
 
+# criando uma classe para o boss do Bowser
 class Bowser(pygame.sprite.Sprite):
     def __init__(self, assets, grupos):
         pygame.sprite.Sprite.__init__(self)
@@ -233,7 +229,7 @@ class Bowser(pygame.sprite.Sprite):
         else:
             return 3
 
-
+# Criando uma classe para a bola de fogo que o Bowser atira
 class BolaDeFogo(pygame.sprite.Sprite):
     def __init__(self, x, y, vertical=True):
         pygame.sprite.Sprite.__init__(self)
@@ -252,6 +248,7 @@ class BolaDeFogo(pygame.sprite.Sprite):
         if self.rect.top > 1080 or self.rect.right < 0:
             self.kill()
 
+# Criando uma classe para a flor de fogo que o Bowser atira
 class FlorDeFogo(pygame.sprite.Sprite):
     def __init__(self, x, y):
         pygame.sprite.Sprite.__init__(self)
@@ -260,6 +257,7 @@ class FlorDeFogo(pygame.sprite.Sprite):
         self.rect.centerx = x
         self.rect.bottom = y
 
+# criando uma classe para os inimigos na fase do Bowser
 class Inimigo(pygame.sprite.Sprite):
     def __init__(self, animacao, x, y, speedx=0):
         super().__init__()
@@ -282,7 +280,7 @@ class Inimigo(pygame.sprite.Sprite):
             self.image = self.animacao[self.frame]
 
 # --------------------------
-# Subclasses específicas
+# Subclasses específicas para os inimigos da fase do Bowser
 # --------------------------
 
 class Goomba(Inimigo):

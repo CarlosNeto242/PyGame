@@ -6,8 +6,6 @@ import assets as a
 assets = a.carrega_assets()
 # a primeira classe criada se refere ao player 
 class Player(pygame.sprite.Sprite):
-    # inicialmente, definimos diversos parâmetros: dimensões, animações, velocidade...
-    # Não só isso, mas o intervalo de tempo entre os frames das animações e de seus projéteis
     def __init__(self, grupos, assets):
         pygame.sprite.Sprite.__init__(self)
 
@@ -143,8 +141,7 @@ class Player(pygame.sprite.Sprite):
             self.speedy = -21
             self.pulando = True
         
-        
-
+# criando uma outra classe para o tiro do player, que será um sprite que se movimenta horizontalmente
 class Tiro(pygame.sprite.Sprite): 
     def __init__(self, bottom, centerx, direcao, player_x):
         pygame.sprite.Sprite.__init__(self)
@@ -162,7 +159,8 @@ class Tiro(pygame.sprite.Sprite):
             self.kill()
 
             print("Tiro saiu da tela")
-    
+
+# criando uma classe para o tiro especial do player, que será um sprite que se movimenta horizontalmente e quica no chão  
 class TiroEspecial(pygame.sprite.Sprite):
     def __init__(self, bottom, centerx, direcao):
         pygame.sprite.Sprite.__init__(self)

@@ -1,3 +1,4 @@
+# importamos as bibliotecas e arquivos necessários para montar o looping principal do jogo
 import pygame
 import parametros as p
 import tela_inicial 
@@ -8,19 +9,20 @@ import ganhar
 import ctypes
 import fase_mario
 import selecao_fase
-
+# comando para ajustar a escala de DPI no Windows, para evitar problemas de resolução (os dois participantes tinham notebooks com dierentes resoluções)
 try:
     ctypes.windll.user32.SetProcessDPIAware()
 except:
     pass
-
+# inicianndo os módulos do pygame e criando a tela principal do jogo, juntamente com sua taxa de atualização
 pygame.init()
 pygame.font.init()
 pygame.mixer.init()
 tela = pygame.display.set_mode((p.WIDHT, p.HEIGHT))
 clock = pygame.time.Clock()
+# definindo as possíveis variáveis de estado do jogo, que serão alteradas conforme o jogo for rodando
 estados = {"Jogando": True, "Inicial": True, "Mapa": False, "Ganhar": False, "Perder": False, "DK": False, "Bowser": False}
-
+# checando em qual parte o jogo está, e rodando a parte correspondente do jogo.
 while estados["Jogando"]: 
     if estados["Inicial"]: 
         tela_inicial.inicio(tela, clock, estados)
@@ -34,5 +36,5 @@ while estados["Jogando"]:
         perder.gameover(tela, clock, estados)
     elif estados["Ganhar"]: 
         ganhar.win(tela, clock, estados)
-
+# finalizando o pygame quando o jogo acabar
 pygame.quit()
