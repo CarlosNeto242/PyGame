@@ -16,6 +16,10 @@ def carrega_assets():
     assets["fundo mario"] = pygame.image.load("Sprites/Backgrounds/mario.png")
     assets["tela de gameover"] = pygame.image.load("Sprites/Telas/game over.jpg")
     assets["tela de vitória"] = pygame.image.load("Sprites/Telas/victory.png")
+    imagem = pygame.image.load("Sprites/megamen/Planta 1.png")
+    imagem = pygame.transform.scale(imagem, (60,90))
+    imagem = pygame.transform.rotate(imagem, 180)
+    assets["cano"] = imagem
     assets["som_tiro"] = pygame.mixer.Sound("Sprites/megamen/som_tiro.wav")
     assets["som_tiroespecial"] = pygame.mixer.Sound("Sprites/megamen/especial.mp3")
     

@@ -3,7 +3,32 @@ import parametros as p
 import assets as a
 import player as pl
 import bosses as b
-from Auxiliares import Bloco, PlataformaMovel, PlataformaQuebravel, desenhar_barra_vida_player, desenhar_barra_vida_boss
+from Auxiliares import Bloco,desenhar_barra_vida_player, desenhar_barra_vida_boss
+
+class Bloco(pygame.sprite.Sprite):
+    def __init__(self, x, y, imagem):
+        super().__init__()
+        self.image = imagem
+        self.rect = self.image.get_rect(topleft=(x, y))
+
+class Cano(pygame.sprite.Sprite):
+    def __init__(self, x, y, imagem):
+        super().__init__()
+        self.image = imagem
+        self.rect = self.image.get_rect(topleft=(x, y))
+
+class Bloco_Marro(pygame.sprite.Sprite):
+    def __init__(self, x, y, imagem):
+        super().__init__()
+        self.image = imagem
+        self.rect = self.image.get_rect(topleft=(x, y))
+
+class Bloco_Interrogacao(pygame.sprite.Sprite):
+    def __init__(self, x, y, imagem):
+        super().__init__()
+        self.image = imagem
+        self.rect = self.image.get_rect(topleft=(x, y))
+
 
 # -------------------------
 # FASE PRINCIPAL - fase_mario
@@ -23,12 +48,25 @@ def fase_mario(tela, clock, estado):
 
     plataformas = pygame.sprite.Group(
         Bloco(300, 700, assets["bloco"]),
-        PlataformaMovel(500, 650, assets["bloco"], 450, 650),
-        PlataformaQuebravel(700, 600, assets["bloco"])
+        Bloco(500, 600, assets["bloco"]),
+        Bloco(800, 500, assets["bloco"]),
+        Bloco(1100, 400, assets["bloco"]),
+        Bloco(1400, 300, assets["bloco"]),
+        Bloco(1700, 200, assets["bloco"]),
+        Bloco(2000, 100, assets["bloco"]),
     )
 
     for i in range(1000, 10000, 1000):
         plataformas.add(Bloco(i, 700, assets["bloco"]))
+
+    plataformas.add(Cano(16, 112, assets["cano"]))
+    plataformas.add(Cano(32, 112, assets["cano"]))
+    plataformas.add(Cano(496, 112, assets["cano"]))
+    plataformas.add(Cano(960, 112, assets["cano"]))
+    plataformas.add(Cano(1424, 112, assets["cano"]))
+    plataformas.add(Cano(1888, 112, assets["cano"]))
+    plataformas.add(Cano(608, 256, assets["cano"]))
+
 
     while estado["Mario"]:
         for evento in pygame.event.get():
