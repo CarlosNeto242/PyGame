@@ -8,6 +8,7 @@ import ganhar
 import ctypes
 import fase_mario
 import selecao_fase
+import Fase_dk
 # comando para ajustar a escala de DPI no Windows, para evitar problemas de resolução (os dois participantes tinham notebooks com dierentes resoluções)
 try:
     ctypes.windll.user32.SetProcessDPIAware()
@@ -27,7 +28,7 @@ while estados["Jogando"]:
     elif estados["Mapa"]:
         selecao_fase.selecionar(tela, clock, estados)
     elif estados["DK"]:
-        fase_mario.mapa(tela, clock, estados)
+        Fase_dk.mapa(tela, clock, estados)
         fase = "Bowser"
     elif estados["Mario"]:
         fase_mario.fase_mario(tela, clock, estados) 
