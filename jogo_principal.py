@@ -3,7 +3,6 @@ import pygame
 import parametros as p
 import tela_inicial 
 import bosses
-import Fase_dk
 import perder 
 import ganhar
 import ctypes
@@ -20,21 +19,27 @@ pygame.font.init()
 pygame.mixer.init()
 tela = pygame.display.set_mode((p.WIDHT, p.HEIGHT))
 clock = pygame.time.Clock()
-# definindo as possíveis variáveis de estado do jogo, que serão alteradas conforme o jogo for rodando
-estados = {"Jogando": True, "Inicial": True, "Mapa": False, "Ganhar": False, "Perder": False, "DK": False, "Bowser": False}
-# checando em qual parte o jogo está, e rodando a parte correspondente do jogo.
+estados = {"Jogando": True, "Inicial": True, "Mapa": False, "Ganhar": False, "Perder": False, "DK": False, "Bowser": False, "EggMan": False, "Final": False}
+
 while estados["Jogando"]: 
     if estados["Inicial"]: 
         tela_inicial.inicio(tela, clock, estados)
     elif estados["Mapa"]:
         selecao_fase.selecionar(tela, clock, estados)
     elif estados["DK"]:
-        Fase_dk.mapa(tela, clock, estados)
+        fase_mario.mapa(tela, clock, estados)
+        fase = "Bowser"
     elif estados["Bowser"]:
         fase_mario.fase_bowser(tela, clock, estados) 
     elif estados["Perder"]: 
         perder.gameover(tela, clock, estados)
     elif estados["Ganhar"]: 
-        ganhar.win(tela, clock, estados)
-# finalizando o pygame quando o jogo acabar
+        ganhar.win(tela, clock, estados, fase)
+    elif estados["Final"]: 
+        pass
+
+
 pygame.quit()
+
+
+

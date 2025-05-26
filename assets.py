@@ -67,7 +67,7 @@ def carrega_assets():
     assets["Icon EggMan"] = pygame.transform.scale(icon_eggman, (250, 250))
     assets["EggMan idle"] = pygame.image.load("Sprites/Chefes/boss 3 parado.png")
     assets["fundo eggman"] = pygame.image.load("Sprites/Backgrounds/cenario_eggman.png")
-    
+    assets["bowser_junior_idle"] = pygame.image.load("Sprites/Chefes/bowser_junior_idle.png")
     animacao_foguinho = []
     imagem = pygame.image.load("Sprites/megamen/foguinho.png")
     imagem = pygame.transform.scale(imagem, (40,40))
@@ -83,17 +83,17 @@ def carrega_assets():
     animacao_goomba = []
     for i in [1,2,3,4]:
         goomba = pygame.image.load(f"Sprites/megamen/goomba {i}.png")
-        frame = pygame.transform.scale(goomba, (100, 100))
+        frame = pygame.transform.scale(goomba, (55,55))
         animacao_goomba.append(frame)
     assets["goomba"] = animacao_goomba
 
     animacao_planta = []
     imagem = pygame.image.load("Sprites/megamen/Planta 1.png")
-    imagem = pygame.transform.scale(imagem, (100,150))
+    imagem = pygame.transform.scale(imagem, (60,90))
     imagem = pygame.transform.rotate(imagem, 180)
     animacao_planta.append(imagem)
     imagem = pygame.image.load("Sprites/megamen/Planta 2.png")
-    imagem = pygame.transform.scale(imagem, (100,150))
+    imagem = pygame.transform.scale(imagem, (60,90))
     imagem = pygame.transform.rotate(imagem, 180)
     animacao_planta.append(imagem)
     assets["planta"] = animacao_planta
@@ -115,5 +115,11 @@ def carrega_assets():
     imagem = pygame.transform.rotate(animacao_barril_especial[0], 90)
     animacao_barril_especial.append(imagem)
     assets["barril especial"] = animacao_barril_especial
+
+    assets["king boo"] = [pygame.image.load("Sprites/megamen/Planta 1.png")]  # lista de frames
+    assets["bowser jr andando"] = [pygame.image.load("Sprites/Chefes/koopa.png")]
+    assets["bowser jr atacando"] = [pygame.image.load("Sprites/Chefes/koopa.png")]
+    assets["bowser jr shell"] = [pygame.image.load("Sprites/Chefes/koopa.png")]
+
     return assets
 
