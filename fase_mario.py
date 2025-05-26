@@ -1,4 +1,3 @@
-# Fases completas com fase principal e bosses isolados
 import pygame
 import parametros as p
 import assets as a
@@ -45,6 +44,9 @@ def fase_mario(tela, clock, estado):
                     player.pular()
                 if evento.key == pygame.K_v:
                     player.atirar_especial(True)
+                if evento.key == pygame.K_b:
+                    estado["BowserJr"] = True
+                    estado["Mario"] = False
             if evento.type == pygame.KEYUP:
                 if evento.key in [pygame.K_LEFT, pygame.K_a, pygame.K_RIGHT, pygame.K_d]:
                     player.speedx = 0
@@ -84,6 +86,8 @@ def fase_mario(tela, clock, estado):
 
         pygame.display.update()
         clock.tick(p.FPS)
+
+        
 
 
 # -------------------------
@@ -125,6 +129,9 @@ def fase_bowser_jr(tela, clock, estado):
                     player.pular()
                 if evento.key == pygame.K_v:
                     player.atirar_especial(True)
+                if evento.key == pygame.K_b:
+                    estado["KingBoo"] = True
+                    estado["BowserJr"] = False
             if evento.type == pygame.KEYUP:
                 if evento.key in [pygame.K_LEFT, pygame.K_a, pygame.K_RIGHT, pygame.K_d]:
                     player.speedx = 0
@@ -196,6 +203,9 @@ def fase_king_boo(tela, clock, estado):
                     player.pular()
                 if evento.key == pygame.K_v:
                     player.atirar_especial(True)
+                if evento.key == pygame.K_b:
+                    estado["KingBoo"] = False
+                    estado["Bowser "] = False
             if evento.type == pygame.KEYUP:
                 if evento.key in [pygame.K_LEFT, pygame.K_a, pygame.K_RIGHT, pygame.K_d]:
                     player.speedx = 0
@@ -308,71 +318,3 @@ def fase_bowser_final(tela, clock, estado):
 
         pygame.display.update()
         clock.tick(p.FPS)
-
-# (continuação do código anterior...)
-
-# -------------------------
-# GERENCIADOR DE FASES COM TRANSIÇÃO
-# -------------------------
-def transicao(tela, clock, texto):
-    fonte = pygame.font.SysFont("Arial", 50, bold=True)
-    fundo = pygame.Surface((p.WIDHT, p.HEIGHT))
-    fundo.fill((0, 0, 0))
-
-    texto_render = fonte.render(texto, True, (255, 255, 255))
-    texto_rect = texto_render.get_rect(center=(p.WIDHT // 2, p.HEIGHT // 2))
-
-    tela.blit(fundo, (0, 0))
-    tela.blit(texto_render, texto_rect)
-    pygame.display.update()
-    pygame.time.delay(2500)  # 2.5 segundos
-
-def gerenciador_de_fases(tela, clock):
-    estado = {
-        "Jogando": True,
-        "Mario": True,
-        "BowserJr": False,
-        "KingBoo": False,
-        "Bowser": False,
-        "Perder": False,
-        "Venceu": False
-    }
-
-    transicao(tela, clock, "Prepare-se para a aventura!")
-    fase_mario(tela, clock, estado)
-
-    if estado["Perder"]: return
-    transicao(tela, clock, "Bowser Jr. está chegando!")
-    estado["BowserJr"] = True
-    fase_bowser_jr(tela, clock, estado)
-
-    if estado["Perder"]: return
-    transicao(tela, clock, "King Boo apareceu!")
-    estado["KingBoo"] = True
-    fase_king_boo(tela, clock, estado)
-
-    if estado["Perder"]: return
-    transicao(tela, clock, "Prepare-se para o Bowser Final!")
-    estado["Bowser"] = True
-    fase_bowser_final(tela, clock, estado)
-
-    if estado["Venceu"]:
-        transicao(tela, clock, "Você venceu todos os chefes!")
-    elif estado["Perder"]:
-        transicao(tela, clock, "Game Over")
-
-# -------------------------
-# FUNÇÃO PRINCIPAL DO JOGO
-# -------------------------
-def main():
-    pygame.init()
-    tela = pygame.display.set_mode((p.WIDHT, p.HEIGHT))
-    pygame.display.set_caption("Jogo Mario Boss Rush")
-    clock = pygame.time.Clock()
-
-    gerenciador_de_fases(tela, clock)
-
-    pygame.quit()
-
-if __name__ == '__main__':
-    main()
