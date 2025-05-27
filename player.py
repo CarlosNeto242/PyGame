@@ -13,7 +13,7 @@ class Player(pygame.sprite.Sprite):
         # self.som_tiro = assets["som_tiro"]
         self.som_tiroespecial = assets["som_tiroespecial"]
         self.tiro_especial_dano = 30
-        self.tiro_especial_cooldown = 1000
+        self.tiro_especial_cooldown = 1 
         self.ultimo_tiro_especial = pygame.time.get_ticks()
         # self.som_tiro.set_volume(0.5)
         self.frame = 0 
@@ -28,7 +28,7 @@ class Player(pygame.sprite.Sprite):
         self.groups = grupos
         self.direcao = 1
         self.pulando = False
-        self.gravity = 1.1
+        self.gravity = 1
         self.vida = 10000
         self.max_vida = 10000
         self.knockback_x = 0
@@ -39,7 +39,7 @@ class Player(pygame.sprite.Sprite):
 
 
         self.ultimo_frame = pygame.time.get_ticks()
-        self.frames_ticks = 50
+        self.frames_ticks = 80
 
         self.ultimo_tiro = pygame.time.get_ticks() 
         self.tiro_ticks = 200
@@ -79,11 +79,16 @@ class Player(pygame.sprite.Sprite):
     def update_animacao(self): 
         agora = pygame.time.get_ticks()
         ticks_passados = agora - self.ultimo_frame
+
         if self.pulando:
             if ticks_passados > self.frames_ticks:
                 self.ultimo_frame = agora
-                self.frame += 1
-            frame_atual = self.animacao_pulo[self.frame % len(self.animacao_pulo)]
+                if self.frame < len(self.animacao_pulo) - 1:
+                    self.frame += 1
+
+            # Garante que o índice nunca seja inválido
+            frame_index = min(self.frame, len(self.animacao_pulo) - 1)
+            frame_atual = self.animacao_pulo[frame_index]
             self.image = frame_atual if self.direcao == 1 else pygame.transform.flip(frame_atual, True, False)
             return
         if ticks_passados > self.frames_ticks and self.speedx > 0: 
@@ -146,8 +151,10 @@ class Player(pygame.sprite.Sprite):
 
     def pular(self):
         if not self.pulando:
-            self.speedy = -18
             self.pulando = True
+            self.frame = 0  # Reinicia animação de pulo
+            self.ultimo_frame = pygame.time.get_ticks()
+            self.speedy = -18
         
 # criando uma outra classe para o tiro do player, que será um sprite que se movimenta horizontalmente
 class Tiro(pygame.sprite.Sprite): 
@@ -185,7 +192,7 @@ class TiroEspecial(pygame.sprite.Sprite):
         self.bounces = 0
         self.max_bounces = 3
         self.chao_y = 801.5
-        self.dano = 30
+        self.dano = 3000
 
         self.ultimo_frame = pygame.time.get_ticks()
         self.frame_intervalo = 100  # milissegundos por frame
@@ -214,4 +221,21 @@ class TiroEspecial(pygame.sprite.Sprite):
 
 
         
+class PowerUp(pygame.sprite.Sprite):
+    def __init__(self, tipo, x, y, assets):
+        super().__init__()
+        self.tipo = tipo
+        self.image = assets[f"powerup_{tipo}"][0]  # primeiro frame
+        self.rect = self.image.get_rect()
+        self.rect.x = x
+        self.rect.bottom = y
+        self.speedy = -5
+        self.gravity = 0.5
+
+    def update(self):
+        self.speedy += self.gravity
+        self.rect.y += self.speedy
+        if self.rect.bottom > 801.5:
+            self.rect.bottom = 801.5
+            self.speedy = 0
         

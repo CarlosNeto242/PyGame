@@ -6,30 +6,11 @@ import bosses as b
 from Auxiliares import desenhar_barra_vida_player, desenhar_barra_vida_boss
 import random
 
-class PowerUp(pygame.sprite.Sprite):
-    def __init__(self, tipo, x, y, assets):
-        super().__init__()
-        self.tipo = tipo
-        self.image = assets[f"powerup_{tipo}"][0]  # primeiro frame
-        self.rect = self.image.get_rect()
-        self.rect.x = x
-        self.rect.bottom = y
-        self.speedy = -5
-        self.gravity = 0.5
-
-    def update(self):
-        self.speedy += self.gravity
-        self.rect.y += self.speedy
-        if self.rect.bottom > 801.5:
-            self.rect.bottom = 801.5
-            self.speedy = 0
-
-
 def fase_mario(tela, clock, estado):
     assets = a.carrega_assets()
     background = assets["fundo mario"]
     castelo_img = assets["castelo"]
-    fonte = pygame.font.Font(None, 48)
+    fonte = pygame.font.Font("Fontes/PressStart2P.ttf", 27)
 
     tiros = pygame.sprite.Group()
     inimigos = pygame.sprite.Group()
@@ -47,34 +28,39 @@ def fase_mario(tela, clock, estado):
     pygame.display.update()
     pygame.time.delay(2000)
 
+    fonte = pygame.font.Font("Fontes/PressStart2P.ttf", 20)
     # Mensagem narrativa
     tela.blit(background, (0, 0))
     texto_alerta = fonte.render(
         "Todos os inimigos do Mario estão com raiva por você estar aqui como intruso!",
-        True, (255, 255, 0)
+        True, (0, 0, 0)
     )
     tela.blit(texto_alerta, (p.WIDHT // 2 - texto_alerta.get_width() // 2, p.HEIGHT // 2))
     pygame.display.update()
     pygame.time.delay(3000)
 
-    # Muitos inimigos distribuídos até x=13000
-    for i, x in enumerate(range(600, 13000, 600)):
-        if i % 4 == 0:
+    # Muitos inimigos distribuídos até 20.000px, a cada 500px
+    for i, x in enumerate(range(600, 20000, 500)): 
+        if i % 5 == 0:
             inimigos.add(b.Goomba(assets, x, 800))
-        elif i % 4 == 1:
+        elif i % 5 == 1:
             inimigos.add(b.Koopa(assets, x, 800))
-        elif i % 4 == 2:
+        elif i % 5 == 2:
             inimigos.add(b.PlantaCarnivora(assets, x, 800))
-        else:
+        elif i % 5 == 3:
             inimigos.add(b.Goomba(assets, x, 800))
             inimigos.add(b.Koopa(assets, x + 100, 800))
+        else:
+            inimigos.add(b.PlantaCarnivora(assets, x, 800))
 
     # Flor fixa no mapa
-    flor = PowerUp("flor", 1000, 700, assets)
+    flor = b.PowerUp("flor", 1000, 700, assets)
     itens.add(flor)
     flor_mensagem_mostrada = False
 
-    porta_castelo = pygame.Rect(13500, 700, 100, 200)
+    porta_castelo = pygame.Rect(20100, 750, 100, 150)
+    pygame.draw.rect(tela, (255, 0, 0), (porta_castelo.x - camera_x, porta_castelo.y, porta_castelo.width, porta_castelo.height), 2)
+
 
     while estado["Mario"]:
         for evento in pygame.event.get():
@@ -129,12 +115,7 @@ def fase_mario(tela, clock, estado):
                     flor_mensagem_mostrada = True
                     flor_msg_timer = pygame.time.get_ticks()
 
-        if flor_mensagem_mostrada:
-            if pygame.time.get_ticks() - flor_msg_timer < 2000:
-                texto_flor = fonte.render("Você adquiriu o poder de fogo!", True, (255, 0, 0))
-                tela.blit(texto_flor, (p.WIDHT // 2 - texto_flor.get_width() // 2, 50))
-            else:
-                flor_mensagem_mostrada = False
+
 
         if player.vida <= 0:
             estado["Mario"] = False
@@ -142,7 +123,7 @@ def fase_mario(tela, clock, estado):
 
         if player.rect.colliderect(porta_castelo):
             estado["Mario"] = False
-            estado["Bowser"] = True
+            estado["Bowser_Junior"] = True
             return
 
         target_camera_x = player.rect.centerx - p.WIDHT // 2
@@ -160,6 +141,12 @@ def fase_mario(tela, clock, estado):
         desenhar_barra_vida_player(tela, player)
 
         pygame.display.update()
+        if flor_mensagem_mostrada:
+            if pygame.time.get_ticks() - flor_msg_timer < 2000:
+                texto_flor = fonte.render("Você adquiriu o poder de fogo!", True, (255, 0, 0))
+                tela.blit(texto_flor, (p.WIDHT // 2 - texto_flor.get_width() // 2, 50))
+            else:
+                flor_mensagem_mostrada = False
         clock.tick(p.FPS)
 
 
