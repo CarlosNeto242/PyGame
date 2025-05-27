@@ -10,6 +10,7 @@ import fase_mario
 import selecao_fase
 import Fase_dk
 import cutscene
+import aviso
 # comando para ajustar a escala de DPI no Windows, para evitar problemas de resolução (os dois participantes tinham notebooks com dierentes resoluções)
 try:
     ctypes.windll.user32.SetProcessDPIAware()
@@ -21,13 +22,15 @@ pygame.font.init()
 pygame.mixer.init()
 tela = pygame.display.set_mode((p.WIDHT, p.HEIGHT))
 clock = pygame.time.Clock()
-estados = {"Jogando": True, "Inicial": True, "Cutscene" : False, "Mapa": False, "Ganhar": False, "Perder": False, "DK": False, "Bowser": False, "Mario": False, "Bowser_Junior": False, "KingBoo": False, "Final": False}
+estados = {"Jogando": True, "Inicial": True, "Cutscene" : False, "Aviso" : False, "Mapa": False, "Ganhar": False, "Perder": False, "DK": False, "Bowser": False, "Mario": False, "Bowser_Junior": False, "KingBoo": False, "Final": False}
 
 while estados["Jogando"]: 
     if estados["Inicial"]: 
         tela_inicial.inicio(tela, clock, estados)
     elif estados["Cutscene"]:
         cutscene.animacao_cutscene(tela, clock, estados)
+    elif estados["Aviso"]:
+        aviso.aviso(clock, tela, estados)
     elif estados["Mapa"]:
         selecao_fase.selecionar(tela, clock, estados)
     elif estados["DK"]:
