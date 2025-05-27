@@ -50,26 +50,30 @@ def fase_mario(tela, clock, estado):
     pygame.time.delay(3000)
 
     # Criação de inimigos fixos
-    for i, x in enumerate(range(600, 20000, 500)):
-        if i % 5 == 0:
+    for i, x in enumerate(range(600, 18000, 450)):  # espaçamento reduzido para mais inimigos
+        if i % 6 == 0:
             inimigos.add(b.Goomba(assets, x, 800))
-        elif i % 5 == 1:
+        elif i % 6 == 1:
             inimigos.add(b.Koopa(assets, x, 800))
-        elif i % 5 == 2:
+        elif i % 6 == 2:
             inimigos.add(b.PlantaCarnivoraAnimada(assets, x, 800))
-        elif i % 5 == 3:
+        elif i % 6 == 3:
             inimigos.add(b.Goomba(assets, x, 800))
-            inimigos.add(b.Koopa(assets, x + 100, 800))
-        else:
+            inimigos.add(b.Koopa(assets, x + 50, 800))
+        elif i % 6 == 4:
             inimigos.add(b.PlantaCarnivoraAnimada(assets, x, 800))
-
+            inimigos.add(b.Koopa(assets, x + 50, 800))
+        else:
+            inimigos.add(b.Goomba(assets, x, 800))
+            inimigos.add(b.PlantaCarnivoraAnimada(assets, x + 50, 800))
+            inimigos.add(b.PlantaCarnivoraAnimada(assets, x, 800))
     # Power-up flor fixo
-    flor = b.PowerUp("flor", 1000, 700, assets)
+    flor = b.PowerUp("flor", 19000, 700, assets)
     itens.add(flor)
     flor_mensagem_mostrada = False
 
     # Definição da porta do castelo
-    porta_castelo = pygame.Rect(13650, 750, 80, 150)
+    porta_castelo = pygame.Rect(19500, 0, 80, 801.5)
 
     while estado["Mario"]:
         # Eventos
@@ -78,9 +82,9 @@ def fase_mario(tela, clock, estado):
                 estado["Mario"] = estado["Jogando"] = False
             elif evento.type == pygame.KEYDOWN:
                 if evento.key in [pygame.K_LEFT, pygame.K_a]:
-                    player.speedx += -25
+                    player.speedx += -11
                 elif evento.key in [pygame.K_RIGHT, pygame.K_d]:
-                    player.speedx += 25
+                    player.speedx += 11
                 elif evento.key in [pygame.K_UP, pygame.K_w]:
                     player.pular(22)
                 elif evento.key == pygame.K_v:
@@ -114,14 +118,6 @@ def fase_mario(tela, clock, estado):
                     knock_dir = -15 if player.rect.centerx < inimigo.rect.centerx else 15
                     player.knockback(knock_dir)
 
-        # Tiros especiais matam Koopas
-        for tiro in tiros:
-            if isinstance(tiro, pl.TiroEspecial):
-                atingidos = pygame.sprite.spritecollide(tiro, inimigos, False)
-                for inimigo in atingidos:
-                    if isinstance(inimigo, b.Koopa):
-                        inimigo.kill()
-                        tiro.kill()
 
         # Coleta de itens
         for item in itens:
@@ -151,7 +147,7 @@ def fase_mario(tela, clock, estado):
         for i in range(int(camera_x // largura_fundo) - 1, int((camera_x + p.WIDHT) // largura_fundo) + 2):
             tela.blit(background, (i * largura_fundo - camera_x, 0))
 
-        tela.blit(castelo_img, (13500 - camera_x, 801.5 - castelo_img.get_height()))
+        tela.blit(castelo_img, (19500 - camera_x, 801.5 - castelo_img.get_height()))
         pygame.draw.rect(
             tela, (255, 0, 0),
             (porta_castelo.x - camera_x, porta_castelo.y, porta_castelo.width, porta_castelo.height),

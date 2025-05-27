@@ -29,8 +29,8 @@ class Player(pygame.sprite.Sprite):
         self.direcao = 1
         self.pulando = False
         self.gravity = 1
-        self.vida = 10000
-        self.max_vida = 10000
+        self.vida = 900
+        self.max_vida = 900
         self.knockback_x = 0
         self.knockback_frames = 0
         self.pegou_flor = False
