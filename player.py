@@ -28,7 +28,7 @@ class Player(pygame.sprite.Sprite):
         self.groups = grupos
         self.direcao = 1
         self.pulando = False
-        self.gravity = 0.8
+        self.gravity = 1.1
         self.vida = 10000
         self.max_vida = 10000
         self.knockback_x = 0
@@ -63,6 +63,7 @@ class Player(pygame.sprite.Sprite):
             self.direcao = 1
         elif self.speedx < 0:
             self.direcao = -1
+
 
     def update_deslocar_fixo(self):
         self.rect.x += self.speedx
@@ -145,7 +146,7 @@ class Player(pygame.sprite.Sprite):
 
     def pular(self):
         if not self.pulando:
-            self.speedy = -21
+            self.speedy = -18
             self.pulando = True
         
 # criando uma outra classe para o tiro do player, que será um sprite que se movimenta horizontalmente

@@ -2,7 +2,7 @@
 import pygame
 import parametros as p
 import tela_inicial 
-import bosses
+import bossesC
 import perder 
 import ganhar
 import ctypes
