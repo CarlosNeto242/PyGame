@@ -128,10 +128,11 @@ def carrega_assets():
 
     imagem = pygame.image.load("Sprites/Backgrounds/castelo.png")
     assets["castelo"] = pygame.transform.scale(imagem, (290,290))
-    assets["powerup_flor"] = [pygame.image.load("Sprites/Chefes/flor_de_fogo.png")]
+    Florzinha = pygame.image.load("Sprites/Chefes/flor_de_fogo.png")
+    assets["powerup_flor"] = [pygame.transform.scale(Florzinha, (60,60))]
     assets["powerup_cogumelo"] = [pygame.image.load("Sprites/Chefes/flor_de_fogo.png")]
     assets["powerup_estrela"] = [pygame.image.load("Sprites/Chefes/flor_de_fogo.png")]
-
+    assets["casco"] = [pygame.image.load("Sprites/Chefes/bloco.png")]
 
     return assets
 

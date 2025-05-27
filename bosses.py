@@ -559,6 +559,7 @@ class PowerUp(pygame.sprite.Sprite):
             self.rect.bottom = 801.5
             self.speedy = 0
 
+
 class PlantaCarnivoraAnimada(pygame.sprite.Sprite):
     def __init__(self, assets, x, base_y):
         super().__init__()
@@ -590,7 +591,10 @@ class Koopa(pygame.sprite.Sprite):
     def __init__(self, assets, x, y):
         super().__init__()
         self.estado = "vivo"  # "vivo", "casco_parado", "casco_andando"
-        self.animacoes = assets
+        self.animacoes = {
+            "koopa": assets["koopa"],
+            "casco": assets["casco"]
+        }
         self.image = self.animacoes["koopa"][0]
         self.rect = self.image.get_rect()
         self.rect.x = x
@@ -613,7 +617,7 @@ class Koopa(pygame.sprite.Sprite):
 
         elif self.estado == "casco_andando":
             self.rect.x += 10 * self.direcao
-            self.image = self.animacoes["casco"][0]  # assume 1 frame
+            self.image = self.animacoes["casco"][0]
 
         elif self.estado == "casco_parado":
             self.image = self.animacoes["casco"][0]
@@ -627,26 +631,3 @@ class Koopa(pygame.sprite.Sprite):
             self.estado = "casco_andando"
             self.direcao = 1 if player.rect.centerx < self.rect.centerx else -1
             player.speedy = -18
-
-    def __init__(self, assets, x, base_y):
-        super().__init__()
-        self.image = assets["planta"][0]
-        self.rect = self.image.get_rect()
-        self.rect.x = x
-        self.base_y = base_y
-        self.rect.bottom = base_y
-        self.subindo = True
-        self.velocidade = 1
-        self.limite_superior = base_y - 50
-        self.limite_inferior = base_y
-        self.dano = 25
-
-    def update(self):
-        if self.subindo:
-            self.rect.y -= self.velocidade
-            if self.rect.y <= self.limite_superior:
-                self.subindo = False
-        else:
-            self.rect.y += self.velocidade
-            if self.rect.bottom >= self.limite_inferior:
-                self.subindo = True

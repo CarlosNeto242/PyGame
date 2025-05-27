@@ -149,12 +149,12 @@ class Player(pygame.sprite.Sprite):
             self.speedy = 0
             self.pulando = False
 
-    def pular(self):
+    def pular(self,forca):
         if not self.pulando:
             self.pulando = True
             self.frame = 0  # Reinicia animação de pulo
             self.ultimo_frame = pygame.time.get_ticks()
-            self.speedy = -18
+            self.speedy = -forca
         
 # criando uma outra classe para o tiro do player, que será um sprite que se movimenta horizontalmente
 class Tiro(pygame.sprite.Sprite): 
