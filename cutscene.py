@@ -11,12 +11,22 @@ def animacao_cutscene(tela, clock, estado):
     background = pygame.transform.scale(background, (p.WIDHT, p.HEIGHT))
     assets = a.carrega_assets()
     frames = 2000
+<<<<<<< HEAD
     preto = pygame.Surface((16, 16))
     preto.fill((0, 0, 0))
     bloco_preto = aux.Bloco(0, 0, preto )
+=======
+    bloco_preto = aux.Bloco(0, 0, assets["bloco preto"])
+    bloco_preto.image = pygame.transform.scale(bloco_preto.image, (100, 100))
+>>>>>>> 7369ef4a60d7d9d5750e90587b55896dea270274
     tempo = 0
+
     while tempo <= frames:
+        tela.blit(background, (0, 0))
+        pygame.display.update()
+        clock.tick(p.FPS)
         tempo += 1
+<<<<<<< HEAD
         if tempo == frames:
             i = 0
             while i in range (0, 1820):
@@ -27,3 +37,10 @@ def animacao_cutscene(tela, clock, estado):
     tela.blit(background, (0, 0))
     pygame.display.update()
     clock.tick(p.FPS)
+=======
+
+    # Depois do loop principal, exibir os blocos pretos
+    for i in range(0, p.WIDHT, 100):
+        tela.blit(bloco_preto.image, (i, 0))
+    pygame.display.update()
+>>>>>>> 7369ef4a60d7d9d5750e90587b55896dea270274
