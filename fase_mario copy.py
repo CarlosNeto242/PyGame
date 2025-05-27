@@ -10,7 +10,7 @@ class PowerUp(pygame.sprite.Sprite):
     def __init__(self, tipo, x, y, assets):
         super().__init__()
         self.tipo = tipo
-        self.image = assets[f"powerup_{tipo}"][0]  # primeiro frame
+        self.image = assets[f"powerup_{tipo}"]
         self.rect = self.image.get_rect()
         self.rect.x = x
         self.rect.bottom = y
@@ -25,8 +25,6 @@ class PowerUp(pygame.sprite.Sprite):
             self.speedy = 0
 
 
-
-
 def fase_mario(tela, clock, estado):
     assets = a.carrega_assets()
     background = assets["fundo mario"]
@@ -34,25 +32,17 @@ def fase_mario(tela, clock, estado):
 
     tiros = pygame.sprite.Group()
     inimigos = pygame.sprite.Group()
-    itens = pygame.sprite.Group()
-    grupos = {"tiros": tiros, "inimigos": inimigos, "itens": itens}
+    grupos = {"tiros": tiros, "inimigos": inimigos}
 
     player = pl.Player(grupos, assets)
     player.rect.bottom = 801.5
     camera_x = 0
 
-    # Cria Goombas, incluindo um com flor garantida
-    goombas = []
-    for i in range(15):
-        g = b.Goomba(assets, random.randint(500, 4000), 800)
-        g.dropa_flor = (i == 0)
-        goombas.append(g)
-        inimigos.add(g)
-
-    # Cria Koopas e Plantas
+    for _ in range(15):
+        inimigos.add(b.Goomba(assets, random.randint(500, 4000), 800))
     for _ in range(13):
         inimigos.add(b.Koopa(assets, random.randint(500, 4000), 800))
-    for _ in range(10):
+    for _ in range(12):
         inimigos.add(b.PlantaCarnivora(assets, random.randint(500, 4000), 800))
 
     porta_castelo = pygame.Rect(4500, 700, 100, 200)
@@ -69,36 +59,27 @@ def fase_mario(tela, clock, estado):
                 elif evento.key in [pygame.K_UP, pygame.K_w]:
                     player.pular()
                 elif evento.key == pygame.K_v:
-                    player.atirar_especial(player.pegou_flor)
+                    player.atirar_especial(True)
             elif evento.type == pygame.KEYUP:
                 if evento.key in [pygame.K_LEFT, pygame.K_a, pygame.K_RIGHT, pygame.K_d]:
                     player.speedx = 0
 
-        player.update_deslocar(0, 10000)  # Limite esquerdo = 0 (borda da tela)
+        player.update_deslocar(0, 10000)
         player.update_animacao()
         player.update_gravidade(801.5)
         tiros.update()
         inimigos.update()
-        itens.update()
 
-        # Colisão com inimigos
         for inimigo in inimigos:
             if player.rect.colliderect(inimigo.rect):
                 if isinstance(inimigo, b.Goomba) and player.rect.bottom < inimigo.rect.centery:
-                    # Mata o goomba e possivelmente dropa item
-                    if hasattr(inimigo, "dropa_flor") and inimigo.dropa_flor:
-                        itens.add(PowerUp("flor", inimigo.rect.centerx, inimigo.rect.top, assets))
-                    elif random.random() < 0.3:
-                        tipo = random.choice(["cogumelo", "estrela"])
-                        itens.add(PowerUp(tipo, inimigo.rect.centerx, inimigo.rect.top, assets))
                     inimigo.kill()
                     player.speedy = -15
-                elif not player.invulneravel:
+                else:
                     player.vida -= inimigo.dano
                     knock_dir = -15 if player.rect.centerx < inimigo.rect.centerx else 15
                     player.knockback(knock_dir)
 
-        # Tiros especiais matam Koopas
         for tiro in tiros:
             if isinstance(tiro, pl.TiroEspecial):
                 atingidos = pygame.sprite.spritecollide(tiro, inimigos, False)
@@ -106,22 +87,6 @@ def fase_mario(tela, clock, estado):
                     if isinstance(inimigo, b.Koopa):
                         inimigo.kill()
                         tiro.kill()
-
-        # Power-ups
-        for item in itens:
-            if player.rect.colliderect(item.rect):
-                if item.tipo == "flor":
-                    player.pegou_flor = True
-                elif item.tipo == "cogumelo":
-                    player.vida = min(player.max_vida, player.vida + 30)
-                elif item.tipo == "estrela":
-                    player.invulneravel = True
-                    player.tempo_invulneravel = pygame.time.get_ticks()
-                item.kill()
-
-        # Timer da invulnerabilidade
-        if player.invulneravel and pygame.time.get_ticks() - player.tempo_invulneravel > 5000:
-            player.invulneravel = False
 
         if player.vida <= 0:
             estado["Mario"] = False
@@ -140,7 +105,7 @@ def fase_mario(tela, clock, estado):
             tela.blit(background, (i * largura_fundo - camera_x, 0))
         tela.blit(castelo_img, (4500 - camera_x, 801.5 - castelo_img.get_height()))
 
-        for grupo in [inimigos, tiros, itens]:
+        for grupo in [inimigos, tiros]:
             for entidade in grupo:
                 tela.blit(entidade.image, (entidade.rect.x - camera_x, entidade.rect.y))
         tela.blit(player.image, (player.rect.x - camera_x, player.rect.y))
@@ -148,6 +113,8 @@ def fase_mario(tela, clock, estado):
 
         pygame.display.update()
         clock.tick(p.FPS)
+
+
 
 
 

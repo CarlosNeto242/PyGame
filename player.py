@@ -29,10 +29,13 @@ class Player(pygame.sprite.Sprite):
         self.direcao = 1
         self.pulando = False
         self.gravity = 0.8
-        self.vida = 100
-        self.max_vida = 100
+        self.vida = 10000
+        self.max_vida = 10000
         self.knockback_x = 0
         self.knockback_frames = 0
+        self.pegou_flor = False
+        self.invulneravel = False
+        self.tempo_invulneravel = 0
 
 
         self.ultimo_frame = pygame.time.get_ticks()
@@ -40,6 +43,10 @@ class Player(pygame.sprite.Sprite):
 
         self.ultimo_tiro = pygame.time.get_ticks() 
         self.tiro_ticks = 200
+
+    def knockback(self, forca):
+        self.knockback_x = forca
+        self.knockback_frames = 10
 
     def update_deslocar(self, limite_esquerdo, limite_direito):
         self.rect.x += self.speedx

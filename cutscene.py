@@ -11,14 +11,16 @@ def animacao_cutscene(tela, clock, estado):
     background = pygame.transform.scale(background, (p.WIDHT, p.HEIGHT))
     assets = a.carrega_assets()
     frames = 2000
-    bloco_preto = aux.Bloco(0, 0, (0, 0, 0))
+    preto = pygame.Surface((16, 16))
+    preto.fill((0, 0, 0))
+    bloco_preto = aux.Bloco(0, 0, preto )
     tempo = 0
     while tempo <= frames:
         tempo += 1
         if tempo == frames:
             i = 0
             while i in range (0, 1820):
-                tela.blit(bloco_preto.image,(i, bloco_preto.rect))
+                tela.blit(bloco_preto.image,i, 0)
                 i += 100
             tempo == 0  
     

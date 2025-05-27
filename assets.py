@@ -125,5 +125,12 @@ def carrega_assets():
     assets["bowser jr atacando"] = [pygame.image.load("Sprites/Chefes/koopa.png")]
     assets["bowser jr shell"] = [pygame.image.load("Sprites/Chefes/koopa.png")]
 
+    imagem = pygame.image.load("Sprites/Backgrounds/castelo.png")
+    assets["castelo"] = pygame.transform.scale(imagem, (100,100))
+    assets["powerup_flor"] = [pygame.image.load("Sprites/Chefes/flor_de_fogo.png")]
+    assets["powerup_cogumelo"] = [pygame.image.load("Sprites/Chefes/flor_de_fogo.png")]
+    assets["powerup_estrela"] = [pygame.image.load("Sprites/Chefes/flor_de_fogo.png")]
+
+
     return assets
 
