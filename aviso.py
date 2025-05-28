@@ -26,7 +26,7 @@ def aviso(clock, tela, estado):
         fonte_rect.midtop = (p.WIDHT/2, p.HEIGHT/2)
         tela.blit(texto, fonte_rect)
 
-        texto = fonte_maior.render("Roube a energia de outros jogos para continuar vivo", True, (255, 255, 255))
+        texto = fonte_maior.render("Roube a energia de outro jogo para continuar vivo", True, (255, 255, 255))
         fonte_rect = texto.get_rect()
         fonte_rect.midtop = (p.WIDHT/2, p.HEIGHT/2 + 50)
         tela.blit(texto, fonte_rect)
@@ -39,7 +39,7 @@ def aviso(clock, tela, estado):
             if evento.type == pygame.QUIT:
                 estado["Aviso"] = False
                 estado["Jogando"] = False
-            if evento.type == pygame.KEYDOWN:
+            if evento.type == pygame.KEYUP:
                     estado["Aviso"] = False
                     estado["Mario"] = True
         pygame.display.update()

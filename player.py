@@ -193,7 +193,7 @@ class TiroEspecial(pygame.sprite.Sprite):
         self.bounces = 0
         self.max_bounces = 3
         self.chao_y = 801.5
-        self.dano = 3000
+        self.dano = 10
 
         self.ultimo_frame = pygame.time.get_ticks()
         self.frame_intervalo = 100  # milissegundos por frame

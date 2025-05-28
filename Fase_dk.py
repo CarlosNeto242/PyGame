@@ -32,7 +32,7 @@ def desenhar_barra_vida_player(tela, player):
     pygame.draw.rect(tela, (0, 0, 0), (x, y, largura, altura), 3)  
 # definimos uma função que rodará o principal da fase 
 def mapa(tela, clock, estado): 
-    pygame.mixer.music.load('Sprites/Sound Effects/bgm_action_3.mp3')
+    pygame.mixer.music.load('Assets/Sound Effects/bgm_action_3.mp3')
     pygame.mixer.music.play(loops=-1)
     # colocamos o background na fase
     assets = a.carrega_assets()

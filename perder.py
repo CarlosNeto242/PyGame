@@ -8,8 +8,8 @@ import bosses as b
 
 pygame.init()
 # definindo uma função responsável por montar a tela de game over (será posteriormente chamada no loop principal)
-def gameover(tela, clock, estado, fase): 
-    pygame.mixer.music.load('Sprites/Sound Effects/JRPG OST (Rev 2)/20 - Game Over.ogg')
+def gameover(tela, clock, estado): 
+    pygame.mixer.music.load('Assets/Sound Effects/JRPG OST (Rev 2)/20 - Game Over.ogg')
     pygame.mixer.music.play()
     # começamos chamando o tela de game over do assets e configurando seus parâmetros
     assets = a.carrega_assets()
@@ -37,7 +37,7 @@ def gameover(tela, clock, estado, fase):
             if evento.type == pygame.KEYDOWN:
                 if evento.key == pygame.K_SPACE:
                     estado["Perder"] = False
-                    estado[fase] = True
+                    estado["Mario"] = True
                     pygame.mixer.music.stop()
         # por fim, atualizamos a cada momento o jogo e determinamos sua taxa de atualizacao
         pygame.display.update()

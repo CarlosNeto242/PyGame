@@ -7,7 +7,7 @@ pygame.init()
 
 # definindo uma função responsável por montar a tela inicial (será posteriormente chamada no loop principal)
 def inicio(tela, clock, estado):
-    pygame.mixer.music.load('Sprites/Sound Effects/bgm_action_1.mp3')
+    pygame.mixer.music.load('Assets/Sound Effects/bgm_action_1.mp3')
     pygame.mixer.music.play(loops=-1)
     # começamos chamando o tela de fundo inicial do assets e configurando seus parâmetros
     assets = a.carrega_assets()

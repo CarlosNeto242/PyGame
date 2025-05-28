@@ -11,9 +11,9 @@ import Auxiliares as aux
 # criando uma função que irá criar a animação da cutscene do jogo
 def animacao_cutscene(tela, clock, estado): 
     #carregando os assets
-    pygame.mixer.music.load("Sprites/Sound Effects/sound_effects/sound_effects/odd2.wav")
+    pygame.mixer.music.load("Assets/Sound Effects/sound_effects/sound_effects/odd2.wav")
     pygame.mixer.music.play()
-    background = pygame.image.load("Sprites/megaman_inicial.jpg")
+    background = pygame.image.load("Assets/megaman_inicial.jpg")
     background = pygame.transform.scale(background, (p.WIDHT, p.HEIGHT))
     assets = a.carrega_assets()
     frames = 2000

@@ -4,14 +4,14 @@ import parametros as p
 import assets as a
 import player as pl
 import bosses as b
-from bosses import Bowser, PowerUp
+from bosses import PowerUp
 from Auxiliares import desenhar_barra_vida_player, desenhar_barra_vida_boss
 import random
 # criando uma função para a fase
 def fase_mario(tela, clock, estado):
     
     pygame.mixer.init()
-    pygame.mixer.music.load("Sprites/mario.wav")
+    pygame.mixer.music.load("Assets/mario.wav")
     pygame.mixer.music.play(-1)  # Toca em loop
 
 
@@ -122,11 +122,11 @@ def fase_mario(tela, clock, estado):
                     player.speedx += 11
                 elif evento.key in [pygame.K_UP, pygame.K_w]:
                     player.pular(21.5)
-                    pygame.mixer.Sound("Sprites/smw_jump.wav").play()  # Som de pulo
+                    pygame.mixer.Sound("Assets/smw_jump.wav").play()  # Som de pulo
                 elif evento.key == pygame.K_v:
                     player.atirar_especial(player.pegou_flor)
                     if player.pegou_flor:
-                        pygame.mixer.Sound("Sprites/smw_fireball.wav").play()  # Som de pulo
+                        pygame.mixer.Sound("Assets/smw_fireball.wav").play()  # Som de pulo
             elif evento.type == pygame.KEYUP:
                 if evento.key in [pygame.K_LEFT, pygame.K_a, pygame.K_RIGHT, pygame.K_d]:
                     player.speedx = 0
@@ -176,7 +176,7 @@ def fase_mario(tela, clock, estado):
             if player.rect.colliderect(item.rect):
                 if item.tipo == "flor":
                     player.pegou_flor = True
-                    pygame.mixer.Sound("Sprites/smw_power-up.wav").play()
+                    pygame.mixer.Sound("Assets/smw_power-up.wav").play()
                     item.kill()
                     flor_mensagem_mostrada = True
                     flor_msg_timer = pygame.time.get_ticks()
