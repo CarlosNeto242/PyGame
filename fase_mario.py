@@ -37,12 +37,47 @@ def fase_mario(tela, clock, estado):
     player.rect.bottom = 801.5
     camera_x = 0
 
-    # Tela preta de introdução
+# Tela preta de introdução
     tela.fill((0, 0, 0))
-    texto_intro = fonte.render("Invasão de jogo em processamento...", True, (255, 255, 255))
-    tela.blit(texto_intro, (p.WIDHT // 2 - texto_intro.get_width() // 2, p.HEIGHT // 2))
-    pygame.display.update()
-    pygame.time.delay(3000)
+    base_texto_intro = "Invasão de jogo em processamento" # Texto base sem os pontos
+
+    # Define a duração total da tela de introdução em milissegundos
+    duracao_total_intro = 3000 # 3 segundos (como o seu delay original)
+    tempo_inicial = pygame.time.get_ticks()
+
+    frame_atual_pontos = 0
+    intervalo_animacao_pontos = 500 # 500 milissegundos para cada mudança de ponto
+
+    while pygame.time.get_ticks() - tempo_inicial < duracao_total_intro:
+        # Lidar com eventos para que a janela não congele
+        for evento in pygame.event.get():
+            if evento.type == pygame.QUIT:
+                # É importante permitir que o usuário feche o jogo
+                # mesmo durante a introdução.
+                estado["Mario"] = estado["Jogando"] = False
+                return # Sai da função fase_mario
+
+        # Atualiza a animação dos pontos
+        agora = pygame.time.get_ticks()
+        if agora - tempo_inicial > frame_atual_pontos * intervalo_animacao_pontos:
+            frame_atual_pontos += 1
+            # Garante que os pontos se repetem de forma cíclica (., .., ...)
+            num_pontos = (frame_atual_pontos % 3) + 1
+            pontos = "." * num_pontos
+            texto_completo = base_texto_intro + pontos
+            
+            texto_intro = fonte.render(texto_completo, True, (255, 255, 255))
+            
+            # Limpa a tela e redesenha o texto
+            tela.fill((0, 0, 0)) 
+            tela.blit(texto_intro, (p.WIDHT // 2 - texto_intro.get_width() // 2, p.HEIGHT // 2))
+            pygame.display.update()
+
+        # Pequena pausa para evitar que o loop rode muito rápido e consuma CPU
+        pygame.time.delay(10) # Ajuste este valor se precisar
+
+    # Após o tempo total, o texto final (com os últimos pontos) estará na tela
+    # e o código continuará para a próxima mensagem.
 
     # Mensagem narrativa
     fonte = pygame.font.Font("Fontes/PressStart2P.ttf", 20)
@@ -56,23 +91,23 @@ def fase_mario(tela, clock, estado):
     pygame.time.delay(3000)
 
     # Criação de inimigos fixos
-    # for i, x in enumerate(range(600, 13000, 450)):  # espaçamento reduzido para mais inimigos
-    #     if i % 6 == 0:
-    #         inimigos.add(b.Goomba(assets, x, 800))
-    #     elif i % 6 == 1:
-    #         inimigos.add(b.Koopa(assets, x, 800))
-    #     elif i % 6 == 2:
-    #         inimigos.add(b.PlantaCarnivora(assets, x, 800))
-    #     elif i % 6 == 3:
-    #         inimigos.add(b.Goomba(assets, x, 800))
-    #         inimigos.add(b.Koopa(assets, x + 50, 800))
-    #     elif i % 6 == 4:
-    #         inimigos.add(b.PlantaCarnivora(assets, x, 800))
-    #         inimigos.add(b.Koopa(assets, x + 50, 800))
-    #     else:
-    #         inimigos.add(b.Goomba(assets, x, 800))
-    #         inimigos.add(b.PlantaCarnivora(assets, x + 50, 800))
-    #         inimigos.add(b.PlantaCarnivora(assets, x, 800))
+    for i, x in enumerate(range(600, 13000, 350)):  # espaçamento reduzido para mais inimigos
+        if i % 6 == 0:
+            inimigos.add(b.Goomba(assets, x, 800))
+        elif i % 6 == 1:
+            inimigos.add(b.Koopa(assets, x, 800))
+        elif i % 6 == 2:
+            inimigos.add(b.PlantaCarnivora(assets, x, 800))
+        elif i % 6 == 3:
+            inimigos.add(b.Goomba(assets, x, 800))
+            inimigos.add(b.Koopa(assets, x + 50, 800))
+        elif i % 6 == 4:
+            inimigos.add(b.PlantaCarnivora(assets, x, 800))
+            inimigos.add(b.Koopa(assets, x + 50, 800))
+        else:
+            inimigos.add(b.Goomba(assets, x, 800))
+            inimigos.add(b.PlantaCarnivora(assets, x + 50, 800))
+            inimigos.add(b.PlantaCarnivora(assets, x, 800))
     # Power-up flor fixo
     flor = b.PowerUp("flor", 14050, 700, assets)
     itens.add(flor)
@@ -88,11 +123,11 @@ def fase_mario(tela, clock, estado):
                 estado["Mario"] = estado["Jogando"] = False
             elif evento.type == pygame.KEYDOWN:
                 if evento.key in [pygame.K_LEFT, pygame.K_a]:
-                    player.speedx += -80
+                    player.speedx += -11
                 elif evento.key in [pygame.K_RIGHT, pygame.K_d]:
-                    player.speedx += 80
+                    player.speedx += 11
                 elif evento.key in [pygame.K_UP, pygame.K_w]:
-                    player.pular(121.5)
+                    player.pular(21.5)
                     pygame.mixer.Sound("Sprites/smw_jump.wav").play()  # Som de pulo
                 elif evento.key == pygame.K_v:
                     player.atirar_especial(player.pegou_flor)
@@ -159,7 +194,7 @@ def fase_mario(tela, clock, estado):
 
         if player.rect.colliderect(porta_castelo):
             estado["Mario"] = False
-            estado["Bowser_Junior"] = True
+            estado["DK"] = True
             pygame.mixer.music.stop()
             pygame.display.update()
             pygame.time.delay(100)  # pequena pausa para suavizar a transição
@@ -199,115 +234,3 @@ def fase_mario(tela, clock, estado):
         pygame.display.update()
         clock.tick(p.FPS)
 
-
-def fase_bowser(tela, clock, estado):
-    """
-    Combate único contra o Bowser na sala.
-    """
-    # Inicialização
-    assets = a.carrega_assets()
-    bg = assets.get("fundo_bowser", None)
-    background = pygame.transform.scale(bg, (p.WIDHT, p.HEIGHT)) if bg else pygame.Surface((p.WIDHT, p.HEIGHT))
-    
-    # pygame.mixer.music.load(assets.get("bgm_boss", ""))
-    # pygame.mixer.music.play(-1)
-
-    # Grupos de sprite
-    # Criamos um grupo para todos os sprites para facilitar a atualização e desenho
-    all_sprites = pygame.sprite.Group() 
-    # Grupo para tiros do jogador
-    player_tiros = pygame.sprite.Group() 
-    # Grupo para projéteis do Bowser
-    bowser_projectiles = pygame.sprite.Group() 
-
-    grupos = {
-        "player_tiros": player_tiros,
-        "bowser_projectiles": bowser_projectiles,
-        "all_sprites": all_sprites, # Adicionado para facilitar
-        "room_width": p.WIDHT,
-        "room_height": p.HEIGHT,
-        "ground_y": p.HEIGHT - 50, # Defina o chão da fase do Bowser
-    }
-
-    # Player
-    player = pl.Player(grupos, assets)
-    player.rect.midbottom = (150, grupos["ground_y"]) # Posiciona o jogador no chão
-    all_sprites.add(player)
-
-    # Bowser
-    boss = Bowser(assets, grupos)
-    all_sprites.add(boss)
-
-    estado['fase_bowser'] = True # Define o estado inicial da fase
-
-    while estado['fase_bowser']:
-        dt = clock.tick(p.FPS) / 1000.0  # Calcula o delta tempo em segundos
-
-        for ev in pygame.event.get():
-            if ev.type == pygame.QUIT:
-                estado['fase_bowser'] = estado['Jogando'] = False
-            elif ev.type == pygame.KEYDOWN:
-                if ev.key in [pygame.K_LEFT, pygame.K_a]: player.speedx = -250 # Ajustado para dt
-                elif ev.key in [pygame.K_RIGHT, pygame.K_d]: player.speedx = 250 # Ajustado para dt
-                elif ev.key in [pygame.K_UP, pygame.K_w]: 
-                    player.pular(350) # Ajustado para dt
-                    pygame.mixer.Sound(assets.get("smw_jump", "")).play() # Som de pulo
-                elif ev.key == pygame.K_z: 
-                    player.atirar()
-                    pygame.mixer.Sound(player.som_tiro).play() # Som de tiro
-                elif ev.key == pygame.K_v: # Adicionado tiro especial
-                    player.atirar_especial(player.pegou_flor)
-                    if player.pegou_flor:
-                        pygame.mixer.Sound(player.som_tiroespecial).play() # Som de tiro especial
-            elif ev.type == pygame.KEYUP:
-                if ev.key in [pygame.K_LEFT, pygame.K_a, pygame.K_RIGHT, pygame.K_d]:
-                    player.speedx = 0
-
-        # Atualizações
-        # Passa dt para as funções de update que precisam dele
-        player.update_deslocar_fixo(dt) # Usa update_deslocar_fixo para movimento sem limites de tela
-        player.update_gravidade(grupos["ground_y"], dt) 
-        player.update_animacao() # A animação não precisa de dt, mas é bom chamá-la aqui
-        
-        player_tiros.update(dt) # Atualiza os tiros do player
-        bowser_projectiles.update(dt) # Atualiza os projéteis do Bowser
-        boss.update(player, dt) # Atualiza o Bowser e seus ataques
-
-        # Colisões inimigo (projéteis do Bowser) ← player
-        for proj in bowser_projectiles:
-            if player.rect.colliderect(proj.rect):
-                player.take_damage(proj.dmg)
-                proj.kill() # Remove o projétil após a colisão
-
-        # Colisões boss ← player tiro
-        for tiro in player_tiros:
-            if boss.rect.colliderect(tiro.rect):
-                boss.take_damage(tiro.dano) # Use 'dano' para tiros do player
-                tiro.kill()
-
-        # Desenho
-        tela.blit(background, (0, 0))
-        # Desenha todos os sprites nos grupos
-        for s in all_sprites:
-            tela.blit(s.image, s.rect)
-        for s in player_tiros: # Desenha os tiros do jogador
-            tela.blit(s.image, s.rect)
-        for s in bowser_projectiles: # Desenha os projéteis do Bowser
-            tela.blit(s.image, s.rect)
-
-
-        # HUD
-        desenhar_barra_vida_player(tela, player)
-        desenhar_barra_vida_boss (tela, boss, p.WIDHT - 300) # Ajuste a posição da barra de vida do boss
-
-        pygame.display.flip()
-
-        # Checa fim de combate
-        if player.vida <= 0:
-            estado['fase_bowser'] = False
-            estado['Perder'] = True
-        elif boss.vida <= 0:
-            estado['fase_bowser'] = False
-            estado['Vencer'] = True
-        
-    pygame.mixer.music.stop()

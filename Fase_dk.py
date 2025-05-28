@@ -57,7 +57,7 @@ def mapa(tela, clock, estado):
     # enquanto a fase acontecer
 
     tela.blit(loading, (0, 0))
-    texto_intro = fonte.render("Invasão de jogo em processamento...", True, (255, 255, 255))
+    texto_intro = fonte.render("Entrando na fortaleza do Donkey Kong...", True, (255, 255, 255))
     tela.blit(texto_intro, (p.WIDHT // 2 - texto_intro.get_width() // 2, p.HEIGHT // 2))
     pygame.display.update()
     pygame.time.delay(2000)

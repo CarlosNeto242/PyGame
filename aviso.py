@@ -37,6 +37,6 @@ def aviso(clock, tela, estado):
                 estado["Jogando"] = False
             if evento.type == pygame.KEYDOWN:
                     estado["Aviso"] = False
-                    estado["Mapa"] = True
+                    estado["Mario"] = True
         pygame.display.update()
         clock.tick(p.FPS)
