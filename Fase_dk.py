@@ -107,7 +107,7 @@ def mapa(tela, clock, estado):
         # atualizamos na tela o background, as animacoes do player, do boss de dos projéteis
         tela.fill((0, 0, 0))
         tela.blit(background, (0, 0))
-        player.update_deslocar_fixo()
+        player.update_deslocar_fixo(50, 1220)
         player.update_animacao()
         player.update_gravidade(chao_y)
         tela.blit(player.image, player.rect)
@@ -121,12 +121,12 @@ def mapa(tela, clock, estado):
         # checamos as diferentes hitboxes possíveis 
         for barril in barris:
             if player.rect.colliderect(barril.rect):
-                player.vida -= 10
+                player.vida -= 20
                 barril.kill()
                 assets["som de dano"].play()
         for tiro in tiros:
             if boss.rect.colliderect(tiro.rect):
-                dano = getattr(tiro, "dano", 1) 
+                dano = getattr(tiro, "dano", 2) 
                 boss.levar_dano(dano)
                 tiro.kill()
         for fogo in foguinho:

@@ -119,7 +119,7 @@ def fase_mario(tela, clock, estado):
                 elif evento.key in [pygame.K_RIGHT, pygame.K_d]:
                     player.speedx += 11
                 elif evento.key in [pygame.K_UP, pygame.K_w]:
-                    player.pular(21.5)
+                    player.pular(24.5)
                     pygame.mixer.Sound("Assets/smw_jump.wav").play()  # Som de pulo
                 elif evento.key == pygame.K_v:
                     player.atirar_especial(player.pegou_flor)

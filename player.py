@@ -13,7 +13,7 @@ class Player(pygame.sprite.Sprite):
         # self.som_tiro = assets["som_tiro"]
         self.som_tiroespecial = assets["som_tiroespecial"]
         self.tiro_especial_dano = 30
-        self.tiro_especial_cooldown = 1 
+        self.tiro_especial_cooldown = 3000
         self.ultimo_tiro_especial = pygame.time.get_ticks()
         # self.som_tiro.set_volume(0.5)
         self.frame = 0 
@@ -28,9 +28,9 @@ class Player(pygame.sprite.Sprite):
         self.groups = grupos
         self.direcao = 1
         self.pulando = False
-        self.gravity = 1
-        self.vida = 220
-        self.max_vida = 220
+        self.gravity = 1.5
+        self.vida = 330
+        self.max_vida = 330
         self.knockback_x = 0
         self.knockback_frames = 0
         self.pegou_flor = False
@@ -65,12 +65,16 @@ class Player(pygame.sprite.Sprite):
             self.direcao = -1
 
     # atualiza a posiçao do player quando ele estiver parado
-    def update_deslocar_fixo(self):
+    def update_deslocar_fixo(self, limite_esquerdo, limite_direito):
         self.rect.x += self.speedx
 
         if self.knockback_frames > 0:
             self.rect.x += self.knockback_x
             self.knockback_frames -= 1
+        if self.rect.right > limite_direito: 
+            self.rect.right = limite_direito
+        if self.rect.left < limite_esquerdo:
+            self.rect.left = limite_esquerdo 
         if self.speedx > 0:
             self.direcao = 1
         elif self.speedx < 0:
