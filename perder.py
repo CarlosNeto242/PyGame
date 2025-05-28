@@ -10,7 +10,7 @@ pygame.init()
 # definindo uma função responsável por montar a tela de game over (será posteriormente chamada no loop principal)
 def gameover(tela, clock, estado): 
     pygame.mixer.music.load('Sprites/Sound Effects/JRPG OST (Rev 2)/20 - Game Over.ogg')
-    pygame.mixer.music.play(loops=-1)
+    pygame.mixer.music.play()
     # começamos chamando o tela de game over do assets e configurando seus parâmetros
     assets = a.carrega_assets()
     background = assets["tela de gameover"]

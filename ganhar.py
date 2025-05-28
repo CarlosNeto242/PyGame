@@ -8,6 +8,8 @@ import bosses as b
 pygame.init()
 # definindo uma função responsável por montar a tela de vitória (será posteriormente chamada no loop principal)
 def win(tela, clock, estado): 
+    pygame.mixer.music.load('Sprites/Sound Effects/bgm_action_5.mp3')
+    pygame.mixer.music.play()
     # começamos chamando o tela de fundo de vitória do assets e configurando seus parâmetros
     assets = a.carrega_assets()
     background = assets["tela de vitória"]
