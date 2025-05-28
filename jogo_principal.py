@@ -11,6 +11,7 @@ import selecao_fase
 import Fase_dk
 import cutscene
 import aviso
+import fases_bosses
 # comando para ajustar a escala de DPI no Windows, para evitar problemas de resolução (os dois participantes tinham notebooks com dierentes resoluções)
 try:
     ctypes.windll.user32.SetProcessDPIAware()
@@ -22,7 +23,7 @@ pygame.font.init()
 pygame.mixer.init()
 tela = pygame.display.set_mode((p.WIDHT, p.HEIGHT))
 clock = pygame.time.Clock()
-estados = {"Jogando": True, "Inicial": True, "Aviso" : False, "Cutscene" : False, "Mapa": False, "Ganhar": False, "Perder": False, "DK": False  , "Bowser": False, "Mario": False, "Final": False}
+estados = {"Jogando": True, "Inicial": True, "Aviso" : False, "Cutscene" : False, "Mapa": False, "Ganhar": False, "Perder": False, "DK": False  ,"Bowser Jr" : False, "King Boo" : False, "Bowser": False, "Mario": False, "Final": False}
 
 while estados["Jogando"]: 
     if estados["Inicial"]: 
@@ -35,15 +36,23 @@ while estados["Jogando"]:
         selecao_fase.selecionar(tela, clock, estados)
     elif estados["DK"]:
         Fase_dk.mapa(tela, clock, estados)
-        fase = "Bowser"
+        atual = "DK"
+        proxima = "Bowser"
     elif estados["Mario"]:
+        atual = "Mario"
         fase_mario.fase_mario(tela, clock, estados) 
+    elif estados["Bowser Jr"]:
+        fases_bosses.fase_bowser_jr(tela, clock, estados)
+        fase = "King Boo"
+    elif estados["King Boo"]:
+        fases_bosses.fase_king_boo(tela, clock, estados)
+        fase = 'Bowser'
     elif estados["Bowser"]:
-        fase_mario.fase_bowser(tela, clock, estados) 
+        fases_bosses.fase_bowser_final(tela, clock, estados) 
     elif estados["Perder"]: 
-        perder.gameover(tela, clock, estados)
+        perder.gameover(tela, clock, estados, atual)
     elif estados["Ganhar"]: 
-        ganhar.win(tela, clock, estados)
+        ganhar.win(tela, clock, estados, proxima)
     elif estados["Final"]: 
         pass
 

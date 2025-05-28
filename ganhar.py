@@ -7,7 +7,7 @@ import bosses as b
 
 pygame.init()
 # definindo uma função responsável por montar a tela de vitória (será posteriormente chamada no loop principal)
-def win(tela, clock, estado): 
+def win(tela, clock, estado, fase): 
     pygame.mixer.music.load('Sprites/Sound Effects/bgm_action_5.mp3')
     pygame.mixer.music.play()
     # começamos chamando o tela de fundo de vitória do assets e configurando seus parâmetros
@@ -21,7 +21,7 @@ def win(tela, clock, estado):
     while estado["Ganhar"]: 
          # colocamos na tela o seu fundo e os textos com as respectivas fontes 
         tela.blit(background, (0, 0))
-        fonte_tecla = fonte1.render("Clique espaço para selecionar outra fase", True, (0, 195, 255))
+        fonte_tecla = fonte1.render("Clique espaço para ir para próxima fase", True, (0, 195, 255))
         fonte_rect1 = fonte_tecla.get_rect()
         fonte_rect1.midtop = (p.WIDHT/2, 800)
         tela.blit(fonte_tecla, fonte_rect1)
@@ -37,7 +37,7 @@ def win(tela, clock, estado):
             # se o usuário clicar espaço, ele será direcionado para a primeira fase (o jogo reinicia)
                 if evento.key == pygame.K_SPACE:
                     estado["Ganhar"] = False
-                    estado["Mapa"] = True
+                    estado[fase] = True
         # por fim, atualizamos a cada momento o jogo e determinamos sua taxa de atualizacao
         pygame.display.update()
         clock.tick(p.FPS)
