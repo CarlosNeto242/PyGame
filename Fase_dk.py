@@ -7,9 +7,6 @@ import bosses as b
 import random 
 import fase_mario as fm
 
-pygame.init()
-pygame.font.init()
-pygame.mixer.init()
 # definimos uma função que desenha a barra de vida do boss na tela
 def desenhar_barra_vida(tela, boss):
     largura = 400

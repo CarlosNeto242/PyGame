@@ -39,7 +39,7 @@ def aviso(clock, tela, estado):
             if evento.type == pygame.QUIT:
                 estado["Aviso"] = False
                 estado["Jogando"] = False
-            if evento.type == pygame.KEYUP:
+            if evento.type == pygame.KEYDOWN:
                     estado["Aviso"] = False
                     estado["Mario"] = True
         pygame.display.update()

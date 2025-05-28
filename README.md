@@ -14,6 +14,7 @@ https://chatgpt.com/share/6836f56b-0d10-800f-a6e8-7d627409f1ef
 https://chatgpt.com/share/6836f57b-7938-800f-9e53-5c3d0048658e
 https://chatgpt.com/share/68370f21-e2dc-8007-9084-3d2071404752
 
+#### Para rodar o jogo, deve-se executar o arquivo jogo_principal no Visual Code
 
 
 
