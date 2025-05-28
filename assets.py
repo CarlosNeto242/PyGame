@@ -127,7 +127,7 @@ def carrega_assets():
     assets["bloco preto"] = pygame.image.load("Sprites/bloco preto.jpg")
 
     imagem = pygame.image.load("Sprites/Backgrounds/castelo.png")
-    assets["castelo"] = pygame.transform.scale(imagem, (290,290))
+    assets["castelo"] = pygame.transform.scale(imagem, (490,490))
     Florzinha = pygame.image.load("Sprites/Chefes/flor_de_fogo.png")
     assets["powerup_flor"] = [pygame.transform.scale(Florzinha, (60,60))]
     assets["powerup_cogumelo"] = [pygame.image.load("Sprites/Chefes/flor_de_fogo.png")]
@@ -138,6 +138,6 @@ def carrega_assets():
         pygame.transform.scale(pygame.image.load("Sprites/Chefes/casco3.png"), (60,47)),
         pygame.transform.scale(pygame.image.load("Sprites/Chefes/casco4.png"), (60,47))
     ]
-
+    assets["fundo castelo"] = pygame.image.load("Sprites/Backgrounds/donkey kong.png")
     return assets
 

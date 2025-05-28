@@ -40,7 +40,7 @@ def fase_mario(tela, clock, estado):
     texto_intro = fonte.render("Invasão de jogo em processamento...", True, (255, 255, 255))
     tela.blit(texto_intro, (p.WIDHT // 2 - texto_intro.get_width() // 2, p.HEIGHT // 2))
     pygame.display.update()
-    pygame.time.delay(2000)
+    pygame.time.delay(3000)
 
     # Mensagem narrativa
     fonte = pygame.font.Font("Fontes/PressStart2P.ttf", 20)
@@ -54,30 +54,30 @@ def fase_mario(tela, clock, estado):
     pygame.time.delay(3000)
 
     # Criação de inimigos fixos
-    for i, x in enumerate(range(600, 18000, 450)):  # espaçamento reduzido para mais inimigos
-        if i % 6 == 0:
-            inimigos.add(b.Goomba(assets, x, 800))
-        elif i % 6 == 1:
-            inimigos.add(b.Koopa(assets, x, 800))
-        elif i % 6 == 2:
-            inimigos.add(b.PlantaCarnivora(assets, x, 800))
-        elif i % 6 == 3:
-            inimigos.add(b.Goomba(assets, x, 800))
-            inimigos.add(b.Koopa(assets, x + 50, 800))
-        elif i % 6 == 4:
-            inimigos.add(b.PlantaCarnivora(assets, x, 800))
-            inimigos.add(b.Koopa(assets, x + 50, 800))
-        else:
-            inimigos.add(b.Goomba(assets, x, 800))
-            inimigos.add(b.PlantaCarnivora(assets, x + 50, 800))
-            inimigos.add(b.PlantaCarnivora(assets, x, 800))
+    # for i, x in enumerate(range(600, 13000, 450)):  # espaçamento reduzido para mais inimigos
+    #     if i % 6 == 0:
+    #         inimigos.add(b.Goomba(assets, x, 800))
+    #     elif i % 6 == 1:
+    #         inimigos.add(b.Koopa(assets, x, 800))
+    #     elif i % 6 == 2:
+    #         inimigos.add(b.PlantaCarnivora(assets, x, 800))
+    #     elif i % 6 == 3:
+    #         inimigos.add(b.Goomba(assets, x, 800))
+    #         inimigos.add(b.Koopa(assets, x + 50, 800))
+    #     elif i % 6 == 4:
+    #         inimigos.add(b.PlantaCarnivora(assets, x, 800))
+    #         inimigos.add(b.Koopa(assets, x + 50, 800))
+    #     else:
+    #         inimigos.add(b.Goomba(assets, x, 800))
+    #         inimigos.add(b.PlantaCarnivora(assets, x + 50, 800))
+    #         inimigos.add(b.PlantaCarnivora(assets, x, 800))
     # Power-up flor fixo
-    flor = b.PowerUp("flor", 19000, 700, assets)
+    flor = b.PowerUp("flor", 14050, 700, assets)
     itens.add(flor)
     flor_mensagem_mostrada = False
 
     # Definição da porta do castelo
-    porta_castelo = pygame.Rect(19605, 0, 80, 801.5)
+    porta_castelo = pygame.Rect(14605, 0, 80, 801.5)
 
     while estado["Mario"]:
         # Eventos
@@ -86,11 +86,11 @@ def fase_mario(tela, clock, estado):
                 estado["Mario"] = estado["Jogando"] = False
             elif evento.type == pygame.KEYDOWN:
                 if evento.key in [pygame.K_LEFT, pygame.K_a]:
-                    player.speedx += -8
+                    player.speedx += -80
                 elif evento.key in [pygame.K_RIGHT, pygame.K_d]:
-                    player.speedx += 8
+                    player.speedx += 80
                 elif evento.key in [pygame.K_UP, pygame.K_w]:
-                    player.pular(21.5)
+                    player.pular(121.5)
                     pygame.mixer.Sound("Sprites/smw_jump.wav").play()  # Som de pulo
                 elif evento.key == pygame.K_v:
                     player.atirar_especial(player.pegou_flor)
@@ -101,7 +101,7 @@ def fase_mario(tela, clock, estado):
                     player.speedx = 0
 
         # Atualizações
-        player.update_deslocar(0, 20000)
+        player.update_deslocar(0, 15000)
         player.update_animacao()
         player.update_gravidade(801.5)
         tiros.update()
@@ -158,6 +158,9 @@ def fase_mario(tela, clock, estado):
         if player.rect.colliderect(porta_castelo):
             estado["Mario"] = False
             estado["Bowser_Junior"] = True
+            pygame.mixer.music.stop()
+            pygame.display.update()
+            pygame.time.delay(100)  # pequena pausa para suavizar a transição
             return
 
         # Atualização da câmera
@@ -169,7 +172,7 @@ def fase_mario(tela, clock, estado):
         for i in range(int(camera_x // largura_fundo) - 1, int((camera_x + p.WIDHT) // largura_fundo) + 2):
             tela.blit(background, (i * largura_fundo - camera_x, 0))
 
-        tela.blit(castelo_img, (19500 - camera_x, 801.5 - castelo_img.get_height()))
+        tela.blit(castelo_img, (14500 - camera_x, 826.5 - castelo_img.get_height()))
 
 
         for grupo in [inimigos, tiros, itens]:
@@ -193,4 +196,3 @@ def fase_mario(tela, clock, estado):
 
         pygame.display.update()
         clock.tick(p.FPS)
-

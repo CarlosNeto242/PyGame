@@ -595,7 +595,8 @@ class BowserJr(pygame.sprite.Sprite):
                 self.kill()
             elif self.vida < self.max_vida / 3:
                 self.intervalo_ataque = 1000
-
+    def alive(self):
+        return self.vida > 0
 class Martelo(pygame.sprite.Sprite):
     def __init__(self, x, y, direcao):
         super().__init__()
