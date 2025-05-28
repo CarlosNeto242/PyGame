@@ -8,17 +8,16 @@ import Auxiliares as aux
 
 def aviso(clock, tela, estado): 
     assets = a.carrega_assets()
-    fonte = assets["fonte apertar inicial"]
+    fonte_maior = pygame.font.Font("Fontes/PressStart2P.ttf", 25)
 
     while estado["Aviso"]: 
         tela.fill((0, 0, 0))
-        texto = fonte.render("O seu jogo foi desligado", True, (255, 255, 255))
+        texto = fonte_maior.render("O seu jogo foi desligado", True, (255, 255, 255))
         fonte_rect = texto.get_rect()
         fonte_rect.midtop = (p.WIDHT/2, p.HEIGHT/2)
         tela.blit(texto, fonte_rect)
 
-        tela.fill((0, 0, 0))
-        texto = fonte.render("Roube a energia de outros jogos para continuar vivo", True, (255, 255, 255))
+        texto = fonte_maior.render("Roube a energia de outros jogos para continuar vivo", True, (255, 255, 255))
         fonte_rect = texto.get_rect()
         fonte_rect.midtop = (p.WIDHT/2, p.HEIGHT/2 + 50)
         tela.blit(texto, fonte_rect)
@@ -32,8 +31,7 @@ def aviso(clock, tela, estado):
                 estado["Aviso"] = False
                 estado["Jogando"] = False
             if evento.type == pygame.KEYDOWN:
-                if evento.key == pygame.K_SPACE:
                     estado["Aviso"] = False
-                    estado["Jogando"] = True
+                    estado["Mapa"] = True
         pygame.display.update()
         clock.tick(p.FPS)

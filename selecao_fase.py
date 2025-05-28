@@ -33,7 +33,7 @@ def selecionar(tela, clock, estado):
         tela.blit((background), (0, 0))
         for botao in botoes:
             tela.blit(botao.image, botao.rect)
-        fonte1 = fonte.render("Selecione a fase desejada", True, (255, 255, 255))
+        fonte1 = fonte.render("Selecione o jogo para invadir", True, (255, 255, 255))
         fonte_rect1 = fonte1.get_rect()
         fonte_rect1.midtop = (p.WIDHT/2, 800)
         tela.blit(fonte1, fonte_rect1)
