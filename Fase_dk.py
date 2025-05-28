@@ -74,7 +74,6 @@ def mapa(tela, clock, estado):
         eventos = pygame.event.get()
         # fazemos o boss continuamente atacar 
         boss.update_tiro()
-        boss.ataque_chuva(100, 1700)
         # analisamos as teclas que o player pode ativar e relacionamos aos seus respectivos eventos
         for evento in eventos: 
             if evento.type == pygame.QUIT:
@@ -100,6 +99,8 @@ def mapa(tela, clock, estado):
                 if evento.key == pygame.K_RIGHT or evento.key == pygame.K_d:
                     player.speedx -= 8
                 player.i_animacao = assets["animacao player"]
+            if  boss.vida <= boss.max_vida * 0.8:
+                boss.ataque_chuva(100, 1700,4)
         # atualizamos na tela o background, as animacoes do player, do boss de dos projéteis
         tela.fill((0, 0, 0))
         tela.blit(background, (0, 0))

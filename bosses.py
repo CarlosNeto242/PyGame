@@ -42,12 +42,12 @@ class Boss(pygame.sprite.Sprite):
         if self.vida <= 0:
             self.kill()
 
-    def ataque_chuva(self, intervalo1, intervalo2): 
+    def ataque_chuva(self, intervalo1, intervalo2, n): 
         agora = pygame.time.get_ticks()
         passados = agora - self.ultimo_ataque_chuva
         if passados >= self.intervalo_chuva: 
             self.ultimo_ataque_chuva = agora
-            for _ in range(3):
+            for _ in range(n):
                 x = random.randint(intervalo1, intervalo2)
                 novo_fogo = Fogo(self.assets, self.groups, x, 0)
                 self.groups["foguinhos"].add(novo_fogo)
