@@ -14,6 +14,10 @@ def fase_mario(tela, clock, estado):
     import bosses as b
     from Auxiliares import desenhar_barra_vida_player
     import random
+    pygame.mixer.init()
+    pygame.mixer.music.load("Sprites/mario.wav")
+    pygame.mixer.music.play(-1)  # Toca em loop
+
 
     assets = a.carrega_assets()
     background = assets["fundo mario"]
@@ -87,6 +91,7 @@ def fase_mario(tela, clock, estado):
                     player.speedx += 11
                 elif evento.key in [pygame.K_UP, pygame.K_w]:
                     player.pular(22)
+                    pygame.mixer.Sound("Sprites/smw_jump.wav").play()  # Som de pulo
                 elif evento.key == pygame.K_v:
                     player.atirar_especial(player.pegou_flor)
             elif evento.type == pygame.KEYUP:
