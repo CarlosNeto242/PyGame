@@ -37,6 +37,8 @@ def mapa(tela, clock, estado):
     assets = a.carrega_assets()
     background = assets["fundo mapa"]
     background = pygame.transform.scale(background, (1920, 1080))
+    loading = assets["loading dk"]
+    loading = pygame.transform.scale(loading, (p.WIDHT, p.HEIGHT))
     fonte = pygame.font.Font("Fontes/PressStart2P.ttf", 30)
     # criamos grupos associados as sprites "disparadas" no jogo
     tiros = pygame.sprite.Group()
@@ -54,7 +56,7 @@ def mapa(tela, clock, estado):
     player.rect.bottom = chao_y
     # enquanto a fase acontecer
 
-    tela.fill((0, 0, 0))
+    tela.blit(loading, (0, 0))
     texto_intro = fonte.render("Invasão de jogo em processamento...", True, (255, 255, 255))
     tela.blit(texto_intro, (p.WIDHT // 2 - texto_intro.get_width() // 2, p.HEIGHT // 2))
     pygame.display.update()
@@ -63,7 +65,7 @@ def mapa(tela, clock, estado):
     fonte = pygame.font.Font("Fontes/PressStart2P.ttf", 20)
     tela.blit(background, (0, 0))
     texto_alerta = fonte.render(
-        "Donkey Kong está bravo por você estar aqui como INTRUSO!",
+        "Donkey Kong está furioso pelo Mario ter sumido, e acha que VOCÊ É O CULPADO!",
         True, (255, 255, 255)
     )
     tela.blit(texto_alerta, (p.WIDHT // 2 - texto_alerta.get_width() // 2, p.HEIGHT // 2))

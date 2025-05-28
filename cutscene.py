@@ -7,6 +7,8 @@ import random
 import Auxiliares as aux
 
 def animacao_cutscene(tela, clock, estado): 
+    pygame.mixer.music.load("Sprites/Sound Effects/sound_effects/sound_effects/odd2.wav")
+    pygame.mixer.music.play()
     background = pygame.image.load("Sprites/megaman_inicial.jpg")
     background = pygame.transform.scale(background, (p.WIDHT, p.HEIGHT))
     assets = a.carrega_assets()
