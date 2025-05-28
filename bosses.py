@@ -284,10 +284,106 @@ class Inimigo(pygame.sprite.Sprite):
 # Subclasses específicas para os inimigos da fase do Bowser
 # --------------------------
 
-class Goomba(Inimigo):
+
+class Goomba(pygame.sprite.Sprite):
     def __init__(self, assets, x, y):
-        super().__init__(assets["goomba"], x, y, speedx=-2)
+        super().__init__()
+        self.animacao = assets["goomba"]
+        self.frame = 0
+        self.image = self.animacao[self.frame]
+        self.rect = self.image.get_rect()
+        self.rect.x = x
+        self.rect.bottom = y
+        self.speedx = -2
         self.dano = 10
+        self.ultimo_frame = pygame.time.get_ticks()
+        self.intervalo = 250
+
+    def update(self):
+        self.rect.x += self.speedx
+        agora = pygame.time.get_ticks()
+        if agora - self.ultimo_frame > self.intervalo:
+            self.ultimo_frame = agora
+            self.frame = (self.frame + 1) % len(self.animacao)
+            self.image = self.animacao[self.frame]
+
+class Koopa(pygame.sprite.Sprite):
+    def __init__(self, assets, x, y):
+        super().__init__()
+        self.estado = "vivo"
+        self.animacoes = {
+            "koopa": assets["koopa"],
+            "casco": assets["casco"]
+        }
+        self.frame = 0
+        self.image = self.animacoes["koopa"][self.frame]
+        self.rect = self.image.get_rect()
+        self.rect.x = x
+        self.rect.bottom = y
+        self.speedx = -1.5
+        self.dano = 15
+        self.ultimo_frame = pygame.time.get_ticks()
+        self.frame_interval = 150  # animação mais rápida
+        self.direcao = -1
+
+    def update(self):
+        agora = pygame.time.get_ticks()
+        if self.estado == "vivo":
+            self.rect.x += self.speedx
+            if agora - self.ultimo_frame > self.frame_interval:
+                self.ultimo_frame = agora
+                self.frame = (self.frame + 1) % len(self.animacoes["koopa"])
+                self.image = self.animacoes["koopa"][self.frame]
+
+        elif self.estado == "casco_andando":
+            self.rect.x += 10 * self.direcao
+            if agora - self.ultimo_frame > self.frame_interval:
+                self.ultimo_frame = agora
+                self.frame = (self.frame + 1) % len(self.animacoes["casco"])
+                self.image = self.animacoes["casco"][self.frame]
+            if self.rect.right < 0 or self.rect.left > 21000:
+                self.kill()
+
+        elif self.estado == "casco_parado":
+            self.image = self.animacoes["casco"][0]
+
+    def levar_pulo(self, player):
+        if self.estado == "vivo":
+            self.estado = "casco_parado"
+            bottom = self.rect.bottom
+            x = self.rect.x
+            self.image = self.animacoes["casco"][0]
+            self.rect = self.image.get_rect()
+            self.rect.bottom = bottom
+            self.rect.x = x
+            player.speedy = -18
+
+        elif self.estado == "casco_parado":
+            self.estado = "casco_andando"
+            self.direcao = 1 if player.rect.centerx < self.rect.centerx else -1
+            player.speedy = -18
+
+
+
+class PlantaCarnivora(pygame.sprite.Sprite):
+    def __init__(self, assets, x, y):
+        super().__init__()
+        self.animacao = assets["planta"]
+        self.frame = 0
+        self.image = self.animacao[self.frame]
+        self.rect = self.image.get_rect()
+        self.rect.x = x
+        self.rect.bottom = y
+        self.dano = 25
+        self.ultimo_frame = pygame.time.get_ticks()
+        self.intervalo = 250
+
+    def update(self):
+        agora = pygame.time.get_ticks()
+        if agora - self.ultimo_frame > self.intervalo:
+            self.ultimo_frame = agora
+            self.frame = (self.frame + 1) % len(self.animacao)
+            self.image = self.animacao[self.frame]
 
 
 class PlantaCarnivora(Inimigo):
@@ -559,75 +655,3 @@ class PowerUp(pygame.sprite.Sprite):
             self.rect.bottom = 801.5
             self.speedy = 0
 
-
-class PlantaCarnivoraAnimada(pygame.sprite.Sprite):
-    def __init__(self, assets, x, base_y):
-        super().__init__()
-        self.image = assets["planta"][0]
-        self.rect = self.image.get_rect()
-        self.rect.x = x
-        self.base_y = base_y
-        self.rect.bottom = base_y
-        self.subindo = True
-        self.velocidade = 1
-        self.limite_superior = base_y - 50
-        self.limite_inferior = base_y
-        self.dano = 25
-
-    def update(self, player=None):
-        if player and abs(player.rect.centerx - self.rect.centerx) < 100:
-            return  # não sobe se o jogador estiver perto
-
-        if self.subindo:
-            self.rect.y -= self.velocidade
-            if self.rect.y <= self.limite_superior:
-                self.subindo = False
-        else:
-            self.rect.y += self.velocidade
-            if self.rect.bottom >= self.limite_inferior:
-                self.subindo = True
-
-class Koopa(pygame.sprite.Sprite):
-    def __init__(self, assets, x, y):
-        super().__init__()
-        self.estado = "vivo"  # "vivo", "casco_parado", "casco_andando"
-        self.animacoes = {
-            "koopa": assets["koopa"],
-            "casco": assets["casco"]
-        }
-        self.image = self.animacoes["koopa"][0]
-        self.rect = self.image.get_rect()
-        self.rect.x = x
-        self.rect.bottom = y
-        self.speedx = -1.5
-        self.dano = 15
-        self.frame = 0
-        self.ultimo_frame = pygame.time.get_ticks()
-        self.frame_interval = 200
-        self.direcao = -1
-
-    def update(self):
-        agora = pygame.time.get_ticks()
-        if self.estado == "vivo":
-            self.rect.x += self.speedx
-            if agora - self.ultimo_frame > self.frame_interval:
-                self.ultimo_frame = agora
-                self.frame = (self.frame + 1) % len(self.animacoes["koopa"])
-                self.image = self.animacoes["koopa"][self.frame]
-
-        elif self.estado == "casco_andando":
-            self.rect.x += 10 * self.direcao
-            self.image = self.animacoes["casco"][0]
-
-        elif self.estado == "casco_parado":
-            self.image = self.animacoes["casco"][0]
-
-    def levar_pulo(self, player):
-        if self.estado == "vivo":
-            self.estado = "casco_parado"
-            self.image = self.animacoes["casco"][0]
-            player.speedy = -18
-        elif self.estado == "casco_parado":
-            self.estado = "casco_andando"
-            self.direcao = 1 if player.rect.centerx < self.rect.centerx else -1
-            player.speedy = -18
