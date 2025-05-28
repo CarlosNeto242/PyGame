@@ -5,6 +5,7 @@ import assets as a
 import player as pl
 import bosses as b
 import random 
+import fase_mario as fm
 
 pygame.init()
 pygame.font.init()
@@ -53,7 +54,10 @@ def mapa(tela, clock, estado):
     boss = b.Boss(assets, grupos)
     # criando um chão
     chao_y = 830
+    player.rect.centerx = 300
     player.rect.bottom = chao_y
+    player.speedx = 8
+    player.speedy = 0
     # enquanto a fase acontecer
 
     tela.blit(loading, (0, 0))

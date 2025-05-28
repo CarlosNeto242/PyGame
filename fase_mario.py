@@ -227,4 +227,5 @@ def fase_mario(tela, clock, estado):
 
         pygame.display.update()
         clock.tick(p.FPS)
+    return player
 
