@@ -103,7 +103,7 @@ def carrega_assets():
     assets["planta"] = animacao_planta
 
     assets["koopa"] = [
-        pygame.image.load("Sprites/Chefes/koopa.png")
+        pygame.transform.scale(pygame.image.load("Sprites/Chefes/tartaruga1.png"), (65,75)),pygame.transform.scale(pygame.image.load("Sprites/Chefes/tartaruga2.png"), (65,75))
     ]
 
     assets["bullet"] = [
@@ -132,7 +132,12 @@ def carrega_assets():
     assets["powerup_flor"] = [pygame.transform.scale(Florzinha, (60,60))]
     assets["powerup_cogumelo"] = [pygame.image.load("Sprites/Chefes/flor_de_fogo.png")]
     assets["powerup_estrela"] = [pygame.image.load("Sprites/Chefes/flor_de_fogo.png")]
-    assets["casco"] = [pygame.image.load("Sprites/Chefes/bloco.png")]
+    assets["casco"] =[
+        pygame.transform.scale(pygame.image.load("Sprites/Chefes/casco1.png"), (60,60)),
+        pygame.transform.scale(pygame.image.load("Sprites/Chefes/casco2.png"), (60,47)),
+        pygame.transform.scale(pygame.image.load("Sprites/Chefes/casco3.png"), (60,47)),
+        pygame.transform.scale(pygame.image.load("Sprites/Chefes/casco4.png"), (60,47))
+    ]
 
     return assets
 
