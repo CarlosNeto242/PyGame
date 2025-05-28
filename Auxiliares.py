@@ -49,3 +49,4 @@ def desenhar_barra_vida_boss(tela, boss, camera_x):
     fonte = pygame.font.SysFont("Arial", 24, bold=True)
     texto = fonte.render(f"{type(boss).__name__}", True, (255, 255, 255))
     tela.blit(texto, (x + largura // 2 - texto.get_width() // 2, y - 30))
+

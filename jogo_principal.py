@@ -22,7 +22,7 @@ pygame.font.init()
 pygame.mixer.init()
 tela = pygame.display.set_mode((p.WIDHT, p.HEIGHT))
 clock = pygame.time.Clock()
-estados = {"Jogando": True, "Inicial": False, "Aviso" : False, "Cutscene" : False, "Mapa": False, "Ganhar": False, "Perder": False, "DK": False  , "Bowser": False, "Mario": True, "Bowser_Junior": False, "KingBoo": False, "Final": False}
+estados = {"Jogando": True, "Inicial": False, "Aviso" : False, "Cutscene" : False, "Mapa": False, "Ganhar": False, "Perder": False, "DK": False  , "Bowser": True, "Mario": False, "Final": False}
 
 while estados["Jogando"]: 
     if estados["Inicial"]: 
@@ -38,12 +38,8 @@ while estados["Jogando"]:
         fase = "Bowser"
     elif estados["Mario"]:
         fase_mario.fase_mario(tela, clock, estados) 
-    elif estados["Bowser_Junior"]:
-        fase_mario.fase_bowser_jr(tela, clock, estados) 
-    elif estados["KingBoo"]:
-        fase_mario.fase_king_boo(tela, clock, estados) 
     elif estados["Bowser"]:
-        fase_mario.fase_bowser_final(tela, clock, estados) 
+        fase_mario.fase_bowser(tela, clock, estados) 
     elif estados["Perder"]: 
         perder.gameover(tela, clock, estados)
     elif estados["Ganhar"]: 

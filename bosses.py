@@ -4,6 +4,7 @@ import parametros as p
 import player as pl 
 import random
 import math
+from pygame.sprite import Sprite
 
 # Criando uma classe para o boss Donkey Kong
 class Boss(pygame.sprite.Sprite): 
@@ -142,113 +143,6 @@ class Fogo(pygame.sprite.Sprite):
             self.frame += 1
             self.image = self.animacao[self.frame % len(self.animacao)]
 
-# criando uma classe para o boss do Bowser
-class Bowser(pygame.sprite.Sprite):
-    def __init__(self, assets, grupos):
-        pygame.sprite.Sprite.__init__(self)
-
-        self.image = pygame.transform.scale(pygame.image.load("Sprites/Chefes/bowser_idle.png"), (200, 200))
-        self.image = pygame.transform.flip(self.image, True, False)
-        self.assets = assets
-        self.groups = grupos
-        self.rect = self.image.get_rect()
-        self.rect.centerx = 1600
-        self.rect.bottom = 800
-
-        self.speedx = -2  
-        self.vida = 100
-        self.max_vida = 100
-
-        self.ultimo_ataque = pygame.time.get_ticks()
-
-    def update_comportamento(self, player):
-        self.movimentar()
-        self.atacar(player)
-
-    def movimentar(self):
-        self.rect.x += self.speedx
-
-        LIMITE_ESQUERDO = 1000
-        LIMITE_DIREITO = 1720
-
-        if self.rect.left < LIMITE_ESQUERDO:
-            self.rect.left = LIMITE_ESQUERDO
-            self.speedx = abs(self.speedx)  
-        elif self.rect.right > LIMITE_DIREITO:
-            self.rect.right = LIMITE_DIREITO
-            self.speedx = -abs(self.speedx)  
-
-    def atacar(self, player):
-        agora = pygame.time.get_ticks()
-        fase = self.fase_atual()
-
-        if fase == 1:
-            intervalo = 3000
-            self.speedx = -2
-        elif fase == 2:
-            intervalo = 2000
-            self.speedx = -3
-        else:
-            intervalo = 1500
-            self.speedx = -4
-
-        if agora - self.ultimo_ataque < intervalo:
-            return
-        self.ultimo_ataque = agora
-
-        if fase >= 1:
-            self.ataque_chuva()
-        if fase >= 2:
-            self.ataque_investida(player)
-        if fase == 3:
-            self.ataque_lateral()
-
-
-    def ataque_chuva(self):
-        for _ in range(4):
-            x = random.randint(100, 1700)
-            nova_bola = BolaDeFogo(x, 0)
-            self.groups["bolas_de_fogo"].add(nova_bola)
-
-    def ataque_investida(self, player):
-        if abs(player.rect.centery - self.rect.centery) < 200:
-            self.rect.x -= 80  
-
-    def ataque_lateral(self):
-        nova_bola = BolaDeFogo(self.rect.centerx, self.rect.centery, vertical=False)
-        self.groups["bolas_de_fogo"].add(nova_bola)
-
-    def levar_dano(self, dano):
-        self.vida -= dano
-        if self.vida <= 0:
-            self.kill()
-    def fase_atual(self):
-        if self.vida > 60:
-            return 1
-        elif self.vida > 30:
-            return 2
-        else:
-            return 3
-
-# Criando uma classe para a bola de fogo que o Bowser atira
-class BolaDeFogo(pygame.sprite.Sprite):
-    def __init__(self, x, y, vertical=True):
-        pygame.sprite.Sprite.__init__(self)
-        self.image = pygame.transform.scale(pygame.image.load("Sprites/Chefes/bola_fogo.png"), (40, 40))
-        self.rect = self.image.get_rect()
-        self.rect.x = x
-        self.rect.y = y
-        self.vertical = vertical
-        self.speed = 10
-    
-    def update(self):
-        if self.vertical:
-            self.rect.y += self.speed
-        else:
-            self.rect.x -= self.speed
-        if self.rect.top > 1080 or self.rect.right < 0:
-            self.kill()
-
 # Criando uma classe para a flor de fogo que o Bowser atira
 class FlorDeFogo(pygame.sprite.Sprite):
     def __init__(self, x, y):
@@ -363,8 +257,6 @@ class Koopa(pygame.sprite.Sprite):
             self.direcao = 1 if player.rect.centerx < self.rect.centerx else -1
             player.speedy = -18
 
-
-
 class PlantaCarnivora(pygame.sprite.Sprite):
     def __init__(self, assets, x, y):
         super().__init__()
@@ -385,258 +277,10 @@ class PlantaCarnivora(pygame.sprite.Sprite):
             self.frame = (self.frame + 1) % len(self.animacao)
             self.image = self.animacao[self.frame]
 
-
 class PlantaCarnivora(Inimigo):
     def __init__(self, assets, x, y):
         super().__init__(assets["planta"], x, y, speedx=0)
         self.dano = 25
-
-class KingBoo(pygame.sprite.Sprite):
-    def __init__(self, assets, grupos):
-        pygame.sprite.Sprite.__init__(self)
-        self.animacao = assets["king boo"]
-        self.frame = 0
-        self.image = self.animacao[self.frame]
-        self.rect = self.image.get_rect()
-        self.rect.centerx = 1500
-        self.rect.centery = 400
-        self.assets = assets
-        self.groups = grupos
-        
-        self.vida = 120
-        self.max_vida = 120
-        self.velocidade = 3
-        self.estado = "voando"
-        self.tempo_estado = pygame.time.get_ticks()
-        self.intervalo_estado = 3000
-        self.ultimo_ataque = pygame.time.get_ticks()
-        self.intervalo_ataque = 1500
-        self.ultimo_frame = pygame.time.get_ticks()
-    
-    def update(self, player):
-        agora = pygame.time.get_ticks()
-        
-        # Máquina de estados
-        if agora - self.tempo_estado > self.intervalo_estado:
-            self.tempo_estado = agora
-            if self.estado == "voando":
-                self.estado = random.choice(["atacando", "invisivel"])
-            else:
-                self.estado = "voando"
-                self.image = self.animacao[self.frame]
-                self.rect = self.image.get_rect(center=self.rect.center)
-        
-        # Comportamentos
-        if self.estado == "voando":
-            self.voar(player)
-            self.atacar(player)
-        elif self.estado == "atacando":
-            self.ataque_raio()
-        
-        # Animação
-        if self.estado != "invisivel":
-            self.atualizar_animacao()
-    
-    def voar(self, player):
-        tempo = pygame.time.get_ticks() / 1000
-        self.rect.centerx = 1500 + 200 * math.sin(tempo * 0.5)
-        self.rect.centery = 400 + 100 * math.sin(tempo)
-    
-    def atacar(self, player):
-        agora = pygame.time.get_ticks()
-        if agora - self.ultimo_ataque > self.intervalo_ataque:
-            self.ultimo_ataque = agora
-            self.lancar_bolas_fantasmas()
-    
-    def lancar_bolas_fantasmas(self):
-        for _ in range(3):
-            angulo = random.uniform(0, 2 * math.pi)
-            velocidade = random.uniform(3, 6)
-            bola = BolaFantasma(self.rect.centerx, self.rect.centery, 
-                               math.cos(angulo) * velocidade, 
-                               math.sin(angulo) * velocidade)
-            self.groups["projeteis_inimigos"].add(bola)
-    
-    def ataque_raio(self):
-        if pygame.time.get_ticks() - self.ultimo_ataque > 500:
-            self.ultimo_ataque = pygame.time.get_ticks()
-            raio = RaioEletrico(self.rect.centerx, self.rect.bottom)
-            self.groups["projeteis_inimigos"].add(raio)
-    
-    def atualizar_animacao(self):
-        agora = pygame.time.get_ticks()
-        if agora - self.ultimo_frame > 100:
-            self.ultimo_frame = agora
-            self.frame = (self.frame + 1) % len(self.animacao)
-            self.image = self.animacao[self.frame]
-    
-    def levar_dano(self, dano):
-        if self.estado != "invisivel":
-            self.vida -= dano
-            if self.vida <= 0:
-                self.kill()
-                estrela = ItemEstrela(self.rect.centerx, self.rect.centery)
-                self.groups["itens"].add(estrela)
-
-class BolaFantasma(pygame.sprite.Sprite):
-    def __init__(self, x, y, speedx, speedy):
-        super().__init__()
-        self.image = pygame.Surface((30, 30), pygame.SRCALPHA)
-        pygame.draw.circle(self.image, (200, 200, 255, 200), (15, 15), 15)
-        self.rect = self.image.get_rect(center=(x, y))
-        self.speedx = speedx
-        self.speedy = speedy
-        self.tempo_vida = 120
-    
-    def update(self):
-        self.rect.x += self.speedx
-        self.rect.y += self.speedy
-        self.tempo_vida -= 1
-        if self.tempo_vida <= 0:
-            self.kill()
-
-class RaioEletrico(pygame.sprite.Sprite):
-    def __init__(self, x, y):
-        super().__init__()
-        self.image = pygame.Surface((20, 800), pygame.SRCALPHA)
-        pygame.draw.rect(self.image, (100, 255, 255, 150), (0, 0, 20, 800))
-        self.rect = self.image.get_rect(midtop=(x, y))
-        self.tempo_vida = 30
-    
-    def update(self):
-        self.tempo_vida -= 1
-        if self.tempo_vida <= 0:
-            self.kill()
-
-class BowserJr(pygame.sprite.Sprite):
-    def __init__(self, assets, grupos):
-        pygame.sprite.Sprite.__init__(self)
-        self.animacoes = {
-            "andando": assets["bowser jr andando"],
-            "atacando": assets["bowser jr atacando"],
-            "shell": assets["bowser jr shell"]
-        }
-        self.estado = "andando"
-        self.image = self.animacoes[self.estado][0]
-        self.rect = self.image.get_rect()
-        self.rect.centerx = 1400
-        self.rect.bottom = 800
-        
-        self.vida = 150
-        self.max_vida = 150
-        self.speedx = -3
-        self.direcao = -1
-        self.contador_ataques = 0
-        self.ultimo_ataque = pygame.time.get_ticks()
-        self.intervalo_ataque = 2000
-        self.groups = grupos
-        self.frame = 0
-        self.ultimo_frame = pygame.time.get_ticks()
-        self.frame_interval = 100
-    
-    def update(self, player):
-        self.movimentar()
-        self.atacar(player)
-        self.atualizar_animacao()
-        
-        hits = pygame.sprite.collide_rect(self, player)
-        if hits and self.estado != "shell":
-            player.vida -= 10
-            player.knockback(15 if self.rect.centerx < player.rect.centerx else -15)
-    
-    def movimentar(self):
-        if self.estado == "shell":
-            self.speedx = 8 * self.direcao
-            self.rect.x += self.speedx
-            
-            if self.rect.right < 0 or self.rect.left > p.WIDHT:
-                self.estado = "andando"
-                self.speedx = -3
-        else:
-            self.rect.x += self.speedx
-            if self.rect.left < 1000:
-                self.rect.left = 1000
-                self.speedx = 3
-                self.direcao = 1
-            elif self.rect.right > 1700:
-                self.rect.right = 1700
-                self.speedx = -3
-                self.direcao = -1
-    
-    def atacar(self, player):
-        agora = pygame.time.get_ticks()
-        if agora - self.ultimo_ataque > self.intervalo_ataque:
-            self.ultimo_ataque = agora
-            self.contador_ataques += 1
-            
-            if self.contador_ataques % 3 == 0:
-                self.estado = "shell"
-                self.direcao = -1 if player.rect.centerx < self.rect.centerx else 1
-            else:
-                self.estado = "atacando"
-                self.lancar_martelo()
-    
-    def lancar_martelo(self):
-        martelo = Martelo(self.rect.centerx, self.rect.top, self.direcao)
-        self.groups["projeteis_inimigos"].add(martelo)
-    
-    def atualizar_animacao(self):
-        agora = pygame.time.get_ticks()
-        if agora - self.ultimo_frame > self.frame_interval:
-            self.ultimo_frame = agora
-            animacao = self.animacoes[self.estado]
-            self.frame = (self.frame + 1) % len(animacao)
-            self.image = animacao[self.frame]
-    
-    def levar_dano(self, dano):
-        if self.estado != "shell":
-            self.vida -= dano
-            if self.vida <= 0:
-                self.kill()
-            elif self.vida < self.max_vida / 3:
-                self.intervalo_ataque = 1000
-    def alive(self):
-        return self.vida > 0
-class Martelo(pygame.sprite.Sprite):
-    def __init__(self, x, y, direcao):
-        super().__init__()
-        self.image = pygame.Surface((40, 40), pygame.SRCALPHA)
-        pygame.draw.circle(self.image, (150, 75, 0), (20, 20), 20)
-        self.rect = self.image.get_rect(center=(x, y))
-        self.direcao = direcao
-        self.speedx = 5 * direcao
-        self.speedy = -5
-        self.gravity = 0.3
-        self.rotation = 0
-        self.rotation_speed = 10 * direcao
-    
-    def update(self):
-        self.rect.x += self.speedx
-        self.rect.y += self.speedy
-        self.speedy += self.gravity
-        # self.rotation += self.rotation_speed
-        # self.image = pygame.transform.rotate(self.image, self.rotation)
-        
-        if self.rect.top > p.HEIGHT:
-            self.kill()
-
-class ItemEstrela(pygame.sprite.Sprite):
-    def __init__(self, x, y):
-        super().__init__()
-        self.image = pygame.Surface((30, 30), pygame.SRCALPHA)
-        pygame.draw.polygon(self.image, (255, 255, 0), [
-            (15, 0), (20, 15), (30, 15),
-            (22, 22), (27, 32), (15, 25),
-            (3, 32), (8, 22), (0, 15),
-            (10, 15)
-        ])
-        self.rect = self.image.get_rect(center=(x, y))
-        self.tempo_vida = 300
-    
-    def update(self):
-        self.tempo_vida -= 1
-        if self.tempo_vida <= 0:
-            self.kill()
 
 class PowerUp(pygame.sprite.Sprite):
     def __init__(self, tipo, x, y, assets):
@@ -656,3 +300,129 @@ class PowerUp(pygame.sprite.Sprite):
             self.rect.bottom = 801.5
             self.speedy = 0
 
+class Bowser(Sprite):
+    def __init__(self, assets, grupos):
+        super().__init__()
+        self.assets = assets
+        self.grupos = grupos
+
+        # Animação idle ⬅ lista de Surfaces em assets["bowser_idle"]
+        self.frames_idle = assets.get("bowser_idle", [])
+        self.frame_idx = 0
+        self.image = self.frames_idle[self.frame_idx]
+        self.rect = self.image.get_rect(midbottom=(grupos["room_width"] - 200, grupos["ground_y"]))
+
+        # Vida
+        self.max_vida = 300
+        self.vida = self.max_vida
+
+        # Controle de invulnerabilidade após hit
+        self.invul = False
+        self.invul_timer = 0.0
+
+        # Cooldowns de ataque
+        self.attack_cd = 0.0
+        self.attack_phase = 0
+
+    def update(self, player, dt):
+        # Animação idle
+        self.frame_idx = (self.frame_idx + 5 * dt) % len(self.frames_idle)
+        self.image = self.frames_idle[int(self.frame_idx)]
+
+        # Atualiza invulnerabilidade
+        if self.invul:
+            self.invul_timer -= dt
+            if self.invul_timer <= 0:
+                self.invul = False
+
+        # Gerencia ataques
+        self.attack_cd -= dt
+        if self.attack_cd <= 0:
+            self.attack_phase = (self.attack_phase + 1) % 3
+            if self.attack_phase == 0:
+                self._fireballs()
+            elif self.attack_phase == 1:
+                self._ground_slam()
+            else:
+                self._flame_breath(player)
+            self.attack_cd = 2.0  # 2s entre padrões
+
+    def take_damage(self, dmg):
+        if not self.invul:
+            self.vida = max(0, self.vida - dmg)
+            self.invul = True
+            self.invul_timer = 1.0  # 1s de invulnerabilidade
+
+    # --- ATAQUES ---
+
+    def _fireballs(self, count=5, speed=220):
+        tex = self.assets.get("bowser_fireball")
+        for i in range(count):
+            angle = random.uniform(-0.5, 0.5)
+            fb = Fireball(tex, speed, self.rect.center, angle, self.grupos)
+            self.grupos["projectiles"].add(fb)
+
+    def _ground_slam(self):
+        slam = GroundSlam(self.rect.midbottom, self.grupos)
+        self.grupos["projectiles"].add(slam)
+
+    def _flame_breath(self, player):
+        tex = self.assets.get("bowser_flame")
+        breath = FlameBreath(tex, self.rect.midright, player.rect.center, self.grupos)
+        self.grupos["projectiles"].add(breath)
+
+
+class Fireball(Sprite):
+    def __init__(self, image, speed, origin, angle, grupos):
+        super().__init__()
+        self.image = image
+        self.rect = self.image.get_rect(center=origin)
+        self.speed = speed
+        self.dx = -1 + angle
+        self.dy = angle
+        self.dmg = 8
+        self.grupos = grupos
+
+    def update(self, dt):
+        self.rect.x += int(self.dx * self.speed * dt)
+        self.rect.y += int(self.dy * self.speed * dt)
+        if (self.rect.right < 0 or self.rect.left > self.grupos["room_width"] or 
+            self.rect.top > self.grupos["room_height"] or self.rect.bottom < 0):
+            self.kill()
+
+
+class GroundSlam(Sprite):
+    def __init__(self, origin, grupos):
+        super().__init__()
+        self.image = pygame.Surface((self.groups["room_width"], 20), pygame.SRCALPHA)
+        pygame.draw.rect(self.image, (255, 100, 0, 200), self.image.get_rect())
+        self.rect = self.image.get_rect(midtop=(origin[0], origin[1] - 10))
+        self.timer = 0.5
+        self.dmg = 15
+        self.grupos = grupos
+
+    def update(self, dt):
+        self.timer -= dt
+        if self.timer <= 0:
+            self.kill()
+
+
+class FlameBreath(Sprite):
+    def __init__(self, image, origin, target, grupos):
+        super().__init__()
+        self.image = image
+        self.rect = self.image.get_rect(midleft=origin)
+        self.speed = 300
+        self.target = target
+        self.dmg = 12
+        self.grupos = grupos
+
+    def update(self, dt):
+        # avança reto em direção ao player
+        dir_vec = pygame.math.Vector2(self.target) - pygame.math.Vector2(self.rect.topleft)
+        if dir_vec.length() != 0:
+            dir_vec = dir_vec.normalize()
+        self.rect.x += int(dir_vec.x * self.speed * dt)
+        self.rect.y += int(dir_vec.y * self.speed * dt)
+        if not pygame.Rect(0, 0, self.grupos["room_width"], self.grupos["room_height"]).colliderect(self.rect):
+            self.kill()

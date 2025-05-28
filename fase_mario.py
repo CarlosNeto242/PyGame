@@ -3,10 +3,12 @@ import parametros as p
 import assets as a
 import player as pl
 import bosses as b
+from bosses import Bowser, PowerUp
 from Auxiliares import desenhar_barra_vida_player, desenhar_barra_vida_boss
 import random
 
 def fase_mario(tela, clock, estado):
+    
     import pygame
     import parametros as p
     import assets as a
@@ -196,3 +198,116 @@ def fase_mario(tela, clock, estado):
 
         pygame.display.update()
         clock.tick(p.FPS)
+
+
+def fase_bowser(tela, clock, estado):
+    """
+    Combate único contra o Bowser na sala.
+    """
+    # Inicialização
+    assets = a.carrega_assets()
+    bg = assets.get("fundo_bowser", None)
+    background = pygame.transform.scale(bg, (p.WIDHT, p.HEIGHT)) if bg else pygame.Surface((p.WIDHT, p.HEIGHT))
+    
+    # pygame.mixer.music.load(assets.get("bgm_boss", ""))
+    # pygame.mixer.music.play(-1)
+
+    # Grupos de sprite
+    # Criamos um grupo para todos os sprites para facilitar a atualização e desenho
+    all_sprites = pygame.sprite.Group() 
+    # Grupo para tiros do jogador
+    player_tiros = pygame.sprite.Group() 
+    # Grupo para projéteis do Bowser
+    bowser_projectiles = pygame.sprite.Group() 
+
+    grupos = {
+        "player_tiros": player_tiros,
+        "bowser_projectiles": bowser_projectiles,
+        "all_sprites": all_sprites, # Adicionado para facilitar
+        "room_width": p.WIDHT,
+        "room_height": p.HEIGHT,
+        "ground_y": p.HEIGHT - 50, # Defina o chão da fase do Bowser
+    }
+
+    # Player
+    player = pl.Player(grupos, assets)
+    player.rect.midbottom = (150, grupos["ground_y"]) # Posiciona o jogador no chão
+    all_sprites.add(player)
+
+    # Bowser
+    boss = Bowser(assets, grupos)
+    all_sprites.add(boss)
+
+    estado['fase_bowser'] = True # Define o estado inicial da fase
+
+    while estado['fase_bowser']:
+        dt = clock.tick(p.FPS) / 1000.0  # Calcula o delta tempo em segundos
+
+        for ev in pygame.event.get():
+            if ev.type == pygame.QUIT:
+                estado['fase_bowser'] = estado['Jogando'] = False
+            elif ev.type == pygame.KEYDOWN:
+                if ev.key in [pygame.K_LEFT, pygame.K_a]: player.speedx = -250 # Ajustado para dt
+                elif ev.key in [pygame.K_RIGHT, pygame.K_d]: player.speedx = 250 # Ajustado para dt
+                elif ev.key in [pygame.K_UP, pygame.K_w]: 
+                    player.pular(350) # Ajustado para dt
+                    pygame.mixer.Sound(assets.get("smw_jump", "")).play() # Som de pulo
+                elif ev.key == pygame.K_z: 
+                    player.atirar()
+                    pygame.mixer.Sound(player.som_tiro).play() # Som de tiro
+                elif ev.key == pygame.K_v: # Adicionado tiro especial
+                    player.atirar_especial(player.pegou_flor)
+                    if player.pegou_flor:
+                        pygame.mixer.Sound(player.som_tiroespecial).play() # Som de tiro especial
+            elif ev.type == pygame.KEYUP:
+                if ev.key in [pygame.K_LEFT, pygame.K_a, pygame.K_RIGHT, pygame.K_d]:
+                    player.speedx = 0
+
+        # Atualizações
+        # Passa dt para as funções de update que precisam dele
+        player.update_deslocar_fixo(dt) # Usa update_deslocar_fixo para movimento sem limites de tela
+        player.update_gravidade(grupos["ground_y"], dt) 
+        player.update_animacao() # A animação não precisa de dt, mas é bom chamá-la aqui
+        
+        player_tiros.update(dt) # Atualiza os tiros do player
+        bowser_projectiles.update(dt) # Atualiza os projéteis do Bowser
+        boss.update(player, dt) # Atualiza o Bowser e seus ataques
+
+        # Colisões inimigo (projéteis do Bowser) ← player
+        for proj in bowser_projectiles:
+            if player.rect.colliderect(proj.rect):
+                player.take_damage(proj.dmg)
+                proj.kill() # Remove o projétil após a colisão
+
+        # Colisões boss ← player tiro
+        for tiro in player_tiros:
+            if boss.rect.colliderect(tiro.rect):
+                boss.take_damage(tiro.dano) # Use 'dano' para tiros do player
+                tiro.kill()
+
+        # Desenho
+        tela.blit(background, (0, 0))
+        # Desenha todos os sprites nos grupos
+        for s in all_sprites:
+            tela.blit(s.image, s.rect)
+        for s in player_tiros: # Desenha os tiros do jogador
+            tela.blit(s.image, s.rect)
+        for s in bowser_projectiles: # Desenha os projéteis do Bowser
+            tela.blit(s.image, s.rect)
+
+
+        # HUD
+        desenhar_barra_vida_player(tela, player)
+        desenhar_barra_vida_boss (tela, boss, p.WIDHT - 300) # Ajuste a posição da barra de vida do boss
+
+        pygame.display.flip()
+
+        # Checa fim de combate
+        if player.vida <= 0:
+            estado['fase_bowser'] = False
+            estado['Perder'] = True
+        elif boss.vida <= 0:
+            estado['fase_bowser'] = False
+            estado['Vencer'] = True
+        
+    pygame.mixer.music.stop()

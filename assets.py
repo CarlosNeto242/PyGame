@@ -142,5 +142,11 @@ def carrega_assets():
         pygame.transform.scale(pygame.image.load("Sprites/Chefes/casco4.png"), (60,47))
     ]
     assets["fundo castelo"] = pygame.image.load("Sprites/Backgrounds/donkey kong.png")
+    assets["bowser_idle"] = [pygame.image.load("Sprites/Chefes/bowser_idle.png")]
+    assets["bowser_fireball"] = [pygame.image.load("Sprites/Chefes/bola_fogo.png")]
+    assets["bowser_rock"] =  pygame.transform.scale(pygame.image.load("Sprites/Chefes/casco4.png"), (60,47))
+    assets["bgm_boss"] = pygame.mixer.Sound("Sprites/Sound Effects/expl3.wav")
+    assets["fundo_bowser"] = pygame.image.load("Sprites/Backgrounds/donkey kong.png")
+    assets["powerup_mushroom"] = [pygame.image.load("Sprites/Chefes/cogumelo.png")]
     return assets
 
