@@ -16,7 +16,7 @@ def animacao_cutscene(tela, clock, estado):
     bloco_preto = aux.Bloco(0, 0, preto )
     tempo = 0
 
-    while tempo <= frames:
+    while estado["Cutscene"]: 
         tela.blit(background, (0, 0))
         pygame.display.update()
         clock.tick(p.FPS)
