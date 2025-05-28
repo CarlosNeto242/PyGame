@@ -22,7 +22,7 @@ pygame.font.init()
 pygame.mixer.init()
 tela = pygame.display.set_mode((p.WIDHT, p.HEIGHT))
 clock = pygame.time.Clock()
-estados = {"Jogando": True, "Inicial": True, "Cutscene" : False, "Aviso" : False, "Mapa": False, "Ganhar": False, "Perder": False, "DK": False, "Bowser": False, "Mario": False, "Bowser_Junior": False, "KingBoo": False, "Final": False}
+estados = {"Jogando": True, "Inicial": False, "Cutscene" : False, "Mapa": False, "Ganhar": False, "Perder": False, "DK": False  , "Bowser": False, "Mario": TrueV, "Bowser_Junior": False, "KingBoo": False, "Final": False}
 
 while estados["Jogando"]: 
     if estados["Inicial"]: 
