@@ -43,11 +43,11 @@ class Player(pygame.sprite.Sprite):
 
         self.ultimo_tiro = pygame.time.get_ticks() 
         self.tiro_ticks = 200
-
+    # atualiza a posição do player com base no dano levado
     def knockback(self, forca):
         self.knockback_x = forca
         self.knockback_frames = 10
-
+    # atualiza a posiçao d player 
     def update_deslocar(self, limite_esquerdo, limite_direito):
         self.rect.x += self.speedx
 
@@ -64,7 +64,7 @@ class Player(pygame.sprite.Sprite):
         elif self.speedx < 0:
             self.direcao = -1
 
-
+    # atualiza a posiçao do player quando ele estiver parado
     def update_deslocar_fixo(self):
         self.rect.x += self.speedx
 
@@ -75,7 +75,7 @@ class Player(pygame.sprite.Sprite):
             self.direcao = 1
         elif self.speedx < 0:
             self.direcao = -1
-
+    # atualiza a animação do player, dependendo se ele está pulando ou não
     def update_animacao(self): 
         agora = pygame.time.get_ticks()
         ticks_passados = agora - self.ultimo_frame
@@ -106,6 +106,7 @@ class Player(pygame.sprite.Sprite):
             else:
                 self.image = self.i_animacao[0]
                 self.image = pygame.transform.flip(self.image, True, False)
+    # função que irá fazer o player atirar
     def atirar(self):
         self.i_animacao = assets["animacao player atirando"]
         self.frame = 0
@@ -129,7 +130,7 @@ class Player(pygame.sprite.Sprite):
             self.image = pygame.transform.flip(self.image, True, False)
 
         self.som_tiro.play()
-
+    # função que irá fazer o player atirar especial
     def atirar_especial(self,pegou_flor):
         if not pegou_flor:
             return
@@ -139,7 +140,7 @@ class Player(pygame.sprite.Sprite):
             novo_tiro = TiroEspecial(self.rect.bottom, self.rect.centerx, self.direcao)
             self.groups["tiros"].add(novo_tiro)
             self.som_tiroespecial.play()
-
+    # função que irá atualizar a gravidade do player
     def update_gravidade(self, chao_y):
         self.speedy += self.gravity
         self.rect.y += self.speedy
@@ -148,7 +149,7 @@ class Player(pygame.sprite.Sprite):
             self.rect.bottom = chao_y
             self.speedy = 0
             self.pulando = False
-
+    # função que irá fazer o player pular
     def pular(self,forca):
         if not self.pulando:
             self.pulando = True
@@ -165,8 +166,8 @@ class Tiro(pygame.sprite.Sprite):
         self.rect.centerx = centerx
         self.rect.bottom = bottom 
         self.speedx = 15 * direcao
-        self.player_x = player_x  # salva posição do player no momento do tiro
-
+        self.player_x = player_x  
+    # função que irá atualizar a posição do tiro do player
     def update(self):
         self.rect.x += self.speedx
 
@@ -196,7 +197,7 @@ class TiroEspecial(pygame.sprite.Sprite):
 
         self.ultimo_frame = pygame.time.get_ticks()
         self.frame_intervalo = 100  # milissegundos por frame
-
+    # função que irá atualizar a posição do tiro especial do player, assim como sua animação e colisão com o chão
     def update(self):
         # Animação
         agora = pygame.time.get_ticks()
@@ -220,7 +221,7 @@ class TiroEspecial(pygame.sprite.Sprite):
             self.kill()
 
 
-        
+# criando uma classe para o power-up que será coletado pelo player      
 class PowerUp(pygame.sprite.Sprite):
     def __init__(self, tipo, x, y, assets):
         super().__init__()
@@ -231,7 +232,7 @@ class PowerUp(pygame.sprite.Sprite):
         self.rect.bottom = y
         self.speedy = -5
         self.gravity = 0.5
-
+    # função que irá atualizar a posição do power-up, fazendo com que ele suba e desça
     def update(self):
         self.speedy += self.gravity
         self.rect.y += self.speedy

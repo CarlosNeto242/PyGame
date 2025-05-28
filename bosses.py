@@ -43,7 +43,7 @@ class Boss(pygame.sprite.Sprite):
         if self.vida <= 0:
             self.kill()
 
-    def ataque_chuva(self, intervalo1, intervalo2, n): 
+    def ataque_chuva(self, intervalo1, intervalo2, n): # cria o ataque de chuva de fogo do Donkey Kong
         agora = pygame.time.get_ticks()
         passados = agora - self.ultimo_ataque_chuva
         if passados >= self.intervalo_chuva: 
@@ -79,7 +79,7 @@ class Barril(pygame.sprite.Sprite):
         self.ultimo_frame = pygame.time.get_ticks() 
         self.frame_ticks = 50
         
-    def update_posicao(self):
+    def update_posicao(self): #atuliza a posição do barril na tela
         if self.tipo_do_barril == "normal":
             self.rect.x += self.speedx
 
@@ -97,7 +97,7 @@ class Barril(pygame.sprite.Sprite):
             if self.rect.x > p.WIDHT or self.rect.y > p.HEIGHT:
                 self.kill()
             
-    def update_animacao(self): 
+    def update_animacao(self): #atualiza a animação do barril
         if self.tipo_do_barril == "normal":
             agora = pygame.time.get_ticks()
             ticks_passados = agora - self.ultimo_frame
@@ -111,7 +111,7 @@ class Barril(pygame.sprite.Sprite):
             self.ultimo_frame = agora
             self.frame += 1
             self.image = self.animacao[self.frame % len(self.animacao)]
-    def update(self):
+    def update(self): # atualiza tudo do barril
         self.update_animacao()
         self.update_posicao()
 
@@ -131,11 +131,11 @@ class Fogo(pygame.sprite.Sprite):
         self.ultimo_ticks = pygame.time.get_ticks()
         self.ticks_animacao = 50
     
-    def update(self):
+    def update(self): # atualiza a posição do fogo
         self.rect.y += self.speed
         self.update_animacao()
     
-    def update_animacao(self): 
+    def update_animacao(self): # atualiza a animação do fogo
         agora = pygame.time.get_ticks()
         ticks_passados = agora - self.ultimo_ticks
         if ticks_passados > self.ticks_animacao:
@@ -166,7 +166,7 @@ class Inimigo(pygame.sprite.Sprite):
         self.ultimo_frame = pygame.time.get_ticks()
         self.frame_interval = 200
 
-    def update(self):
+    def update(self): # atualiza a posição e animação do inimigo
         self.rect.x += self.speedx
         agora = pygame.time.get_ticks()
         if agora - self.ultimo_frame > self.frame_interval:
@@ -193,7 +193,7 @@ class Goomba(pygame.sprite.Sprite):
         self.ultimo_frame = pygame.time.get_ticks()
         self.intervalo = 250
 
-    def update(self):
+    def update(self): # atualiza a posição e animação do Goomba
         self.rect.x += self.speedx
         agora = pygame.time.get_ticks()
         if agora - self.ultimo_frame > self.intervalo:
@@ -219,16 +219,17 @@ class Koopa(pygame.sprite.Sprite):
         self.ultimo_frame = pygame.time.get_ticks()
         self.frame_interval = 150  # animação mais rápida
         self.direcao = -1
-
+    # atualiza a posição e animação do Koopa
     def update(self):
         agora = pygame.time.get_ticks()
+        # se ele estiver vivo, ele anda para a esquerda
         if self.estado == "vivo":
             self.rect.x += self.speedx
             if agora - self.ultimo_frame > self.frame_interval:
                 self.ultimo_frame = agora
                 self.frame = (self.frame + 1) % len(self.animacoes["koopa"])
                 self.image = self.animacoes["koopa"][self.frame]
-
+        # se ele estiver em casco, ele anda para a direita ou esquerda dependendo da direção e tem uma animação
         elif self.estado == "casco_andando":
             self.rect.x += 10 * self.direcao
             if agora - self.ultimo_frame > self.frame_interval:
@@ -237,10 +238,10 @@ class Koopa(pygame.sprite.Sprite):
                 self.image = self.animacoes["casco"][self.frame]
             if self.rect.right < 0 or self.rect.left > 21000:
                 self.kill()
-
+        # se ele estiver parado, ele fica na posição do casco
         elif self.estado == "casco_parado":
             self.image = self.animacoes["casco"][0]
-
+    # método para levar dano e mudar o estado do Koopa
     def levar_pulo(self, player):
         if self.estado == "vivo":
             self.estado = "casco_parado"
@@ -269,7 +270,7 @@ class PlantaCarnivora(pygame.sprite.Sprite):
         self.dano = 25
         self.ultimo_frame = pygame.time.get_ticks()
         self.intervalo = 250
-
+    # atualiza a posição e animação da planta carnívora
     def update(self):
         agora = pygame.time.get_ticks()
         if agora - self.ultimo_frame > self.intervalo:

@@ -1,6 +1,8 @@
 import pygame
 import random
 
+# Classes para as plataformas
+
 class Bloco(pygame.sprite.Sprite):
     def __init__(self, x, y, imagem):
         super().__init__()

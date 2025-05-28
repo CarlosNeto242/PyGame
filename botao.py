@@ -1,7 +1,7 @@
 import pygame
 import parametros as p
 import assets as a
-
+# definindo uma classe para botões que serão usados ao decorrer do jogo
 class Botao(pygame.sprite.Sprite): 
     def __init__(self, assets, grupos, nome_da_fase):
     

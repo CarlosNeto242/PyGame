@@ -1,3 +1,4 @@
+# importamos as bibliotecas e arquivos necessários para criar os bosses do jogo
 import pygame
 import parametros as p
 import assets as a
@@ -6,16 +7,9 @@ import bosses as b
 from bosses import Bowser, PowerUp
 from Auxiliares import desenhar_barra_vida_player, desenhar_barra_vida_boss
 import random
-
+# criando uma função para a fase
 def fase_mario(tela, clock, estado):
     
-    import pygame
-    import parametros as p
-    import assets as a
-    import player as pl
-    import bosses as b
-    from Auxiliares import desenhar_barra_vida_player
-    import random
     pygame.mixer.init()
     pygame.mixer.music.load("Sprites/mario.wav")
     pygame.mixer.music.play(-1)  # Toca em loop

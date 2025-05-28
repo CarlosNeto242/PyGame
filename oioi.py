@@ -1,9 +1,20 @@
-
+# importamos as bibliotecas e arquivos necessários para criar os bosses do jogo
+import pygame
+import parametros as p
+import assets as a
+import player as pl
+import bosses as b
+from bosses import Bowser, PowerUp
+from Auxiliares import desenhar_barra_vida_player, desenhar_barra_vida_boss
+import random
 
 # -------------------------
 # FASE BOWSER JR - estática
 # -------------------------
+# definindo uma função para a fase do Bowser. Jr
+
 def fase_bowser_jr(tela, clock, estado):
+    # carregando os assets
     assets = a.carrega_assets()
     background = assets["fundo mario"]
 
@@ -11,7 +22,7 @@ def fase_bowser_jr(tela, clock, estado):
     projeteis_inimigos = pygame.sprite.Group()
     itens = pygame.sprite.Group()
     grupos = {"tiros": tiros, "projeteis_inimigos": projeteis_inimigos, "itens": itens}
-
+    # definindo as entidades da fase
     player = pl.Player(grupos, assets)
     player.rect.bottom = 801.5
     camera_x = 0
@@ -21,7 +32,7 @@ def fase_bowser_jr(tela, clock, estado):
 
     boss = b.BowserJr(assets, grupos)
     grupo_boss = pygame.sprite.Group(boss)
-
+    # enquanto a fase rodar, o seguintes eventos serão analizados
     while estado["Bowser_Junior"]:
         for evento in pygame.event.get():
             if evento.type == pygame.QUIT:
@@ -39,7 +50,7 @@ def fase_bowser_jr(tela, clock, estado):
             if evento.type == pygame.KEYUP:
                 if evento.key in [pygame.K_LEFT, pygame.K_a, pygame.K_RIGHT, pygame.K_d]:
                     player.speedx = 0
-
+        # atualiza as coisas na tela 
         player.update_deslocar(400, 1600)  # Limita a movimentação
         player.update_animacao()
         player.update_gravidade(801.5)
@@ -48,7 +59,7 @@ def fase_bowser_jr(tela, clock, estado):
         projeteis_inimigos.update()
         # plataformas.update()
         itens.update()
-
+        # checando quem morreu 
         if player.vida <= 0:
             estado["BowserJr"] = False
             estado["Perder"] = True
@@ -57,13 +68,13 @@ def fase_bowser_jr(tela, clock, estado):
             estado["BowserJr"] = False
             estado["KingBoo"] = True
             return
-
+        # desenha o fundo e as entidades na tela
         tela.blit(background, (0, 0))
         for grupo in [tiros, projeteis_inimigos, itens, grupo_boss]:
             for entidade in grupo:
                 tela.blit(entidade.image, (entidade.rect.x, entidade.rect.y))
         tela.blit(player.image, (player.rect.x, player.rect.y))
-
+        # desenha a vida do boss e do player
         desenhar_barra_vida_player(tela, player)
         desenhar_barra_vida_boss(tela, boss, 0)
 
@@ -73,7 +84,9 @@ def fase_bowser_jr(tela, clock, estado):
 # -------------------------
 # FASE KING BOO - estática
 # -------------------------
+# definindo uma função para a fase do King Boo
 def fase_king_boo(tela, clock, estado):
+    # carregando os assets
     assets = a.carrega_assets()
     background = assets["fundo mario"]
 
@@ -81,7 +94,7 @@ def fase_king_boo(tela, clock, estado):
     projeteis_inimigos = pygame.sprite.Group()
     itens = pygame.sprite.Group()
     grupos = {"tiros": tiros, "projeteis_inimigos": projeteis_inimigos, "itens": itens}
-
+    # definindo as entidades da fase
     player = pl.Player(grupos, assets)
     player.rect.bottom = 801.5
 
@@ -92,7 +105,7 @@ def fase_king_boo(tela, clock, estado):
 
     boss = b.KingBoo(assets, grupos)
     grupo_boss = pygame.sprite.Group(boss)
-
+    # enquanto a fase rodar, o seguintes eventos serão analizados
     while estado["KingBoo"]:
         for evento in pygame.event.get():
             if evento.type == pygame.QUIT:
@@ -113,7 +126,7 @@ def fase_king_boo(tela, clock, estado):
             if evento.type == pygame.KEYUP:
                 if evento.key in [pygame.K_LEFT, pygame.K_a, pygame.K_RIGHT, pygame.K_d]:
                     player.speedx = 0
-
+        # atualiza as coisas na tela
         player.update_deslocar(400, 1600)
         player.update_animacao()
         player.update_gravidade(801.5)
@@ -122,7 +135,7 @@ def fase_king_boo(tela, clock, estado):
         projeteis_inimigos.update()
         # plataformas.update()
         itens.update()
-
+        # checando quem morreu
         if player.vida <= 0:
             estado["KingBoo"] = False
             estado["Perder"] = True
@@ -131,13 +144,13 @@ def fase_king_boo(tela, clock, estado):
             estado["KingBoo"] = False
             estado["Bowser"] = True
             return
-
+        # desenha o fundo e as entidades na tela
         tela.blit(background, (0, 0))
         # for grupo in [plataformas, tiros, projeteis_inimigos, itens, grupo_boss]:
         #     for entidade in grupo:
         #         tela.blit(entidade.image, (entidade.rect.x, entidade.rect.y))
         tela.blit(player.image, (player.rect.x, player.rect.y))
-
+        # desenha a vida do boss e do player
         desenhar_barra_vida_player(tela, player)
         desenhar_barra_vida_boss(tela, boss, 0)
 
@@ -147,7 +160,10 @@ def fase_king_boo(tela, clock, estado):
 # -------------------------
 # FASE BOWSER FINAL - estática
 # -------------------------
+
+# definindo uma função para a fase final do Bowser
 def fase_bowser_final(tela, clock, estado):
+    # carregando os assets
     assets = a.carrega_assets()
     background = assets["fundo mario"]
 
@@ -161,7 +177,7 @@ def fase_bowser_final(tela, clock, estado):
         "projeteis_inimigos": projeteis_inimigos,
         "itens": itens
     }
-
+    # definindo as entidades da fase
     player = pl.Player(grupos, assets)
     player.rect.bottom = 801.5
 
@@ -173,7 +189,7 @@ def fase_bowser_final(tela, clock, estado):
 
     boss = b.Bowser(assets, grupos)
     grupo_boss = pygame.sprite.Group(boss)
-
+     # enquanto a fase rodar, o seguintes eventos serão analizados
     while estado["Bowser"]:
         for evento in pygame.event.get():
             if evento.type == pygame.QUIT:
@@ -191,7 +207,7 @@ def fase_bowser_final(tela, clock, estado):
             if evento.type == pygame.KEYUP:
                 if evento.key in [pygame.K_LEFT, pygame.K_a, pygame.K_RIGHT, pygame.K_d]:
                     player.speedx = 0
-
+        # atualiza as coisas na tela
         player.update_deslocar(400, 1600)
         player.update_animacao()
         player.update_gravidade(801.5)
@@ -201,7 +217,7 @@ def fase_bowser_final(tela, clock, estado):
         projeteis_inimigos.update()
         # plataformas.update()
         itens.update()
-
+        # checando quem morreu
         if player.vida <= 0:
             estado["Bowser"] = False
             estado["Perder"] = True
@@ -210,14 +226,16 @@ def fase_bowser_final(tela, clock, estado):
             estado["Bowser"] = False
             estado["Venceu"] = True
             return
-
+        # desenha o fundo e as entidades na tela
         tela.blit(background, (0, 0))
         # for grupo in [plataformas, tiros, bolas_de_fogo, projeteis_inimigos, itens, grupo_boss]:
         #     for entidade in grupo:
         #         tela.blit(entidade.image, (entidade.rect.x, entidade.rect.y))
         tela.blit(player.image, (player.rect.x, player.rect.y))
-
+        # desenha a vida do boss e do player
         desenhar_barra_vida_player(tela, player)
         desenhar_barra_vida_boss(tela, boss, 0)
+        pygame.display.update()
+        clock.tick(p.FPS)
 
    

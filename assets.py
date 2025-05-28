@@ -19,6 +19,7 @@ def carrega_assets():
     assets["loading dk"] = pygame.image.load("Sprites/Telas/loading_dk.jpg")
     assets["titulo megaman"] = pygame.image.load("Sprites/megamen/titulo.png")
     assets["celula_energia"] = pygame.image.load("Sprites/megamen/celula de energia.jpg")
+    assets["desligado"] = pygame.image.load("Sprites/Botoes/energia baixa.png")
     imagem = pygame.image.load("Sprites/megamen/Planta 1.png")
     imagem = pygame.transform.scale(imagem, (60,90))
     imagem = pygame.transform.rotate(imagem, 180)
