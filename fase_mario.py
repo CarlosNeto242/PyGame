@@ -82,6 +82,16 @@ def fase_mario(tela, clock, estado):
     pygame.display.update()
     pygame.time.delay(3000)
 
+    fonte = pygame.font.Font("Fontes/PressStart2P.ttf", 20)
+    tela.blit(background, (0, 0))
+    texto_alerta = fonte.render(
+        "Comandos: WASD para movimentação",
+        True, (0, 0, 0)
+    )
+    tela.blit(texto_alerta, (p.WIDHT // 2 - texto_alerta.get_width() // 2, p.HEIGHT // 2))
+    pygame.display.update()
+    pygame.time.delay(3000)
+
     # Criação de inimigos fixos
     for i, x in enumerate(range(600, 13000, 350)):  # espaçamento reduzido para mais inimigos
         if i % 6 == 0:
@@ -121,7 +131,7 @@ def fase_mario(tela, clock, estado):
                 elif evento.key in [pygame.K_UP, pygame.K_w]:
                     player.pular(24.5)
                     pygame.mixer.Sound("Assets/smw_jump.wav").play()  # Som de pulo
-                elif evento.key == pygame.K_v:
+                elif evento.key == pygame.K_c:
                     player.atirar_especial(player.pegou_flor)
                     if player.pegou_flor:
                         pygame.mixer.Sound("Assets/smw_fireball.wav").play()  # Som de pulo
@@ -218,7 +228,7 @@ def fase_mario(tela, clock, estado):
                 tela.blit(texto_flor, (p.WIDHT // 2 - texto_flor.get_width() // 2, 450))
 
                 # Linha 2 – instruções
-                instrucoes = fonte.render("Use a tecla V para atirar", True, (255, 255, 0))
+                instrucoes = fonte.render("Use a tecla C para atirar", True, (255, 255, 0))
                 tela.blit(instrucoes, (p.WIDHT // 2 - instrucoes.get_width() // 2, 500))
             else:
                 flor_mensagem_mostrada = False

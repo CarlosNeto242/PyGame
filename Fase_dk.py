@@ -72,6 +72,17 @@ def mapa(tela, clock, estado):
     tela.blit(texto_alerta, (p.WIDHT // 2 - texto_alerta.get_width() // 2, p.HEIGHT // 2))
     pygame.display.update()
     pygame.time.delay(3000)
+
+    fonte = pygame.font.Font("Fontes/PressStart2P.ttf", 20)
+    tela.blit(background, (0, 0))
+    texto_alerta = fonte.render(
+        "Agora você possui um tiro básico, pressione V para atirar",
+        True, (255, 255, 255)
+    )
+    tela.blit(texto_alerta, (p.WIDHT // 2 - texto_alerta.get_width() // 2, p.HEIGHT // 2))
+    pygame.display.update()
+    pygame.time.delay(3000)
+
     while estado["DK"]: 
         # analisamos os eventos
         eventos = pygame.event.get()
