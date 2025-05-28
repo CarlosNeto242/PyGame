@@ -13,6 +13,8 @@ def inicio(tela, clock, estado):
     assets = a.carrega_assets()
     background = assets["imagem tela inicial"]
     background = pygame.transform.scale(background, (p.WIDHT, p.HEIGHT))
+    titulo = assets["titulo megaman"]
+    titulo = pygame.transform.scale(titulo, (600, 400))
     # em seguida, chamamos a fontes usadas no texto da tela inicial
     fonte1 = assets["fonte apertar inicial"] 
     fonte2 = assets["fonte titulo inicial"]
@@ -20,14 +22,11 @@ def inicio(tela, clock, estado):
     while estado["Inicial"]: 
         # colocamos na tela o seu fundo e os textos com as respectivas fontes 
         tela.blit(background, (0, 0))
+        tela.blit(titulo, (p.WIDHT - 1600, 100))
         fonte_tecla = fonte1.render("Clique espaço para começar", True, (0, 195, 255))
         fonte_rect1 = fonte_tecla.get_rect()
         fonte_rect1.midtop = (p.WIDHT/2, 800)
         tela.blit(fonte_tecla, fonte_rect1)
-        fonte_titulo = fonte2.render(" Mega\nMan", True, (255, 255, 255) )
-        fonte_rect2 = fonte_titulo.get_rect()
-        fonte_rect2.midtop = (p.WIDHT - 1400, 200)
-        tela.blit(fonte_titulo, fonte_rect2)
         # agora, consideramos os eventos que podem acontecer na tela
         eventos = pygame.event.get()
 
