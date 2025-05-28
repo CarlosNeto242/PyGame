@@ -55,7 +55,7 @@ def selecionar(tela, clock, estado):
                             estado["DK"] = True
                             estado["Mapa"] = False
                         elif botao.nome_da_fase == "Icon Bowser":
-                            estado["Bowser"] = True
+                            estado["Mario"] = True
                             estado["Mapa"] = False
                         pygame.mixer.music.stop()
         # por fim, atualizamos a cada momento o jogo e determinamos sua taxa de atualizacao

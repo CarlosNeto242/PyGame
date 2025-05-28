@@ -37,6 +37,7 @@ def mapa(tela, clock, estado):
     assets = a.carrega_assets()
     background = assets["fundo mapa"]
     background = pygame.transform.scale(background, (1920, 1080))
+    fonte = pygame.font.Font("Fontes/PressStart2P.ttf", 30)
     # criamos grupos associados as sprites "disparadas" no jogo
     tiros = pygame.sprite.Group()
     barris = pygame.sprite.Group()
@@ -52,6 +53,22 @@ def mapa(tela, clock, estado):
     chao_y = 830
     player.rect.bottom = chao_y
     # enquanto a fase acontecer
+
+    tela.fill((0, 0, 0))
+    texto_intro = fonte.render("Invasão de jogo em processamento...", True, (255, 255, 255))
+    tela.blit(texto_intro, (p.WIDHT // 2 - texto_intro.get_width() // 2, p.HEIGHT // 2))
+    pygame.display.update()
+    pygame.time.delay(2000)
+
+    fonte = pygame.font.Font("Fontes/PressStart2P.ttf", 20)
+    tela.blit(background, (0, 0))
+    texto_alerta = fonte.render(
+        "Donkey Kong está bravo por você estar aqui como INTRUSO!",
+        True, (255, 255, 255)
+    )
+    tela.blit(texto_alerta, (p.WIDHT // 2 - texto_alerta.get_width() // 2, p.HEIGHT // 2))
+    pygame.display.update()
+    pygame.time.delay(3000)
     while estado["DK"]: 
         # analisamos os eventos
         eventos = pygame.event.get()
@@ -71,7 +88,7 @@ def mapa(tela, clock, estado):
                 if evento.key == pygame.K_v:
                     player.atirar()
                 if evento.key == pygame.K_UP or evento.key == pygame.K_w:
-                    player.pular()
+                    player.pular(20)
                 if evento.key == pygame.K_b: 
                     estado["DK"] = False
                     estado["Bowser"] = True
